@@ -1,0 +1,33 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+<div th:fragment="header">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="#">Lucky Paw</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li sec:authorize="isAnonymous()" class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{/login}">Login</a>
+                </li>
+                <div sec:authorize="isAuthenticated()">
+                    <li sec:authorize="hasAuthority('Administrator')" class="nav-item">
+                        <a class="nav-link" href="#" th:href="@{/private/users}">Users</a>
+                    </li>
+                </div>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{/reviews}">Reviews</a>
+                </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{/logout}">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
+</body>
+</html>
