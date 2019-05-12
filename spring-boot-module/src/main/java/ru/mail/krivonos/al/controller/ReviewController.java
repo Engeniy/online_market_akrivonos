@@ -75,7 +75,6 @@ public class ReviewController {
         if (deleted == 0) {
             return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, REVIEWS_FIRST_PAGE_URL, DELETED_NEGATIVE_PARAM);
         }
-
         return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, REVIEWS_FIRST_PAGE_URL, DELETED_POSITIVE_PARAM);
     }
 

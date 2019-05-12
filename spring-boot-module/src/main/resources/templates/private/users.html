@@ -19,7 +19,6 @@
             <li class="nav-item">
                 <a class="nav-link" href="#" th:href="@{/private/users/add}">Add user</a>
             </li>
-
         </ul>
     </div>
 </nav>
@@ -91,19 +90,19 @@
     </div>
 </div>
 <div class="container">
-<form id="delete" style="margin-left: 40%" action="#" th:action="@{/private/users/delete}" method="post">
-    <input class="btn btn-primary" style="width: 35%" type="submit" value="Delete marked">
-</form>
-<ul class="pagination justify-content-center">
-    <div th:if="${pages.size() > 0}" th:each="page : ${pages}">
-        <li th:if="${page} == ${current_page}" class="page-item active">
-            <a class="page-link" th:href="@{/private/users/{pageNumber}(pageNumber=${page})}" th:text="${page}"></a>
-        </li>
-        <li th:unless="${page} == ${current_page}" class="page-item">
-            <a class="page-link" th:href="@{/private/users/{pageNumber}(pageNumber=${page})}" th:text="${page}"></a>
-        </li>
-    </div>
-</ul>
+    <form id="delete" style="margin-left: 40%" action="#" th:action="@{/private/users/delete}" method="post">
+        <input class="btn btn-primary" style="width: 35%" type="submit" value="Delete marked">
+    </form>
+    <ul class="pagination justify-content-center">
+        <div th:if="${pages.size() > 0}" th:each="page : ${pages}">
+            <li th:if="${page} == ${current_page}" class="page-item active">
+                <a class="page-link" th:href="@{/private/users/{pageNumber}(pageNumber=${page})}" th:text="${page}"></a>
+            </li>
+            <li th:unless="${page} == ${current_page}" class="page-item">
+                <a class="page-link" th:href="@{/private/users/{pageNumber}(pageNumber=${page})}" th:text="${page}"></a>
+            </li>
+        </div>
+    </ul>
 </div>
 <div th:replace="fragments/footer.html"/>
 </body>
