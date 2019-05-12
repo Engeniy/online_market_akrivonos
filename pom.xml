@@ -8,8 +8,8 @@
     <name>online-market-akrivonos</name>
 
     <modules>
-        <module>repository-module</module>
-        <module>service-module</module>
         <module>spring-boot-module</module>
+        <module>service-module</module>
+        <module>repository-module</module>
     </modules>
 </project>
