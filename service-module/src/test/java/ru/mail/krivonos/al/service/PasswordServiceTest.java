@@ -19,12 +19,14 @@ public class PasswordServiceTest {
     private PasswordEncoder passwordEncoder;
     @Mock
     private PasswordGenerator passwordGenerator;
+    @Mock
+    private MailService mailService;
 
     private PasswordService passwordService;
 
     @Before
     public void init() {
-        passwordService = new PasswordServiceImpl(passwordEncoder, passwordGenerator);
+        passwordService = new PasswordServiceImpl(passwordEncoder, passwordGenerator, mailService);
     }
 
     @Test
@@ -33,7 +35,7 @@ public class PasswordServiceTest {
         String encodedPassword = "encoded password";
         when(passwordGenerator.getPassword()).thenReturn(password);
         when(passwordEncoder.encode(password)).thenReturn(encodedPassword);
-        String result = passwordService.getPassword();
+        String result = passwordService.getPassword("email");
         assertEquals(encodedPassword, result);
     }
 }

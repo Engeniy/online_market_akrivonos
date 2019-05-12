@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.mail.krivonos.al.service.MailService;
 import ru.mail.krivonos.al.service.PasswordService;
 import ru.mail.krivonos.al.service.generator.PasswordGenerator;
 
@@ -15,17 +16,23 @@ public class PasswordServiceImpl implements PasswordService {
 
     private final PasswordEncoder passwordEncoder;
     private final PasswordGenerator passwordGenerator;
+    private final MailService mailService;
 
     @Autowired
-    public PasswordServiceImpl(PasswordEncoder passwordEncoder, PasswordGenerator passwordGenerator) {
+    public PasswordServiceImpl(
+            PasswordEncoder passwordEncoder,
+            PasswordGenerator passwordGenerator,
+            MailService mailService
+    ) {
         this.passwordEncoder = passwordEncoder;
         this.passwordGenerator = passwordGenerator;
+        this.mailService = mailService;
     }
 
     @Override
-    public String getPassword() {
+    public String getPassword(String email) {
         String password = passwordGenerator.getPassword();
-        logger.info("Generated password: {}", password);
+        mailService.sendMessage(email, password);
         return passwordEncoder.encode(password);
     }
 }

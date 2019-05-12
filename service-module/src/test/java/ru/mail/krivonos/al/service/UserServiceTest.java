@@ -17,6 +17,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -101,7 +103,7 @@ public class UserServiceTest {
         UserDTO userDTO = new UserDTO();
         User user = new User();
         when(userConverter.fromDTO(userDTO)).thenReturn(user);
-        when(passwordService.getPassword()).thenReturn("password");
+        when(passwordService.getPassword(any())).thenReturn("password");
         userService.add(userDTO);
     }
 
@@ -110,7 +112,7 @@ public class UserServiceTest {
         UserDTO userDTO = new UserDTO();
         User user = new User();
         when(userConverter.fromDTO(userDTO)).thenReturn(user);
-        when(passwordService.getPassword()).thenThrow(new RuntimeException());
+        when(passwordService.getPassword(any())).thenThrow(new RuntimeException());
         userService.add(userDTO);
     }
 
@@ -135,7 +137,7 @@ public class UserServiceTest {
         Long id = 1L;
         String password = "password";
         int changed = 1;
-        when(passwordService.getPassword()).thenReturn(password);
+        when(passwordService.getPassword(any())).thenReturn(password);
         when(userRepository.findUserByID(connection, id)).thenReturn(new User());
         when(userRepository.changePassword(connection, id, password)).thenReturn(changed);
         int result = userService.changePassword(id);

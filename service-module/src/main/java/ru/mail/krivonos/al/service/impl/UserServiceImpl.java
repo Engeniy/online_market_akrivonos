@@ -122,7 +122,7 @@ public class UserServiceImpl implements UserService {
             connection.setAutoCommit(false);
             try {
                 User user = userConverter.fromDTO(userDTO);
-                user.setPassword(passwordService.getPassword());
+                user.setPassword(passwordService.getPassword(user.getEmail()));
                 userRepository.saveUser(connection, user);
                 connection.commit();
             } catch (Exception e) {
@@ -185,7 +185,7 @@ public class UserServiceImpl implements UserService {
                     connection.commit();
                     return 0;
                 }
-                String password = passwordService.getPassword();
+                String password = passwordService.getPassword(userByID.getEmail());
                 int changed = userRepository.changePassword(connection, userID, password);
                 connection.commit();
                 return changed;
