@@ -41,8 +41,8 @@
                     <div class="form-group">
                         <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('role')}"
                               th:errors="*{role}"></span>
-                        <select class="custom-select" name="role" th:field="*{role.name}">
-                            <option th:each="role : ${roles}" th:text="${role.name}" th:value="${role.name}"></option>
+                        <select class="custom-select" name="role" th:field="*{role.id}">
+                            <option th:each="role : ${roles}" th:text="${role.name}" th:value="${role.id}"></option>
                         </select>
                     </div>
                     <div class="row">

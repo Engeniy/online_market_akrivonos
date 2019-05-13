@@ -32,35 +32,29 @@ public class ReviewControllerTest {
     }
 
     @Test
-    public void shouldReturnRedirectToReviewsFirstPageForReviewsGetRequest() {
-        String result = reviewController.getReviewPage();
-        assertEquals("redirect:/reviews/1", result);
-    }
-
-    @Test
     public void shouldReturnReviewsPageForReviewsGetRequestWithPageNumber() {
         String result = reviewController.getReviewPageWithPageNumber(1, model);
         assertEquals("reviews", result);
     }
 
     @Test
-    public void shouldReturnRedirectToReviewsFirstPageWithPositiveDeleteParamForSuccessfulDeleteRequest() {
+    public void shouldReturnRedirectToReviewsPageWithPositiveDeleteParamForSuccessfulDeleteRequest() {
         Long id = 1L;
         when(reviewService.deleteReviewByID(id)).thenReturn(1);
         String result = reviewController.deleteReview(id);
-        assertEquals("redirect:/reviews/1?deleted", result);
+        assertEquals("redirect:/reviews?deleted", result);
     }
 
     @Test
-    public void shouldReturnRedirectToReviewsFirstPageWithNegativeDeleteParamForUnsuccessfulDeleteRequest() {
+    public void shouldReturnRedirectToReviewsPageWithNegativeDeleteParamForUnsuccessfulDeleteRequest() {
         Long id = 1L;
         when(reviewService.deleteReviewByID(id)).thenReturn(0);
         String result = reviewController.deleteReview(id);
-        assertEquals("redirect:/reviews/1?deleted_zero", result);
+        assertEquals("redirect:/reviews?deleted_zero", result);
     }
 
     @Test
-    public void shouldReturnRedirectToReviewsFirstPageWithPositiveUpdateParamForSuccessfulUpdateRequest() {
+    public void shouldReturnRedirectToReviewsPageWithPositiveUpdateParamForSuccessfulUpdateRequest() {
         ReviewDTOForm reviewDTOForm = new ReviewDTOForm();
         List<ReviewDTO> reviews = new ArrayList<>();
         ReviewDTO reviewDTO = new ReviewDTO();
@@ -68,11 +62,11 @@ public class ReviewControllerTest {
         reviewDTOForm.setReviewList(reviews);
         when(reviewService.updateHiddenStatus(reviews)).thenReturn(1);
         String result = reviewController.updateReviews(reviewDTOForm);
-        assertEquals("redirect:/reviews/1?updated", result);
+        assertEquals("redirect:/reviews?updated", result);
     }
 
     @Test
-    public void shouldReturnRedirectToReviewsFirstPageWithNegativeUpdateParamForUnsuccessfulUpdateRequest() {
+    public void shouldReturnRedirectToReviewsPageWithNegativeUpdateParamForUnsuccessfulUpdateRequest() {
         ReviewDTOForm reviewDTOForm = new ReviewDTOForm();
         List<ReviewDTO> reviews = new ArrayList<>();
         ReviewDTO reviewDTO = new ReviewDTO();
@@ -80,6 +74,6 @@ public class ReviewControllerTest {
         reviewDTOForm.setReviewList(reviews);
         when(reviewService.updateHiddenStatus(reviews)).thenReturn(0);
         String result = reviewController.updateReviews(reviewDTOForm);
-        assertEquals("redirect:/reviews/1?updated_zero", result);
+        assertEquals("redirect:/reviews?updated_zero", result);
     }
 }

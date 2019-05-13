@@ -98,11 +98,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updateRole(Long id, String roleName) {
+    public int updateRole(Long userID, Long roleID) {
         try (Connection connection = userRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
-                int updated = userRepository.updateRole(connection, id, roleName);
+                int updated = userRepository.updateRole(connection, userID, roleID);
                 connection.commit();
                 return updated;
             } catch (Exception e) {
@@ -141,7 +141,7 @@ public class UserServiceImpl implements UserService {
         try (Connection connection = userRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
-                int usersNumber = userRepository.countUsers(connection);
+                int usersNumber = userRepository.getCountOfUsers(connection);
                 int pagesNumber = pageCountingService.countPages(usersNumber, USERS_LIMIT);
                 connection.commit();
                 return pagesNumber;

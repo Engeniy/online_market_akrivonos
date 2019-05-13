@@ -49,10 +49,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(USERS_PAGE_URL, USERS_PAGE_WITH_PAGE_NUMBER_URL, USERS_ADD_PAGE_URL, USERS_DELETE_URL,
+                .antMatchers(USERS_PAGE_URL, USERS_ADD_PAGE_URL, USERS_DELETE_URL,
                         USERS_PASSWORD_CHANGE_URL, REVIEWS_UPDATE_URL)
                 .hasAuthority(ADMIN_AUTHORITY_NAME)
-                .antMatchers(HOMEPAGE_URL, REVIEWS_PAGE_URL, REVIEWS_PAGE_WITH_PAGE_NUMBER_URL, BOOTSTRAP_CONTENT_URL,
+                .antMatchers(HOMEPAGE_URL, REVIEWS_PAGE_URL, BOOTSTRAP_CONTENT_URL,
                         FORBIDDEN_PAGE_URL, INTERNAL_ERROR_PAGE_URL, REVIEWS_DELETE_URL)
                 .permitAll()
                 .and()

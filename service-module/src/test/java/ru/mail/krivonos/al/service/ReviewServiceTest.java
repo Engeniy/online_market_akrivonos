@@ -104,7 +104,7 @@ public class ReviewServiceTest {
         int reviewsNumber = 20;
         int limit = 10;
         int pagesNumber = 2;
-        when(reviewRepository.countReviews(connection)).thenReturn(reviewsNumber);
+        when(reviewRepository.getCountOfReviews(connection)).thenReturn(reviewsNumber);
         when(pageCountingService.countPages(reviewsNumber, limit)).thenReturn(pagesNumber);
         int result = reviewService.getPagesNumber();
         assertEquals(pagesNumber, result);
@@ -114,7 +114,7 @@ public class ReviewServiceTest {
     public void shouldThrowUserServiceExceptionWhenCatchingExceptionFromRepositoryFromGetPagesNumberMethod() {
         int reviewsNumber = 20;
         int limit = 10;
-        when(reviewRepository.countReviews(connection)).thenReturn(reviewsNumber);
+        when(reviewRepository.getCountOfReviews(connection)).thenReturn(reviewsNumber);
         when(pageCountingService.countPages(reviewsNumber, limit)).thenThrow(new RuntimeException());
         reviewService.getPagesNumber();
     }

@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.ADMIN_AUTHORITY_NAME;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
@@ -51,22 +52,15 @@ public class ReviewControllerIntegrationTest {
 
     @Test
     public void shouldReturnReviewsPageForGetRequestWithPageNumber() throws Exception {
-        mockMvc.perform(get("/reviews/1")).andExpect(status().isOk());
+        mockMvc.perform(get("/reviews")).andExpect(status().isOk());
     }
 
     @Test
     public void requestForReviewsPageSuccessfullyProcessed() throws Exception {
-        this.mockMvc.perform(get("/reviews/1")
+        this.mockMvc.perform(get("/reviews")
                 .accept(MediaType.parseMediaType("text/html;charset=UTF-8")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"));
-    }
-
-    @Test
-    public void shouldRedirectToReviewsPageForGetRequestWithoutPageNumber() throws Exception {
-        mockMvc.perform(get("/reviews"))
-                .andExpect(redirectedUrl("/reviews/1"))
-                .andExpect(status().isFound());
     }
 
     @Test
@@ -75,7 +69,7 @@ public class ReviewControllerIntegrationTest {
         this.mockMvc.perform(post("/reviews/1/delete")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/reviews/1?deleted"));
+                .andExpect(redirectedUrl("/reviews?deleted"));
     }
 
     @Test
@@ -84,10 +78,10 @@ public class ReviewControllerIntegrationTest {
         this.mockMvc.perform(post("/reviews/100/delete")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/reviews/1?deleted_zero"));
+                .andExpect(redirectedUrl("/reviews?deleted_zero"));
     }
 
-    @WithMockUser(authorities = {"Administrator"})
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldSendRedirectToReviewsFirstPageWithPositiveParamForSuccessfulUpdateReviewsRequest()
             throws Exception {
@@ -103,10 +97,10 @@ public class ReviewControllerIntegrationTest {
                 .flashAttr("id", 1L)
                 .flashAttr("reviews", reviewDTOForm))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/reviews/1?updated"));
+                .andExpect(redirectedUrl("/reviews?updated"));
     }
 
-    @WithMockUser(authorities = {"Administrator"})
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldSendRedirectToReviewsFirstPageWithNegativeParamForUnsuccessfulUpdateReviewsRequest()
             throws Exception {
@@ -117,6 +111,6 @@ public class ReviewControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("reviews", reviewDTOForm))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/reviews/1?updated_zero"));
+                .andExpect(redirectedUrl("/reviews?updated_zero"));
     }
 }

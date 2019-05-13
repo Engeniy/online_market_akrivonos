@@ -71,12 +71,12 @@
            value="Update">
 </form>
 <ul class="pagination justify-content-center">
-    <div th:if="${pages.size() > 0}" th:each="page : ${pages}">
+    <div th:if="${pages > 0}" th:each="page : ${#numbers.sequence(1, pages)}">
         <li th:if="${page} == ${current_page}" class="page-item active">
-            <a class="page-link" th:href="@{/private/users/{pageNumber}(pageNumber=${page})}" th:text="${page}"></a>
+            <a class="page-link" th:href="@{/private/users/(page=${page})}" th:text="${page}"></a>
         </li>
         <li th:unless="${page} == ${current_page}" class="page-item">
-            <a class="page-link" th:href="@{/private/users/{pageNumber}(pageNumber=${page})}" th:text="${page}"></a>
+            <a class="page-link" th:href="@{/private/users/(page=${page})}" th:text="${page}"></a>
         </li>
     </div>
 </ul>

@@ -35,7 +35,7 @@ public class RoleValidator implements Validator {
         } else {
             boolean matches = false;
             for (RoleDTO role : roles) {
-                if (roleDTO.getName().equals(role.getName())) {
+                if (roleDTO.getId().equals(role.getId())) {
                     matches = true;
                 }
             }

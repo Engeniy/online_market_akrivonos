@@ -34,7 +34,7 @@ public class ReviewRepositoryImpl extends GenericRepositoryImpl implements Revie
                 "WHERE deleted = FALSE ORDER BY date_of_creation LIMIT ? OFFSET ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, REVIEWS_LIMIT);
-            preparedStatement.setInt(2, (pageNumber - 1) * REVIEWS_LIMIT);
+            preparedStatement.setInt(2, getOffset(pageNumber));
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 List<Review> reviews = new ArrayList<>();
                 while (resultSet.next()) {
@@ -53,7 +53,7 @@ public class ReviewRepositoryImpl extends GenericRepositoryImpl implements Revie
     }
 
     @Override
-    public int countReviews(Connection connection) {
+    public int getCountOfReviews(Connection connection) {
         String sql = "SELECT COUNT(*) FROM Review WHERE deleted = FALSE";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -108,6 +108,10 @@ public class ReviewRepositoryImpl extends GenericRepositoryImpl implements Revie
             logger.error(e.getMessage(), e);
             throw new ReviewRepositoryException(REVIEW_EXTRACTION_ERROR_MESSAGE, e);
         }
+    }
+
+    private int getOffset(int pageNumber) {
+        return (pageNumber - 1) * REVIEWS_LIMIT;
     }
 
     private int getReviewsNumber(ResultSet resultSet) {

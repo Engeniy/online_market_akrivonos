@@ -17,18 +17,13 @@ import ru.mail.krivonos.al.service.model.UserDTO;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import static ru.mail.krivonos.al.controller.constant.PageConstants.ADD_USER_PAGE;
 import static ru.mail.krivonos.al.controller.constant.PageConstants.USERS_PAGE;
-import static ru.mail.krivonos.al.controller.constant.URLConstants.REDIRECT_TEMPLATE;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.REDIRECT_WITH_PARAMETER_TEMPLATE;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.USERS_ADD_PAGE_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.USERS_DELETE_URL;
-import static ru.mail.krivonos.al.controller.constant.URLConstants.USERS_FIRST_PAGE_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.USERS_PAGE_URL;
-import static ru.mail.krivonos.al.controller.constant.URLConstants.USERS_PAGE_WITH_PAGE_NUMBER_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.USERS_PASSWORD_CHANGE_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.USERS_UPDATE_URL;
 import static ru.mail.krivonos.al.controller.constant.URLParametersConstants.ADDED_PARAM;
@@ -54,27 +49,16 @@ public class UserController {
     }
 
     @GetMapping(USERS_PAGE_URL)
-    public String getUsersPage() {
-        return String.format(REDIRECT_TEMPLATE, USERS_FIRST_PAGE_URL);
-    }
-
-    @GetMapping(USERS_PAGE_WITH_PAGE_NUMBER_URL)
     public String getUsersWithPageNumber(
-            @PathVariable("page") Integer page, Model model
+            @RequestParam(name = "page", defaultValue = "1") Integer page, Model model
     ) {
-        Optional<Integer> pageOptional = Optional.ofNullable(page);
-        int pageNumber = pageOptional.orElse(1);
         int pagesNumber = userService.getPagesNumber();
-        if (pageNumber > pagesNumber && pagesNumber > 0) {
-            pageNumber = pagesNumber;
+        if (page > pagesNumber && pagesNumber > 0) {
+            page = pagesNumber;
         }
-        List<Integer> pagesNumbers = IntStream
-                .rangeClosed(1, pagesNumber)
-                .boxed()
-                .collect(Collectors.toList());
-        model.addAttribute("pages", pagesNumbers);
-        model.addAttribute("current_page", pageNumber);
-        List<UserDTO> users = userService.getUsers(pageNumber);
+        model.addAttribute("pages", pagesNumber);
+        model.addAttribute("current_page", page);
+        List<UserDTO> users = userService.getUsers(page);
         model.addAttribute("users", users);
         UserDTO user = new UserDTO();
         user.setRole(new RoleDTO());
@@ -105,7 +89,7 @@ public class UserController {
             return ADD_USER_PAGE;
         }
         userService.add(user);
-        return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, USERS_FIRST_PAGE_URL, ADDED_PARAM);
+        return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, USERS_PAGE_URL, ADDED_PARAM);
     }
 
     @PostMapping(USERS_UPDATE_URL)
@@ -113,11 +97,11 @@ public class UserController {
             @PathVariable("id") Long id,
             @ModelAttribute("user") UserDTO user
     ) {
-        int updated = userService.updateRole(id, user.getRole().getName());
+        int updated = userService.updateRole(id, user.getRole().getId());
         if (updated == 0) {
-            return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, USERS_FIRST_PAGE_URL, UPDATED_NEGATIVE_PARAM);
+            return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, USERS_PAGE_URL, UPDATED_NEGATIVE_PARAM);
         }
-        return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, USERS_FIRST_PAGE_URL, UPDATED_POSITIVE_PARAM);
+        return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, USERS_PAGE_URL, UPDATED_POSITIVE_PARAM);
     }
 
     @PostMapping(USERS_DELETE_URL)
@@ -125,13 +109,13 @@ public class UserController {
             @RequestParam("user_ids") Long[] usersIDs
     ) {
         if (usersIDs.length == 0) {
-            return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, USERS_FIRST_PAGE_URL, DELETED_NEGATIVE_PARAM);
+            return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, USERS_PAGE_URL, DELETED_NEGATIVE_PARAM);
         }
         int deleted = userService.deleteUsers(usersIDs);
         if (deleted == 0) {
-            return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, USERS_FIRST_PAGE_URL, DELETED_NEGATIVE_PARAM);
+            return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, USERS_PAGE_URL, DELETED_NEGATIVE_PARAM);
         }
-        return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, USERS_FIRST_PAGE_URL, DELETED_POSITIVE_PARAM);
+        return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, USERS_PAGE_URL, DELETED_POSITIVE_PARAM);
     }
 
     @PostMapping(USERS_PASSWORD_CHANGE_URL)
@@ -140,8 +124,8 @@ public class UserController {
     ) {
         int changed = userService.changePassword(id);
         if (changed == 0) {
-            return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, USERS_FIRST_PAGE_URL, PASSWORD_CHANGE_NEGATIVE_PARAM);
+            return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, USERS_PAGE_URL, PASSWORD_CHANGE_NEGATIVE_PARAM);
         }
-        return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, USERS_FIRST_PAGE_URL, PASSWORD_CHANGE_POSITIVE_PARAM);
+        return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, USERS_PAGE_URL, PASSWORD_CHANGE_POSITIVE_PARAM);
     }
 }

@@ -1,27 +1,33 @@
 package ru.mail.krivonos.al.service.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import ru.mail.krivonos.al.service.properties.MailProperties;
 
 import java.util.Properties;
 
 @Configuration
+@PropertySource("classpath:mail.properties")
 public class MailConfig {
 
-    private static final String MAIL_HOST = "smtp.gmail.com";
-    private static final int MAIL_PORT = 587;
-    private static final String MAIL_USERNAME = "test.mail.jd2@gmail.com";
-    private static final String MAIL_PASSWORD = "root1234A";
+    private final MailProperties mailProperties;
+
+    @Autowired
+    public MailConfig(MailProperties mailProperties) {
+        this.mailProperties = mailProperties;
+    }
 
     @Bean
     public JavaMailSender mailSender() {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
-        javaMailSender.setHost(MAIL_HOST);
-        javaMailSender.setPort(MAIL_PORT);
-        javaMailSender.setUsername(MAIL_USERNAME);
-        javaMailSender.setPassword(MAIL_PASSWORD);
+        javaMailSender.setHost(mailProperties.getMailHost());
+        javaMailSender.setPort(mailProperties.getMailPort());
+        javaMailSender.setUsername(mailProperties.getMailUsername());
+        javaMailSender.setPassword(mailProperties.getMailPassword());
 
         Properties mailProperties = javaMailSender.getJavaMailProperties();
         mailProperties.put("mail.transport.protocol", "smtp");

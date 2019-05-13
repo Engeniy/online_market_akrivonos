@@ -31,11 +31,12 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
 
     @Override
     public List<User> findUsers(Connection connection, Integer pageNumber) {
-        String sql = "SELECT u.id, u.email, u.password, u.name, u.surname, u.patronymic, u.unchangeable, r.name as role_name " +
-                "FROM User u JOIN Role r ON u.role_id = r.id WHERE deleted = FALSE ORDER BY u.email LIMIT ? OFFSET ?";
+        String sql = "SELECT u.id, u.email, u.password, u.name, u.surname, u.patronymic, u.unchangeable, u.role_id, " +
+                "r.name AS role_name FROM User u JOIN Role r ON u.role_id = r.id " +
+                "WHERE deleted = FALSE ORDER BY email LIMIT ? OFFSET ?";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setInt(1, USERS_LIMIT);
-            preparedStatement.setInt(2, (pageNumber - 1) * USERS_LIMIT);
+            preparedStatement.setInt(2, getOffset(pageNumber));
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 List<User> users = new ArrayList<>();
                 while (resultSet.next()) {
@@ -90,12 +91,12 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
     }
 
     @Override
-    public int updateRole(Connection connection, Long id, String roleName) {
-        String sql = "UPDATE User u SET u.role_id = (SELECT r.id FROM Role r WHERE r.name = ?) WHERE u.id = ? " +
+    public int updateRole(Connection connection, Long userID, Long roleID) {
+        String sql = "UPDATE User SET role_id = ? WHERE id = ? " +
                 "AND unchangeable = FALSE";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
-            preparedStatement.setString(1, roleName);
-            preparedStatement.setLong(2, id);
+            preparedStatement.setLong(1, roleID);
+            preparedStatement.setLong(2, userID);
             return preparedStatement.executeUpdate();
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
@@ -105,15 +106,14 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
 
     @Override
     public void saveUser(Connection connection, User user) {
-        String sql = "INSERT INTO User (email, name, surname, patronymic, password, role_id) VALUES (?, ?, ?, ?, ?, " +
-                "(SELECT r.id FROM Role r WHERE r.name = ?))";
+        String sql = "INSERT INTO User (email, name, surname, patronymic, password, role_id) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             preparedStatement.setString(1, user.getEmail());
             preparedStatement.setString(2, user.getName());
             preparedStatement.setString(3, user.getSurname());
             preparedStatement.setString(4, user.getPatronymic());
             preparedStatement.setString(5, user.getPassword());
-            preparedStatement.setString(6, user.getRole().getName());
+            preparedStatement.setLong(6, user.getRole().getId());
             int added = preparedStatement.executeUpdate();
         } catch (SQLException e) {
             logger.error(e.getMessage(), e);
@@ -122,7 +122,7 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
     }
 
     @Override
-    public int countUsers(Connection connection) {
+    public int getCountOfUsers(Connection connection) {
         String sql = "SELECT COUNT(*) FROM User WHERE deleted = FALSE";
         try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -174,6 +174,7 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
             user.setPatronymic(resultSet.getString("patronymic"));
             user.setUnchangeable(resultSet.getBoolean("unchangeable"));
             Role role = new Role();
+            role.setId(resultSet.getLong("role_id"));
             role.setName(resultSet.getString("role_name"));
             user.setRole(role);
             return user;
@@ -181,6 +182,10 @@ public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRep
             logger.error(e.getMessage(), e);
             throw new UserRepositoryException(USER_EXTRACTION_ERROR_MESSAGE, e);
         }
+    }
+
+    private int getOffset(Integer pageNumber) {
+        return (pageNumber - 1) * USERS_LIMIT;
     }
 
     private User getUserForAuthorization(ResultSet resultSet) {

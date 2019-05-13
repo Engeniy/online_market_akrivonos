@@ -74,12 +74,12 @@
                 <b class="text-lg-center"><span>Role:</span></b>
                 <span th:if="${user.unchangeable}" class="text-lg-center text-center" th:text="*{role.name}"></span>
                 <label th:if="${!user.unchangeable}">
-                    <select class="custom-select align-content-center" name="role" th:field="*{role.name}">
-                        <option th:each="role : ${roles}" th:if="${role.name} == *{role.name}" selected
-                                th:text="${role.name}" th:value="${role.name}"></option>
-                        <option th:each="role : ${roles}" th:unless="${role.name} == *{role.name}"
+                    <select class="custom-select align-content-center" name="role" th:field="*{role.id}">
+                        <option th:each="role : ${roles}" th:if="${role.id} == *{role.id}" selected
+                                th:text="${role.name}" th:value="${role.id}"></option>
+                        <option th:each="role : ${roles}" th:unless="${role.id} == *{role.id}"
                                 th:text="${role.name}"
-                                th:value="${role.name}"></option>
+                                th:value="${role.id}"></option>
                     </select>
                 </label>
                 <br><input th:if="${!user.unchangeable}" class="btn btn-secondary" type="submit" value="Update">
@@ -94,12 +94,12 @@
         <input class="btn btn-primary" style="width: 35%" type="submit" value="Delete marked">
     </form>
     <ul class="pagination justify-content-center">
-        <div th:if="${pages.size() > 0}" th:each="page : ${pages}">
+        <div th:if="${pages > 0}" th:each="page : ${#numbers.sequence(1, pages)}">
             <li th:if="${page} == ${current_page}" class="page-item active">
-                <a class="page-link" th:href="@{/private/users/{pageNumber}(pageNumber=${page})}" th:text="${page}"></a>
+                <a class="page-link" th:href="@{/private/users(page=${page})}" th:text="${page}"></a>
             </li>
             <li th:unless="${page} == ${current_page}" class="page-item">
-                <a class="page-link" th:href="@{/private/users/{pageNumber}(pageNumber=${page})}" th:text="${page}"></a>
+                <a class="page-link" th:href="@{/private/users(page=${page})}" th:text="${page}"></a>
             </li>
         </div>
     </ul>

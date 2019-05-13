@@ -38,12 +38,6 @@ public class UserControllerTest {
     }
 
     @Test
-    public void shouldReturnRedirectToUsersFirstPageForUsersGetRequest() {
-        String users = userController.getUsersPage();
-        assertEquals("redirect:/private/users/1", users);
-    }
-
-    @Test
     public void shouldReturnAddUserPageForAddGetRequest() {
         String addUserPage = userController.getAddUserPage(model);
         assertEquals("private/add-user", addUserPage);
@@ -53,7 +47,7 @@ public class UserControllerTest {
     public void shouldReturnRedirectToUsersPageForAddUserPostRequestWithoutErrors() {
         when(bindingResult.hasErrors()).thenReturn(false);
         String result = userController.saveUser(new UserDTO(), model, bindingResult);
-        assertEquals("redirect:/private/users/1?added", result);
+        assertEquals("redirect:/private/users?added", result);
     }
 
     @Test
@@ -70,9 +64,9 @@ public class UserControllerTest {
         roleDTO.setName("name");
         userDTO.setRole(roleDTO);
         Long id = 1L;
-        when(userService.updateRole(id, roleDTO.getName())).thenReturn(1);
+        when(userService.updateRole(id, roleDTO.getId())).thenReturn(1);
         String result = userController.updateRole(id, userDTO);
-        assertEquals("redirect:/private/users/1?updated", result);
+        assertEquals("redirect:/private/users?updated", result);
     }
 
     @Test
@@ -82,9 +76,9 @@ public class UserControllerTest {
         roleDTO.setName("name");
         userDTO.setRole(roleDTO);
         Long id = 1L;
-        when(userService.updateRole(id, roleDTO.getName())).thenReturn(0);
+        when(userService.updateRole(id, roleDTO.getId())).thenReturn(0);
         String result = userController.updateRole(id, userDTO);
-        assertEquals("redirect:/private/users/1?updated_zero", result);
+        assertEquals("redirect:/private/users?updated_zero", result);
     }
 
     @Test
@@ -92,7 +86,7 @@ public class UserControllerTest {
         Long[] ids = {1L, 2L};
         when(userService.deleteUsers(ids)).thenReturn(2);
         String result = userController.deleteUsers(ids);
-        assertEquals("redirect:/private/users/1?deleted", result);
+        assertEquals("redirect:/private/users?deleted", result);
     }
 
     @Test
@@ -100,7 +94,7 @@ public class UserControllerTest {
         Long[] ids = {1L, 2L};
         when(userService.deleteUsers(ids)).thenReturn(0);
         String result = userController.deleteUsers(ids);
-        assertEquals("redirect:/private/users/1?deleted_zero", result);
+        assertEquals("redirect:/private/users?deleted_zero", result);
     }
 
     @Test
@@ -108,7 +102,7 @@ public class UserControllerTest {
         Long id = 1L;
         when(userService.changePassword(id)).thenReturn(1);
         String result = userController.changePassword(id);
-        assertEquals("redirect:/private/users/1?password_changed", result);
+        assertEquals("redirect:/private/users?password_changed", result);
     }
 
     @Test
@@ -116,6 +110,6 @@ public class UserControllerTest {
         Long id = 1L;
         when(userService.changePassword(id)).thenReturn(0);
         String result = userController.changePassword(id);
-        assertEquals("redirect:/private/users/1?password_error", result);
+        assertEquals("redirect:/private/users?password_error", result);
     }
 }

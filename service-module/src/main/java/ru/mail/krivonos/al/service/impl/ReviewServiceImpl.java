@@ -71,7 +71,7 @@ public class ReviewServiceImpl implements ReviewService {
         try (Connection connection = reviewRepository.getConnection()) {
             connection.setAutoCommit(false);
             try {
-                int reviewsNumber = reviewRepository.countReviews(connection);
+                int reviewsNumber = reviewRepository.getCountOfReviews(connection);
                 int pagesNumber = pageCountingService.countPages(reviewsNumber, USERS_LIMIT);
                 connection.commit();
                 return pagesNumber;
@@ -134,13 +134,6 @@ public class ReviewServiceImpl implements ReviewService {
     private List<Review> getReviews(List<ReviewDTO> reviews) {
         return reviews.stream()
                 .map(reviewConverter::fromDTO)
-                .peek(this::changeNullToFalse)
                 .collect(Collectors.toList());
-    }
-
-    private void changeNullToFalse(Review review) {
-        if (review.getHidden() == null) {
-            review.setHidden(false);
-        }
     }
 }

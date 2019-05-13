@@ -13,11 +13,11 @@ public interface UserRepository extends GenericRepository {
 
     User findUserByID(Connection connection, Long id);
 
-    int updateRole(Connection connection, Long id, String roleName);
+    int updateRole(Connection connection, Long userID, Long roleID);
 
     void saveUser(Connection connection, User user);
 
-    int countUsers(Connection connection);
+    int getCountOfUsers(Connection connection);
 
     int deleteUsers(Connection connection, Long[] userIDs);
 

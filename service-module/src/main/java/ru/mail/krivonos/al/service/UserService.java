@@ -10,7 +10,7 @@ public interface UserService {
 
     List<UserDTO> getUsers(Integer pageNumber);
 
-    int updateRole(Long id, String roleName);
+    int updateRole(Long userID, Long roleID);
 
     void add(UserDTO userDTO);
 

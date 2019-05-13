@@ -21,6 +21,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.ADMIN_AUTHORITY_NAME;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
@@ -41,40 +42,34 @@ public class UserControllerIntegrationTest {
         correctUserDTO.setName("Alex");
         correctUserDTO.setSurname("Krivonos");
         RoleDTO correctRole = new RoleDTO();
+        correctRole.setId(1L);
         correctRole.setName("Sale User");
         correctUserDTO.setRole(correctRole);
     }
 
-    @WithMockUser(authorities = {"Administrator"})
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldReturnUsersPageForGetRequestWithPageNumber() throws Exception {
-        mockMvc.perform(get("/private/users/1")).andExpect(status().isOk());
+        mockMvc.perform(get("/private/users")).andExpect(status().isOk());
     }
 
-    @WithMockUser(authorities = {"Administrator"})
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void requestForUsersPageSuccessfullyProcessed() throws Exception {
-        this.mockMvc.perform(get("/private/users/1")
+        this.mockMvc.perform(get("/private/users")
                 .accept(MediaType.parseMediaType("text/html;charset=UTF-8")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
                 .andExpect(content().string(CoreMatchers.containsString("admin@admin.com")));
     }
 
-    @WithMockUser(authorities = {"Administrator"})
-    @Test
-    public void shouldRedirectToUsersPageForGetRequestWithoutPageNumber() throws Exception {
-        mockMvc.perform(get("/private/users")).andExpect(redirectedUrl("/private/users/1"))
-                .andExpect(status().isFound());
-    }
-
-    @WithMockUser(authorities = {"Administrator"})
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldReturnAddUserPageForGetRequest() throws Exception {
         mockMvc.perform(get("/private/users/add")).andExpect(status().isOk());
     }
 
-    @WithMockUser(authorities = {"Administrator"})
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void requestForAddUserPageSuccessfullyProcessed() throws Exception {
         this.mockMvc.perform(get("/private/users/add")
@@ -84,137 +79,107 @@ public class UserControllerIntegrationTest {
                 .andExpect(content().string(CoreMatchers.containsString("Add user")));
     }
 
-    @WithMockUser(authorities = {"Administrator"})
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldSendRedirectToUsersFirstPageForSuccessfulAddPostRequest() throws Exception {
         UserDTO userDTO = new UserDTO();
         userDTO.setRole(new RoleDTO());
         this.mockMvc.perform(post("/private/users/add")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("email", correctUserDTO.getEmail())
-                .param("name", correctUserDTO.getName())
-                .param("surname", correctUserDTO.getSurname())
-                .param("role.name", correctUserDTO.getRole().getName())
-                .requestAttr("user", userDTO)
+                .flashAttr("user", correctUserDTO)
         )
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/private/users/1?added"));
+                .andExpect(redirectedUrl("/private/users?added"));
     }
 
-    @WithMockUser(authorities = {"Administrator"})
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldReturnAddUserPageWithEmailFieldError() throws Exception {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setRole(new RoleDTO());
+        correctUserDTO.setEmail(null);
         this.mockMvc.perform(post("/private/users/add")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("name", correctUserDTO.getName())
-                .param("surname", correctUserDTO.getSurname())
-                .param("role.name", correctUserDTO.getRole().getName())
-                .requestAttr("user", userDTO)
+                .flashAttr("user", correctUserDTO)
         )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
                 .andExpect(content().string(CoreMatchers.containsString("Email must not be empty.")));
     }
 
-    @WithMockUser(authorities = {"Administrator"})
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldReturnAddUserPageWithNameFieldError() throws Exception {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setRole(new RoleDTO());
+        correctUserDTO.setName(null);
         this.mockMvc.perform(post("/private/users/add")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("email", correctUserDTO.getEmail())
-                .param("surname", correctUserDTO.getSurname())
-                .param("role.name", correctUserDTO.getRole().getName())
-                .requestAttr("user", userDTO)
+                .flashAttr("user", correctUserDTO)
         )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
                 .andExpect(content().string(CoreMatchers.containsString("Name must not be empty.")));
     }
 
-    @WithMockUser(authorities = {"Administrator"})
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldReturnAddUserPageWithSurnameFieldError() throws Exception {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setRole(new RoleDTO());
+        correctUserDTO.setSurname(null);
         this.mockMvc.perform(post("/private/users/add")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("name", correctUserDTO.getName())
-                .param("email", correctUserDTO.getEmail())
-                .param("role.name", correctUserDTO.getRole().getName())
-                .requestAttr("user", userDTO)
+                .flashAttr("user", correctUserDTO)
         )
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
                 .andExpect(content().string(CoreMatchers.containsString("Surname must not be empty.")));
     }
 
-    @WithMockUser(authorities = {"Administrator"})
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldSendRedirectToUsersFirstPageWithPositiveParamForSuccessfulUpdateRolePostRequest()
             throws Exception {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setRole(new RoleDTO());
         this.mockMvc.perform(post("/private/users/add")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("email", correctUserDTO.getEmail())
-                .param("name", correctUserDTO.getName())
-                .param("surname", correctUserDTO.getSurname())
-                .param("role.name", correctUserDTO.getRole().getName())
-                .requestAttr("user", userDTO)
+                .flashAttr("user", correctUserDTO)
         )
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/private/users/1?added"));
+                .andExpect(redirectedUrl("/private/users?added"));
         this.mockMvc.perform(post("/private/users/2/update")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("role.name", correctUserDTO.getRole().getName())
-                .requestAttr("user", userDTO))
+                .flashAttr("user", correctUserDTO))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/private/users/1?updated"));
+                .andExpect(redirectedUrl("/private/users?updated"));
     }
 
-    @WithMockUser(authorities = {"Administrator"})
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldSendRedirectToUsersFirstPageWithNegativeParamForUnsuccessfulUpdateRolePostRequest()
             throws Exception {
-        UserDTO userDTO = new UserDTO();
-        userDTO.setRole(new RoleDTO());
         this.mockMvc.perform(post("/private/users/100/update")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("role.name", correctUserDTO.getRole().getName())
-                .requestAttr("user", userDTO))
+                .flashAttr("user", correctUserDTO))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/private/users/1?updated_zero"));
+                .andExpect(redirectedUrl("/private/users?updated_zero"));
     }
 
-    @WithMockUser(authorities = {"Administrator"})
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldSendRedirectToUsersFirstPageWithPositiveParamForSuccessfulDeletePostRequest() throws Exception {
         UserDTO userDTO = new UserDTO();
         userDTO.setRole(new RoleDTO());
         this.mockMvc.perform(post("/private/users/add")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("email", correctUserDTO.getEmail())
-                .param("name", correctUserDTO.getName())
-                .param("surname", correctUserDTO.getSurname())
-                .param("role.name", correctUserDTO.getRole().getName())
-                .requestAttr("user", userDTO)
+                .flashAttr("user", correctUserDTO)
         )
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/private/users/1?added"));
+                .andExpect(redirectedUrl("/private/users?added"));
         Long[] ids = new Long[1];
         Long id = 2L;
         this.mockMvc.perform(post("/private/users/delete")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("user_ids", id.toString()))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/private/users/1?deleted"));
+                .andExpect(redirectedUrl("/private/users?deleted"));
     }
 
-    @WithMockUser(authorities = {"Administrator"})
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldSendRedirectToUsersFirstPageWithNegativeParamForUnsuccessfulDeletePostRequest() throws Exception {
         Long id = 100L;
@@ -222,10 +187,10 @@ public class UserControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("user_ids", id.toString()))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/private/users/1?deleted_zero"));
+                .andExpect(redirectedUrl("/private/users?deleted_zero"));
     }
 
-    @WithMockUser(authorities = {"Administrator"})
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldSendRedirectToUsersFirstPageWithPositiveParamForSuccessfulPasswordChangePostRequest()
             throws Exception {
@@ -233,27 +198,23 @@ public class UserControllerIntegrationTest {
         userDTO.setRole(new RoleDTO());
         this.mockMvc.perform(post("/private/users/add")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("email", correctUserDTO.getEmail())
-                .param("name", correctUserDTO.getName())
-                .param("surname", correctUserDTO.getSurname())
-                .param("role.name", correctUserDTO.getRole().getName())
-                .requestAttr("user", userDTO)
+                .flashAttr("user", correctUserDTO)
         )
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/private/users/1?added"));
+                .andExpect(redirectedUrl("/private/users?added"));
         this.mockMvc.perform(post("/private/users/2/password")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/private/users/1?password_changed"));
+                .andExpect(redirectedUrl("/private/users?password_changed"));
     }
 
-    @WithMockUser(authorities = {"Administrator"})
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldSendRedirectToUsersFirstPageWithNegativeParamForUnsuccessfulPasswordChangePostRequest()
             throws Exception {
         this.mockMvc.perform(post("/private/users/100/password")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/private/users/1?password_error"));
+                .andExpect(redirectedUrl("/private/users?password_error"));
     }
 }

@@ -10,7 +10,7 @@ public class Review {
     private String patronymic;
     private String review;
     private Date dateOfCreation;
-    private Boolean hidden;
+    private Boolean hidden = false;
 
     public Long getId() {
         return id;

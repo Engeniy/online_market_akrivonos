@@ -18,7 +18,6 @@ import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -84,18 +83,18 @@ public class UserServiceTest {
     public void shouldReturnUpdatedNumberForUpdateRoleMethodCall() {
         Long id = 1L;
         int updated = 1;
-        String roleName = "Admin";
-        when(userRepository.updateRole(connection, id, roleName)).thenReturn(updated);
-        int result = userService.updateRole(id, roleName);
+        Long roleID = 1L;
+        when(userRepository.updateRole(connection, id, roleID)).thenReturn(updated);
+        int result = userService.updateRole(id, roleID);
         assertEquals(updated, result);
     }
 
     @Test(expected = UserServiceException.class)
     public void shouldThrowUserServiceExceptionWhenCatchingExceptionFromRepositoryForUpdateRoleMethodCall() {
         Long id = 1L;
-        String roleName = "Admin";
-        when(userRepository.updateRole(connection, id, roleName)).thenThrow(new RuntimeException());
-        userService.updateRole(id, roleName);
+        Long roleID = 1L;
+        when(userRepository.updateRole(connection, id, roleID)).thenThrow(new RuntimeException());
+        userService.updateRole(id, roleID);
     }
 
     @Test
@@ -167,7 +166,7 @@ public class UserServiceTest {
         int usersNumber = 20;
         int limit = 10;
         int pagesNumber = 2;
-        when(userRepository.countUsers(connection)).thenReturn(usersNumber);
+        when(userRepository.getCountOfUsers(connection)).thenReturn(usersNumber);
         when(pageCountingService.countPages(usersNumber, limit)).thenReturn(pagesNumber);
         int result = userService.getPagesNumber();
         assertEquals(pagesNumber, result);
@@ -177,7 +176,7 @@ public class UserServiceTest {
     public void shouldThrowUserServiceExceptionWhenCatchingExceptionFromRepositoryFromGetPagesNumberMethod() {
         int usersNumber = 20;
         int limit = 10;
-        when(userRepository.countUsers(connection)).thenReturn(usersNumber);
+        when(userRepository.getCountOfUsers(connection)).thenReturn(usersNumber);
         when(pageCountingService.countPages(usersNumber, limit)).thenThrow(new RuntimeException());
         userService.getPagesNumber();
     }

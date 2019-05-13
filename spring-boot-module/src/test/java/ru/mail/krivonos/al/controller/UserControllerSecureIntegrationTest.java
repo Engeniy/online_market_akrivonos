@@ -15,6 +15,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.ADMIN_AUTHORITY_NAME;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
@@ -34,18 +35,18 @@ public class UserControllerSecureIntegrationTest {
                 .build();
     }
 
-    @WithMockUser(authorities = {"Administrator"})
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldSucceedForUsersPage() throws Exception {
-        mockMvc.perform(get("/private/users/1")).andExpect(MockMvcResultMatchers.status().isOk());
+        mockMvc.perform(get("/private/users")).andExpect(MockMvcResultMatchers.status().isOk());
     }
 
     @Test
     public void shouldFailForUsersPage() throws Exception {
-        mockMvc.perform(get("/private/users/1")).andExpect(MockMvcResultMatchers.status().isFound());
+        mockMvc.perform(get("/private/users")).andExpect(MockMvcResultMatchers.status().isFound());
     }
 
-    @WithMockUser(authorities = {"Administrator"})
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldSucceedForAddUserPage() throws Exception {
         mockMvc.perform(get("/private/users/add")).andExpect(MockMvcResultMatchers.status().isOk());

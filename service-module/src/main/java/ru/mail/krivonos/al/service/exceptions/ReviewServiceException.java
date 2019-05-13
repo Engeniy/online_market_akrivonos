@@ -2,7 +2,7 @@ package ru.mail.krivonos.al.service.exceptions;
 
 public class ReviewServiceException extends RuntimeException {
 
-    public ReviewServiceException(String s, Exception e) {
-        super(s, e);
+    public ReviewServiceException(String message, Exception e) {
+        super(message, e);
     }
 }

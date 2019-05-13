@@ -9,7 +9,7 @@ public interface ReviewRepository extends GenericRepository {
 
     List<Review> findReviews(Connection connection, int pageNumber);
 
-    int countReviews(Connection connection);
+    int getCountOfReviews(Connection connection);
 
     int updateHiddenStatus(Connection connection, List<Review> reviews);
 
