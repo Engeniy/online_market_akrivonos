@@ -1,0 +1,109 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <link href="#" rel="stylesheet" th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap.min.css}" type="text/css"/>
+    <link href="#" rel="stylesheet" th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap.css}" type="text/css"/>
+    <link href="#" rel="stylesheet" th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap-grid-jsf.css}" type="text/css"/>
+
+</head>
+<body>
+<div th:replace="fragments/header.html"/>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#" th:href="@{/private/users/add}">Add user</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<div th:if="${param.added}">
+    <div class="alert alert-success text-center">
+        User successfully added.
+    </div>
+</div>
+<div th:if="${param.updated}">
+    <div class="alert alert-success text-center">
+        User role successfully updated.
+    </div>
+</div>
+<div th:if="${param.deleted}">
+    <div class="alert alert-success text-center">
+        Users was successfully deleted.
+    </div>
+</div>
+<div th:if="${param.password_changed}">
+    <div class="alert alert-success text-center">
+        Password was successfully changed.
+    </div>
+</div>
+<div th:if="${param.updated_zero}">
+    <div class="alert alert-danger text-center">
+        User role wasn't updated.
+    </div>
+</div>
+<div th:if="${param.deleted_zero}">
+    <div class="alert alert-danger text-center">
+        Users wasn't deleted or no users was chosen.
+    </div>
+</div>
+<div th:if="${param.password_error}">
+    <div class="alert alert-danger text-center">
+        Password wasn't changed.
+    </div>
+</div>
+<div class="align-self-center container-fluid justify-content-center">
+    <div class="card-group">
+        <div th:each="user : ${users}" style="width: 20%">
+            <form action="#" class="card border-dark" style="padding: 20px; margin: 20px; width: 350px; height: 350px"
+                  th:action="@{/private/users/{id}/update(id=${user.id})}" th:object="${user}" method="post">
+                <label th:if="${!user.unchangeable}">
+                    <input class="checkbox top-left" type="checkbox" name="user_ids"
+                           form="delete" th:value="${user.id}">
+                </label>
+                <b class="text-lg-center">Email:</b>
+                <span class="text-lg-center text-center" th:text="*{email}"></span>
+                <b class="text-lg-center text">Full name:</b>
+                <span class="text-lg-center"
+                      th:text="${user.surname + ' ' + user.name + ' ' + user.patronymic}"></span>
+                <b class="text-lg-center"><span>Role:</span></b>
+                <span th:if="${user.unchangeable}" class="text-lg-center text-center" th:text="*{role.name}"></span>
+                <label th:if="${!user.unchangeable}">
+                    <select class="custom-select align-content-center" name="role" th:field="*{role.id}">
+                        <option th:each="role : ${roles}" th:if="${role.id} == *{role.id}" selected
+                                th:text="${role.name}" th:value="${role.id}"></option>
+                        <option th:each="role : ${roles}" th:unless="${role.id} == *{role.id}"
+                                th:text="${role.name}"
+                                th:value="${role.id}"></option>
+                    </select>
+                </label>
+                <br><input th:if="${!user.unchangeable}" class="btn btn-secondary" type="submit" value="Update">
+                <br><input class="btn btn-secondary" type="submit" value="Change password" formmethod="post"
+                           th:formaction="@{/private/users/{id}/password(id=${user.id})}">
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <form id="delete" style="margin-left: 40%" action="#" th:action="@{/private/users/delete}" method="post">
+        <input class="btn btn-primary" style="width: 35%" type="submit" value="Delete marked">
+    </form>
+    <ul class="pagination justify-content-center">
+        <div th:if="${pages > 0}" th:each="page : ${#numbers.sequence(1, pages)}">
+            <li th:if="${page} == ${current_page}" class="page-item active">
+                <a class="page-link" th:href="@{/private/users(page=${page})}" th:text="${page}"></a>
+            </li>
+            <li th:unless="${page} == ${current_page}" class="page-item">
+                <a class="page-link" th:href="@{/private/users(page=${page})}" th:text="${page}"></a>
+            </li>
+        </div>
+    </ul>
+</div>
+<div th:replace="fragments/footer.html"/>
+</body>
+</html>

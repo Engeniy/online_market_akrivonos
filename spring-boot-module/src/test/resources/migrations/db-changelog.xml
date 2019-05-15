@@ -1,0 +1,134 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet id="ROLE_TABLE_1" author="krivonos-al@mail.ru">
+        <createTable tableName="Role">
+            <column autoIncrement="true" name="id" type="BIGINT UNSIGNED">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(30)"/>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="USER_TABLE_1" author="krivonos-al@mail.ru">
+        <createTable tableName="User">
+            <column autoIncrement="true" name="id" type="BIGINT UNSIGNED">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(50)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="name" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="patronymic" type="VARCHAR(40)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="password" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="BIGINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unchangeable" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="USER_TABLE_2" author="krivonos-al@mail.ru">
+        <addForeignKeyConstraint baseTableName="User"
+                                 baseColumnNames="role_id"
+                                 constraintName="role_id"
+                                 deferrable="false"
+                                 initiallyDeferred="false"
+                                 onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedTableName="Role"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="ROLE_INSERT_1" author="krivonos-al@mail.ru">
+        <insert tableName="Role">
+            <column name="name" value="Administrator"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="USER_INSERT_1" author="krivonos-al@mail.ru">
+        <insert tableName="User">
+            <column name="email" value="admin@admin.com"/>
+            <column name="password" value="$2a$09$QQLe6OdlVTNL2o7Q8LJx3OpxVeiLjcLzBcE/EB70zwaw0l.uZdXIm"/>
+            <column name="name" value="Admin"/>
+            <column name="surname" value="Admin"/>
+            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'Administrator')"/>
+            <column name="unchangeable" valueBoolean="true"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="ROLE_INSERT_2" author="krivonos-al@mail.ru">
+        <insert tableName="Role">
+            <column name="name" value="Sale User"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="ROLE_INSERT_3" author="krivonos-al@mail.ru">
+        <insert tableName="Role">
+            <column name="name" value="Customer User"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="ROLE_INSERT_4" author="krivonos-al@mail.ru">
+        <insert tableName="Role">
+            <column name="name" value="Secure API User"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="REVIEW_TABLE_1" author="krivonos-al@mail.ru">
+        <createTable tableName="Review">
+            <column autoIncrement="true" name="id" type="BIGINT UNSIGNED">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="surname" type="VARCHAR(40)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="patronymic" type="VARCHAR(40)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="review" type="TEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_of_creation" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="hidden" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="TEST_REVIEW_INSERT_1" author="krivonos-al@mail.ru">
+        <insert tableName="Review">
+            <column name="id" value="1"/>
+            <column name="name" value="TestName"/>
+            <column name="surname" value="TestSurname"/>
+            <column name="patronymic" value="TestPatronymic"/>
+            <column name="review" value="Test review."/>
+            <column name="date_of_creation" valueComputed="(NOW())"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
