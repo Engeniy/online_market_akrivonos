@@ -120,4 +120,80 @@
             </column>
         </createTable>
     </changeSet>
+
+    <changeSet id="ARTICLE_TABLE_1" author="krivonos-al@mail.ru">
+        <createTable tableName="Article">
+            <column autoIncrement="true" name="id" type="BIGINT UNSIGNED">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_of_creation" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_id" type="BIGINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="summary" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="VARCHAR(1000)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="ARTICLE_TABLE_2" author="krivonos-al@mail.ru">
+        <addForeignKeyConstraint baseTableName="Article"
+                                 baseColumnNames="author_id"
+                                 constraintName="author_id"
+                                 deferrable="false"
+                                 initiallyDeferred="false"
+                                 onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedTableName="User"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="COMMENT_TABLE_1" author="krivonos-al@mail.ru">
+        <createTable tableName="Comment">
+            <column autoIncrement="true" name="id" type="BIGINT UNSIGNED">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="date_of_creation" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="author_id" type="BIGINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="content" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="article_id" type="BIGINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="COMMENT_TABLE_2" author="krivonos-al@mail.ru">
+        <addForeignKeyConstraint baseTableName="Comment"
+                                 baseColumnNames="author_id"
+                                 constraintName="author_id"
+                                 deferrable="false"
+                                 initiallyDeferred="false"
+                                 onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedTableName="User"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="Comment"
+                                 baseColumnNames="article_id"
+                                 constraintName="article_id"
+                                 deferrable="false"
+                                 initiallyDeferred="false"
+                                 onDelete="NO ACTION"
+                                 onUpdate="NO ACTION"
+                                 referencedTableName="Article"
+                                 referencedColumnNames="id"/>
+    </changeSet>
 </databaseChangeLog>

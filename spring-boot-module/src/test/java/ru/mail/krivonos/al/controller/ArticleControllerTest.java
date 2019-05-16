@@ -22,6 +22,9 @@ import static ru.mail.krivonos.al.controller.constant.PageConstants.ARTICLES_PAG
 @RunWith(MockitoJUnitRunner.class)
 public class ArticleControllerTest {
 
+    @Mock
+    private Model model;
+
     private ArticleController articleController;
 
     @Before
@@ -31,7 +34,7 @@ public class ArticleControllerTest {
 
     @Test
    public void shouldReturnArticlesPageForGetRequest() {
-        String result = articleController.getArticles();
+        String result = articleController.getArticles(1, model);
         Assert.assertEquals(ARTICLES_PAGE, result);
     }
 }
