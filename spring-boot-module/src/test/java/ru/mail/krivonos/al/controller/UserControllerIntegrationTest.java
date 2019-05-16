@@ -49,7 +49,7 @@ public class UserControllerIntegrationTest {
 
     @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
-    public void shouldReturnUsersPageForGetRequestWithPageNumber() throws Exception {
+    public void shouldReturnUsersPageForGetRequest() throws Exception {
         mockMvc.perform(get("/private/users")).andExpect(status().isOk());
     }
 
