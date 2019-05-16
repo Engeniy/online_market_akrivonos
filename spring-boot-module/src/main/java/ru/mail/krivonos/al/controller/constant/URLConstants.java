@@ -18,6 +18,9 @@ public class URLConstants {
     public static final String REVIEWS_DELETE_URL = "/reviews/{id}/delete";
     public static final String REVIEWS_UPDATE_URL = "/reviews/update";
     public static final String BOOTSTRAP_CONTENT_URL = "/webjars/**";
+    public static final String ARTICLES_PAGE_URL = "/articles";
+    public static final String ARTICLE_PAGE_URL = "/article";
+    public static final String PROFILE_PAGE_URL = "/profile";
 
     private URLConstants() {
     }

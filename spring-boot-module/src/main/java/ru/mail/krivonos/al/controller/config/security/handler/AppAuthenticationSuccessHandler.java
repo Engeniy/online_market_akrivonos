@@ -6,6 +6,7 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import ru.mail.krivonos.al.controller.constant.URLConstants;
 import ru.mail.krivonos.al.controller.exceptions.IllegalAuthorityStateException;
 import ru.mail.krivonos.al.controller.exceptions.IllegalResponseStateException;
 
@@ -16,6 +17,9 @@ import java.io.IOException;
 import java.util.Collection;
 
 import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.ADMIN_AUTHORITY_NAME;
+import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.CUSTOMER_AUTHORITY_NAME;
+import static ru.mail.krivonos.al.controller.constant.URLConstants.ARTICLES_PAGE_URL;
+import static ru.mail.krivonos.al.controller.constant.URLConstants.USERS_PAGE_URL;
 
 public class AppAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
@@ -40,8 +44,13 @@ public class AppAuthenticationSuccessHandler implements AuthenticationSuccessHan
         String targetURL = null;
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (GrantedAuthority authority : authorities) {
-            if (ADMIN_AUTHORITY_NAME.equals(authority.getAuthority())) {
-                targetURL = "/private/users";
+            switch (authority.getAuthority()) {
+                case ADMIN_AUTHORITY_NAME:
+                    targetURL = USERS_PAGE_URL;
+                    break;
+                case CUSTOMER_AUTHORITY_NAME:
+                    targetURL = ARTICLES_PAGE_URL;
+                    break;
             }
         }
         if (targetURL == null) {

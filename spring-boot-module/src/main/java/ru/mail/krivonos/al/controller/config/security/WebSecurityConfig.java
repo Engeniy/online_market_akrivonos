@@ -14,20 +14,8 @@ import ru.mail.krivonos.al.controller.config.security.handler.AppAccessDeniedHan
 import ru.mail.krivonos.al.controller.config.security.handler.AppAuthenticationSuccessHandler;
 
 import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.ADMIN_AUTHORITY_NAME;
-import static ru.mail.krivonos.al.controller.constant.URLConstants.BOOTSTRAP_CONTENT_URL;
-import static ru.mail.krivonos.al.controller.constant.URLConstants.FORBIDDEN_PAGE_URL;
-import static ru.mail.krivonos.al.controller.constant.URLConstants.HOMEPAGE_URL;
-import static ru.mail.krivonos.al.controller.constant.URLConstants.INTERNAL_ERROR_PAGE_URL;
-import static ru.mail.krivonos.al.controller.constant.URLConstants.LOGIN_PAGE_URL;
-import static ru.mail.krivonos.al.controller.constant.URLConstants.REVIEWS_DELETE_URL;
-import static ru.mail.krivonos.al.controller.constant.URLConstants.REVIEWS_PAGE_URL;
-import static ru.mail.krivonos.al.controller.constant.URLConstants.REVIEWS_PAGE_WITH_PAGE_NUMBER_URL;
-import static ru.mail.krivonos.al.controller.constant.URLConstants.REVIEWS_UPDATE_URL;
-import static ru.mail.krivonos.al.controller.constant.URLConstants.USERS_ADD_PAGE_URL;
-import static ru.mail.krivonos.al.controller.constant.URLConstants.USERS_DELETE_URL;
-import static ru.mail.krivonos.al.controller.constant.URLConstants.USERS_PAGE_URL;
-import static ru.mail.krivonos.al.controller.constant.URLConstants.USERS_PAGE_WITH_PAGE_NUMBER_URL;
-import static ru.mail.krivonos.al.controller.constant.URLConstants.USERS_PASSWORD_CHANGE_URL;
+import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.CUSTOMER_AUTHORITY_NAME;
+import static ru.mail.krivonos.al.controller.constant.URLConstants.*;
 
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -52,8 +40,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(USERS_PAGE_URL, USERS_ADD_PAGE_URL, USERS_DELETE_URL,
                         USERS_PASSWORD_CHANGE_URL, REVIEWS_UPDATE_URL)
                 .hasAuthority(ADMIN_AUTHORITY_NAME)
-                .antMatchers(HOMEPAGE_URL, REVIEWS_PAGE_URL, BOOTSTRAP_CONTENT_URL,
-                        FORBIDDEN_PAGE_URL, INTERNAL_ERROR_PAGE_URL, REVIEWS_DELETE_URL)
+                .antMatchers(PROFILE_PAGE_URL)
+                .hasAuthority(CUSTOMER_AUTHORITY_NAME)
+                .antMatchers(HOMEPAGE_URL, REVIEWS_PAGE_URL, BOOTSTRAP_CONTENT_URL, FORBIDDEN_PAGE_URL,
+                        INTERNAL_ERROR_PAGE_URL, REVIEWS_DELETE_URL, ARTICLES_PAGE_URL, ARTICLE_PAGE_URL)
                 .permitAll()
                 .and()
                 .formLogin()
