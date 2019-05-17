@@ -15,9 +15,9 @@ import javax.persistence.TemporalType;
 import java.util.Date;
 
 @Entity
-@Table(name = "Comment")
+@Table(name = "T_Comment")
 @SQLDelete(sql =
-        "UPDATE Comment " +
+        "UPDATE T_Comment " +
                 "SET deleted = '1' " +
                 "WHERE id = ?")
 public class Comment {
@@ -25,7 +25,7 @@ public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date_of_creation")
     private Date dateOfCreation;
     @ManyToOne
@@ -34,7 +34,7 @@ public class Comment {
     @Column(name = "content")
     private String content;
     @ManyToOne
-    @JoinColumn(name = "article_id", nullable = false)
+    @JoinColumn(name = "article_id")
     private Article article;
 
     public Long getId() {

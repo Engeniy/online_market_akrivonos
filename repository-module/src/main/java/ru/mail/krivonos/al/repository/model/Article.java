@@ -19,9 +19,9 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "Article")
+@Table(name = "T_Article")
 @SQLDelete(sql =
-        "UPDATE Article " +
+        "UPDATE T_Article " +
                 "SET deleted = '1' " +
                 "WHERE id = ?")
 @Where(clause = "deleted = '0'")
@@ -31,19 +31,19 @@ public class Article {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date_of_creation")
     private Date dateOfCreation;
     @Column(name = "title")
     private String title;
     @ManyToOne
     @JoinColumn(name = "author_id")
-    private User user;
+    private User author;
     @Column(name = "summary")
     private String summary;
     @Column(name = "content")
     private String content;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "Article")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
     private List<Comment> comments;
 
     public Long getId() {
@@ -70,12 +70,12 @@ public class Article {
         this.title = title;
     }
 
-    public User getUser() {
-        return user;
+    public User getAuthor() {
+        return author;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     public String getSummary() {

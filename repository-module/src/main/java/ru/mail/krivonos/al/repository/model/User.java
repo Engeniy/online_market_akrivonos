@@ -1,15 +1,38 @@
 package ru.mail.krivonos.al.repository.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "T_User")
 public class User {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
+    @Column(name = "email")
     private String email;
+    @Column(name = "name")
     private String name;
+    @Column(name = "surname")
     private String surname;
+    @Column(name = "patronymic")
     private String patronymic;
+    @Column(name = "password")
     private String password;
+    @Column(name = "unchangeable")
     private Boolean unchangeable;
+    @Column(name = "deleted")
     private Boolean deleted;
+    @ManyToOne
+    @JoinColumn(name = "role_id")
     private Role role;
 
     public Long getId() {
