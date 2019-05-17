@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import ru.mail.krivonos.al.controller.constant.PageConstants;
 import ru.mail.krivonos.al.controller.validator.UserValidator;
+import ru.mail.krivonos.al.service.ArticleService;
 import ru.mail.krivonos.al.service.RoleService;
 import ru.mail.krivonos.al.service.UserService;
 import ru.mail.krivonos.al.service.model.RoleDTO;
@@ -24,12 +25,14 @@ public class ArticleControllerTest {
 
     @Mock
     private Model model;
+    @Mock
+    private ArticleService articleService;
 
     private ArticleController articleController;
 
     @Before
     public void init() {
-        articleController = new ArticleController();
+       articleController = new ArticleController(articleService);
     }
 
     @Test
