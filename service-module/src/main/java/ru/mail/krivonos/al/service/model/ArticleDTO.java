@@ -8,7 +8,7 @@ public class ArticleDTO {
     private Long id;
     private Date dateOfCreation;
     private String title;
-    private UserDTO userDTO;
+    private UserDTO author;
     private String summary;
     private String content;
     private List<CommentDTO> comments;
@@ -37,12 +37,12 @@ public class ArticleDTO {
         this.title = title;
     }
 
-    public UserDTO getUserDTO() {
-        return userDTO;
+    public UserDTO getAuthor() {
+        return author;
     }
 
-    public void setUserDTO(UserDTO userDTO) {
-        this.userDTO = userDTO;
+    public void setAuthor(UserDTO author) {
+        this.author = author;
     }
 
     public String getSummary() {
