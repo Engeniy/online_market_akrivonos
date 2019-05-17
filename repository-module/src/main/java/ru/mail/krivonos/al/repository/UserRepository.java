@@ -5,7 +5,7 @@ import ru.mail.krivonos.al.repository.model.User;
 import java.sql.Connection;
 import java.util.List;
 
-public interface UserRepository extends GenericRepository {
+public interface UserRepository extends GenericRepository<Long, User> {
 
     List<User> findUsers(Connection connection, Integer pageNumber);
 

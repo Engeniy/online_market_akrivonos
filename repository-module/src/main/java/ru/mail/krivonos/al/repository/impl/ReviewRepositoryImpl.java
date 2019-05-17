@@ -20,7 +20,7 @@ import static ru.mail.krivonos.al.repository.constant.RepositoryMessageConstants
 import static ru.mail.krivonos.al.repository.constant.RepositoryMessageConstants.RESULT_SET_CLOSING_ERROR_MESSAGE;
 
 @Repository("reviewRepository")
-public class ReviewRepositoryImpl extends GenericRepositoryImpl implements ReviewRepository {
+public class ReviewRepositoryImpl extends GenericRepositoryImpl<Long, Review> implements ReviewRepository {
 
     private static final String REVIEW_EXTRACTION_ERROR_MESSAGE = "Error while extracting review.";
     private static final String REVIEWS_COUNTING_ERROR_MESSAGE = "Error while counting reviews.";

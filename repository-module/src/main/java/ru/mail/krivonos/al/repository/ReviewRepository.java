@@ -5,7 +5,7 @@ import ru.mail.krivonos.al.repository.model.Review;
 import java.sql.Connection;
 import java.util.List;
 
-public interface ReviewRepository extends GenericRepository {
+public interface ReviewRepository extends GenericRepository<Long, Review> {
 
     List<Review> findReviews(Connection connection, int pageNumber);
 

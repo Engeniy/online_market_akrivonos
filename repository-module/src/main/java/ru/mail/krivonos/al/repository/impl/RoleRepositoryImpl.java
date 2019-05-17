@@ -18,7 +18,7 @@ import static ru.mail.krivonos.al.repository.constant.RepositoryMessageConstants
 import static ru.mail.krivonos.al.repository.constant.RepositoryMessageConstants.RESULT_SET_CLOSING_ERROR_MESSAGE;
 
 @Repository("roleRepository")
-public class RoleRepositoryImpl extends GenericRepositoryImpl implements RoleRepository {
+public class RoleRepositoryImpl extends GenericRepositoryImpl<Long, Role> implements RoleRepository {
 
     private static final String ROLES_EXTRACTION_ERROR_MESSAGE = "Error while extracting roles.";
 

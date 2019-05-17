@@ -20,7 +20,7 @@ import static ru.mail.krivonos.al.repository.constant.RepositoryMessageConstants
 import static ru.mail.krivonos.al.repository.constant.RepositoryMessageConstants.RESULT_SET_CLOSING_ERROR_MESSAGE;
 
 @Repository("userRepository")
-public class UserRepositoryImpl extends GenericRepositoryImpl implements UserRepository {
+public class UserRepositoryImpl extends GenericRepositoryImpl<Long, User> implements UserRepository {
 
     private static final String USER_EXTRACTION_ERROR_MESSAGE = "Error while extracting user.";
     private static final String USERS_COUNTING_ERROR_MESSAGE = "Error while counting users.";
