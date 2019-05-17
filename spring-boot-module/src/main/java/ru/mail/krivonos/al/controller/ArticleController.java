@@ -12,11 +12,16 @@ import ru.mail.krivonos.al.service.model.PageDTO;
 import static ru.mail.krivonos.al.controller.constant.PageConstants.ARTICLES_PAGE;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ARTICLES_PAGE_URL;
 
-@Controller
+@Controller("articleController")
 public class ArticleController {
 
+    private final ArticleService articleService;
+
     @Autowired
-    private ArticleService articleService;
+    public ArticleController(ArticleService articleService) {
+        this.articleService = articleService;
+    }
+
 
     @GetMapping(ARTICLES_PAGE_URL)
     public String getArticles(

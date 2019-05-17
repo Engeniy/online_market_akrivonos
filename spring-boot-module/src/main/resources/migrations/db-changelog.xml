@@ -5,7 +5,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
     <changeSet id="ROLE_TABLE_1" author="krivonos-al@mail.ru">
-        <createTable tableName="Role">
+        <createTable tableName="t_role">
             <column autoIncrement="true" name="id" type="BIGINT UNSIGNED">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -14,7 +14,7 @@
     </changeSet>
 
     <changeSet id="USER_TABLE_1" author="krivonos-al@mail.ru">
-        <createTable tableName="User">
+        <createTable tableName="t_user">
             <column autoIncrement="true" name="id" type="BIGINT UNSIGNED">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -46,54 +46,54 @@
     </changeSet>
 
     <changeSet id="USER_TABLE_2" author="krivonos-al@mail.ru">
-        <addForeignKeyConstraint baseTableName="User"
+        <addForeignKeyConstraint baseTableName="t_user"
                                  baseColumnNames="role_id"
                                  constraintName="role_id"
                                  deferrable="false"
                                  initiallyDeferred="false"
                                  onDelete="NO ACTION"
                                  onUpdate="NO ACTION"
-                                 referencedTableName="Role"
+                                 referencedTableName="t_role"
                                  referencedColumnNames="id"/>
     </changeSet>
 
     <changeSet id="ROLE_INSERT_1" author="krivonos-al@mail.ru">
-        <insert tableName="Role">
+        <insert tableName="t_role">
             <column name="name" value="Administrator"/>
         </insert>
     </changeSet>
 
     <changeSet id="USER_INSERT_1" author="krivonos-al@mail.ru">
-        <insert tableName="User">
+        <insert tableName="t_user">
             <column name="email" value="admin@admin.com"/>
             <column name="password" value="$2a$09$QQLe6OdlVTNL2o7Q8LJx3OpxVeiLjcLzBcE/EB70zwaw0l.uZdXIm"/>
             <column name="name" value="Admin"/>
             <column name="surname" value="Admin"/>
-            <column name="role_id" valueComputed="(SELECT id FROM Role WHERE name = 'Administrator')"/>
+            <column name="role_id" valueComputed="(SELECT id FROM t_role WHERE name = 'Administrator')"/>
             <column name="unchangeable" valueBoolean="true"/>
         </insert>
     </changeSet>
 
     <changeSet id="ROLE_INSERT_2" author="krivonos-al@mail.ru">
-        <insert tableName="Role">
+        <insert tableName="t_role">
             <column name="name" value="Sale User"/>
         </insert>
     </changeSet>
 
     <changeSet id="ROLE_INSERT_3" author="krivonos-al@mail.ru">
-        <insert tableName="Role">
+        <insert tableName="t_role">
             <column name="name" value="Customer User"/>
         </insert>
     </changeSet>
 
     <changeSet id="ROLE_INSERT_4" author="krivonos-al@mail.ru">
-        <insert tableName="Role">
+        <insert tableName="t_role">
             <column name="name" value="Secure API User"/>
         </insert>
     </changeSet>
 
     <changeSet id="REVIEW_TABLE_1" author="krivonos-al@mail.ru">
-        <createTable tableName="Review">
+        <createTable tableName="t_review">
             <column autoIncrement="true" name="id" type="BIGINT UNSIGNED">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -122,7 +122,7 @@
     </changeSet>
 
     <changeSet id="ARTICLE_TABLE_1" author="krivonos-al@mail.ru">
-        <createTable tableName="Article">
+        <createTable tableName="t_article">
             <column autoIncrement="true" name="id" type="BIGINT UNSIGNED">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -141,23 +141,26 @@
             <column name="content" type="VARCHAR(1000)">
                 <constraints nullable="false"/>
             </column>
+            <column name="deleted" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 
     <changeSet id="ARTICLE_TABLE_2" author="krivonos-al@mail.ru">
-        <addForeignKeyConstraint baseTableName="Article"
+        <addForeignKeyConstraint baseTableName="t_article"
                                  baseColumnNames="author_id"
                                  constraintName="author_id"
                                  deferrable="false"
                                  initiallyDeferred="false"
                                  onDelete="NO ACTION"
                                  onUpdate="NO ACTION"
-                                 referencedTableName="User"
+                                 referencedTableName="t_user"
                                  referencedColumnNames="id"/>
     </changeSet>
 
     <changeSet id="COMMENT_TABLE_1" author="krivonos-al@mail.ru">
-        <createTable tableName="Comment">
+        <createTable tableName="t_comment">
             <column autoIncrement="true" name="id" type="BIGINT UNSIGNED">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -173,27 +176,50 @@
             <column name="article_id" type="BIGINT UNSIGNED">
                 <constraints nullable="false"/>
             </column>
+            <column name="deleted" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
         </createTable>
     </changeSet>
 
     <changeSet id="COMMENT_TABLE_2" author="krivonos-al@mail.ru">
-        <addForeignKeyConstraint baseTableName="Comment"
+        <addForeignKeyConstraint baseTableName="t_comment"
                                  baseColumnNames="author_id"
-                                 constraintName="author_id"
+                                 constraintName="comment_author_id"
                                  deferrable="false"
                                  initiallyDeferred="false"
                                  onDelete="NO ACTION"
                                  onUpdate="NO ACTION"
-                                 referencedTableName="User"
+                                 referencedTableName="t_user"
                                  referencedColumnNames="id"/>
-        <addForeignKeyConstraint baseTableName="Comment"
+        <addForeignKeyConstraint baseTableName="t_comment"
                                  baseColumnNames="article_id"
                                  constraintName="article_id"
                                  deferrable="false"
                                  initiallyDeferred="false"
                                  onDelete="NO ACTION"
                                  onUpdate="NO ACTION"
-                                 referencedTableName="Article"
+                                 referencedTableName="t_article"
                                  referencedColumnNames="id"/>
+    </changeSet>
+    
+    <changeSet id="ARTICLE_INSERT_1" author="krivonos-al@mail.ru">
+    <insert tableName="t_article">
+        <column name="title" value="Some title bro!"/>
+        <column name="date_of_creation" valueComputed="NOW()"/>
+        <column name="author_id" value="1"/>
+        <column name="summary" value="Some summary"/>
+        <column name="content" value="There is some really important content."/>
+    </insert>
+</changeSet>
+
+    <changeSet id="ARTICLE_INSERT_2" author="krivonos-al@mail.ru">
+        <insert tableName="t_article">
+            <column name="title" value="Second title bro!"/>
+            <column name="date_of_creation" valueComputed="NOW()"/>
+            <column name="author_id" value="1"/>
+            <column name="summary" value="Second summary"/>
+            <column name="content" value="There is some really important content Second."/>
+        </insert>
     </changeSet>
 </databaseChangeLog>

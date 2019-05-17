@@ -1,0 +1,74 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Articles</title>
+    <link href="#" rel="stylesheet" th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap.min.css}" type="text/css"/>
+    <link href="#" rel="stylesheet" th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap.css}" type="text/css"/>
+    <link href="#" rel="stylesheet" th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap-grid-jsf.css}" type="text/css"/>
+
+</head>
+<body>
+<div th:replace="fragments/header.html"/>
+<div th:if="${page.list.isEmpty()}">
+    <div class="alert alert-info text-center">
+        There is no reviews at the moment.
+    </div>
+</div>
+<div th:if="${param.updated}">
+    <div class="alert alert-success text-center">
+        Reviews statuses successfully updated.
+    </div>
+</div>
+<div th:if="${param.deleted}">
+    <div class="alert alert-success text-center">
+        Review was successfully deleted.
+    </div>
+</div>
+<div th:if="${param.updated_zero}">
+    <div class="alert alert-danger text-center">
+        Reviews statuses wasn't updated or no reviews was chosen.
+    </div>
+</div>
+<div th:if="${param.deleted_zero}">
+    <div class="alert alert-danger text-center">
+        Review wasn't deleted.
+    </div>
+</div>
+<div class="align-self-center container-fluid justify-content-center">
+    <div class="card-group">
+        <div th:each="article,stat : ${page.list}" style="width: 20%">
+            <form action="#" class="card border-dark"
+                  style="padding: 20px; margin: 20px; width: 350px; height: 450px"
+                  th:action="@{/reviews/{id}/delete(id=${article.id})}" th:object="${article}"
+                  method="post">
+                <b class="text-lg-center text">Written by:</b>
+                <span class="text-lg-center"
+                      th:text="${article.author.surname + ' ' + article.author.name}"></span>
+                <b class="text-lg-center">Written:</b>
+                <span class="text-lg-center text-center" th:text="*{dateOfCreation}"></span>
+                <b class="text-lg-center"><span>Review:</span></b>
+                <span class="text-lg-center text-center" th:text="*{summary}"></span>
+                <div sec:authorize="isAuthenticated()">
+                    <span sec:authorize="hasAuthority('Administrator')">
+                <br><input class="btn btn-secondary" type="submit" value="Delete">
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<ul class="pagination justify-content-center">
+    <div th:if="${page.countOfPages > 0}" th:each="page_number : ${#numbers.sequence(1, page.countOfPages)}">
+        <li th:if="${page_number} == ${page.currentPageNumber}" class="page-item active">
+            <a class="page-link" th:href="@{/private/users/(page=${page})}" th:text="${page_number}"></a>
+        </li>
+        <li th:unless="${page_number} == ${page.currentPageNumber}" class="page-item">
+            <a class="page-link" th:href="@{/private/users/(page=${page_number})}" th:text="${page_number}"></a>
+        </li>
+    </div>
+</ul>
+<div th:replace="fragments/footer.html"/>
+</body>
+</html>
