@@ -6,11 +6,11 @@ public class UserDTO {
     private String email;
     private String name;
     private String surname;
-    private String patronymic;
     private String password;
-    private Boolean unchangeable;
-    private Boolean deleted;
+    private boolean unchangeable;
+    private boolean deleted;
     private RoleDTO role;
+    private ProfileDTO profile;
 
     public Long getId() {
         return id;
@@ -44,23 +44,15 @@ public class UserDTO {
         this.surname = surname;
     }
 
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
     public String getPassword() {
         return password;
     }
 
-    public Boolean getUnchangeable() {
+    public boolean getUnchangeable() {
         return unchangeable;
     }
 
-    public void setUnchangeable(Boolean unchangeable) {
+    public void setUnchangeable(boolean unchangeable) {
         this.unchangeable = unchangeable;
     }
 
@@ -68,11 +60,11 @@ public class UserDTO {
         this.password = password;
     }
 
-    public Boolean getDeleted() {
+    public boolean getDeleted() {
         return deleted;
     }
 
-    public void setDeleted(Boolean deleted) {
+    public void setDeleted(boolean deleted) {
         this.deleted = deleted;
     }
 
@@ -82,5 +74,13 @@ public class UserDTO {
 
     public void setRole(RoleDTO role) {
         this.role = role;
+    }
+
+    public ProfileDTO getProfile() {
+        return profile;
+    }
+
+    public void setProfile(ProfileDTO profile) {
+        this.profile = profile;
     }
 }

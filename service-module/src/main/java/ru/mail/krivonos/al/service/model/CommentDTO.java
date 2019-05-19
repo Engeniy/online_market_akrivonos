@@ -1,12 +1,16 @@
 package ru.mail.krivonos.al.service.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 public class CommentDTO {
 
     private Long id;
     private Date dateOfCreation;
-    private UserDTO user;
+    private UserDTO author;
+    @NotNull
+    @Size(max = 200)
     private String content;
 
     public Long getId() {
@@ -25,12 +29,12 @@ public class CommentDTO {
         this.dateOfCreation = dateOfCreation;
     }
 
-    public UserDTO getUser() {
-        return user;
+    public UserDTO getAuthor() {
+        return author;
     }
 
-    public void setUser(UserDTO user) {
-        this.user = user;
+    public void setAuthor(UserDTO author) {
+        this.author = author;
     }
 
     public String getContent() {
