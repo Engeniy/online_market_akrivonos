@@ -13,6 +13,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.mail.krivonos.al.controller.model.UserPasswordForm;
 import ru.mail.krivonos.al.service.model.ProfileDTO;
 import ru.mail.krivonos.al.service.model.RoleDTO;
 import ru.mail.krivonos.al.service.model.UserDTO;
@@ -23,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.ADMIN_AUTHORITY_NAME;
+import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.CUSTOMER_AUTHORITY_NAME;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
@@ -191,5 +193,44 @@ public class UserControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/private/users?page=1&password_changed"));
+    }
+
+    @WithMockUser(authorities = {CUSTOMER_AUTHORITY_NAME})
+    @Test
+    public void shouldSendRedirectToProfilePageWithPositiveParamForSuccessfulUpdateProfilePostRequest()
+            throws Exception {
+        this.mockMvc.perform(post("/private/profile/1/update")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .flashAttr("user", correctUserDTO))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/private/profile?updated"));
+    }
+
+    @WithMockUser(authorities = {CUSTOMER_AUTHORITY_NAME})
+    @Test
+    public void shouldSendRedirectToProfilePageWithPositiveParamForSuccessfulUpdatePasswordPostRequest()
+            throws Exception {
+        UserPasswordForm userPasswordForm = new UserPasswordForm();
+        userPasswordForm.setOldPassword("admin");
+        userPasswordForm.setNewPassword("admin1");
+        this.mockMvc.perform(post("/private/profile/1/password")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .flashAttr("password_form", userPasswordForm))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/private/profile?password_changed"));
+    }
+
+    @WithMockUser(authorities = {CUSTOMER_AUTHORITY_NAME})
+    @Test
+    public void shouldSendRedirectToArticlePageWithPositiveParamForSuccessfulUpdatePasswordPostRequest()
+            throws Exception {
+        UserPasswordForm userPasswordForm = new UserPasswordForm();
+        userPasswordForm.setOldPassword("admin");
+        userPasswordForm.setNewPassword("admin1");
+        this.mockMvc.perform(post("/private/profile/1/password")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .flashAttr("password_form", userPasswordForm))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/private/profile?password_changed"));
     }
 }
