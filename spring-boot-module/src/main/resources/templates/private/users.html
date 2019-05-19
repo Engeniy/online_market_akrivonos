@@ -59,9 +59,10 @@
 </div>
 <div class="align-self-center container-fluid justify-content-center">
     <div class="card-group">
-        <div th:each="user : ${users}" style="width: 20%">
+        <div th:each="user : ${page.list}" style="width: 20%">
             <form action="#" class="card border-dark" style="padding: 20px; margin: 20px; width: 350px; height: 350px"
-                  th:action="@{/private/users/{id}/update(id=${user.id})}" th:object="${user}" method="post">
+                  th:action="@{/private/users/{id}/update(id=${user.id}, page=${page.currentPageNumber})}"
+                  th:object="${user}" method="post">
                 <label th:if="${!user.unchangeable}">
                     <input class="checkbox top-left" type="checkbox" name="user_ids"
                            form="delete" th:value="${user.id}">
@@ -70,7 +71,7 @@
                 <span class="text-lg-center text-center" th:text="*{email}"></span>
                 <b class="text-lg-center text">Full name:</b>
                 <span class="text-lg-center"
-                      th:text="${user.surname + ' ' + user.name + ' ' + user.patronymic}"></span>
+                      th:text="${user.surname + ' ' + user.name}"></span>
                 <b class="text-lg-center"><span>Role:</span></b>
                 <span th:if="${user.unchangeable}" class="text-lg-center text-center" th:text="*{role.name}"></span>
                 <label th:if="${!user.unchangeable}">
@@ -84,22 +85,23 @@
                 </label>
                 <br><input th:if="${!user.unchangeable}" class="btn btn-secondary" type="submit" value="Update">
                 <br><input class="btn btn-secondary" type="submit" value="Change password" formmethod="post"
-                           th:formaction="@{/private/users/{id}/password(id=${user.id})}">
+                           th:formaction="@{/private/users/{id}/password(id=${user.id}, page=${page.currentPageNumber})}">
             </form>
         </div>
     </div>
 </div>
 <div class="container">
-    <form id="delete" style="margin-left: 40%" action="#" th:action="@{/private/users/delete}" method="post">
+    <form id="delete" style="margin-left: 40%" action="#"
+          th:action="@{/private/users/delete(page = ${page.currentPageNumber})}" method="post">
         <input class="btn btn-primary" style="width: 35%" type="submit" value="Delete marked">
     </form>
     <ul class="pagination justify-content-center">
-        <div th:if="${pages > 0}" th:each="page : ${#numbers.sequence(1, pages)}">
-            <li th:if="${page} == ${current_page}" class="page-item active">
-                <a class="page-link" th:href="@{/private/users(page=${page})}" th:text="${page}"></a>
+        <div th:if="${page.countOfPages > 0}" th:each="page_number : ${#numbers.sequence(1, page.countOfPages)}">
+            <li th:if="${page_number} == ${page.currentPageNumber}" class="page-item active">
+                <a class="page-link" th:href="@{/private/users(page=${page_number})}" th:text="${page_number}"></a>
             </li>
-            <li th:unless="${page} == ${current_page}" class="page-item">
-                <a class="page-link" th:href="@{/private/users(page=${page})}" th:text="${page}"></a>
+            <li th:unless="${page_number} == ${page.currentPageNumber}" class="page-item">
+                <a class="page-link" th:href="@{/private/users(page=${page_number})}" th:text="${page_number}"></a>
             </li>
         </div>
     </ul>

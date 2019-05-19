@@ -19,8 +19,16 @@
                         <a class="nav-link" href="#" th:href="@{/private/users}">Users</a>
                     </li>
                 </div>
+                <div sec:authorize="isAuthenticated()">
+                    <li sec:authorize="hasAuthority('Customer User')" class="nav-item">
+                        <a class="nav-link" href="#" th:href="@{/private/profile}">Profile</a>
+                    </li>
+                </div>
                 <li class="nav-item">
                     <a class="nav-link" href="#" th:href="@{/reviews}">Reviews</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{/articles}">Articles</a>
                 </li>
                 <li sec:authorize="isAuthenticated()" class="nav-item">
                     <a class="nav-link" href="#" th:href="@{/logout}">Logout</a>
