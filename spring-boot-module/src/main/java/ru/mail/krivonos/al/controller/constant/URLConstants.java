@@ -3,6 +3,9 @@ package ru.mail.krivonos.al.controller.constant;
 public class URLConstants {
 
     public static final String REDIRECT_WITH_PARAMETER_TEMPLATE = "redirect:%s?%s";
+    public static final String REDIRECT_WITH_DECIMAL_PARAMETER_TEMPLATE = "redirect:%s?%s%d";
+    public static final String REDIRECT_WITH_TWO_PARAMETERS_TEMPLATE = "redirect:%s?%s%d&%s";
+    public static final String REDIRECT_TEMPLATE = "redirect:%s";
     public static final String HOMEPAGE_URL = "/";
     public static final String LOGIN_PAGE_URL = "/login";
     public static final String FORBIDDEN_PAGE_URL = "/403";
@@ -18,7 +21,12 @@ public class URLConstants {
     public static final String BOOTSTRAP_CONTENT_URL = "/webjars/**";
     public static final String ARTICLES_PAGE_URL = "/articles";
     public static final String ARTICLE_PAGE_URL = "/article";
-    public static final String PROFILE_PAGE_URL = "/profile";
+    public static final String ARTICLE_ADD_COMMENT_URL = "/article/comment";
+    public static final String ARTICLE_DELETE_COMMENT_URL = "/article/comment/delete";
+    public static final String PROFILE_PAGE_URL = "/private/profile";
+    public static final String PROFILE_UPDATE_URL = "/private/profile/{id}/update";
+    public static final String PROFILE_PASSWORD_UPDATE_URL = "/private/profile/{id}/password";
+    public static final String FAVORITE_ARTICLES_URL = "/private/articles/favorites";
 
     private URLConstants() {
     }

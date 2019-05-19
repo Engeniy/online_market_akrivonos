@@ -8,7 +8,9 @@ public class URLParametersConstants {
     public static final String DELETED_POSITIVE_PARAM = "deleted";
     public static final String DELETED_NEGATIVE_PARAM = "deleted_zero";
     public static final String PASSWORD_CHANGE_POSITIVE_PARAM = "password_changed";
-    public static final String PASSWORD_CHANGE_NEGATIVE_PARAM = "password_error";
+    public static final String ARTICLE_NUMBER_PARAM = "article_number=";
+    public static final String PAGE_NUMBER_PARAM = "page=";
+    public static final String FAVORITE_ADDED_PARAM = "favorite_added";
 
     private URLParametersConstants() {
     }

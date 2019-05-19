@@ -9,6 +9,9 @@ public class PageConstants {
     public static final String FORBIDDEN_PAGE = "error/403";
     public static final String INTERNAL_ERROR_PAGE = "error/500";
     public static final String ARTICLES_PAGE = "articles";
+    public static final String ARTICLE_PAGE = "article";
+    public static final String PROFILE_PAGE = "private/profile";
+    public static final String FAVORITE_ARTICLES_PAGE = "private/favorite-articles";
 
     private PageConstants() {
     }
