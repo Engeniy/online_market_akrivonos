@@ -31,7 +31,7 @@ public class RoleConverterTest {
     public void shouldReturnRoleWithSameID() {
         RoleDTO roleDTO = new RoleDTO();
         roleDTO.setId(1L);
-        Role role = roleConverter.fromDTO(roleDTO);
+        Role role = roleConverter.toEntity(roleDTO);
         assertEquals(roleDTO.getId(), role.getId());
     }
 
@@ -39,7 +39,7 @@ public class RoleConverterTest {
     public void shouldReturnRoleWithSameName() {
         RoleDTO roleDTO = new RoleDTO();
         roleDTO.setName("name");
-        Role role = roleConverter.fromDTO(roleDTO);
+        Role role = roleConverter.toEntity(roleDTO);
         assertEquals(roleDTO.getName(), role.getName());
     }
 }
