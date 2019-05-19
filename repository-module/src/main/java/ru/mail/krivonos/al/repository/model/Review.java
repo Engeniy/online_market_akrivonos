@@ -1,16 +1,45 @@
 package ru.mail.krivonos.al.repository.model;
 
-import java.util.Date;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
+import java.util.Objects;
+
+@Entity
+@Table(name = "t_review")
+@SQLDelete(sql =
+        "UPDATE t_review " +
+                "SET deleted = 1 " +
+                "WHERE id = ?")
+@Where(clause = "deleted = 0")
 public class Review {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
-    private String name;
-    private String surname;
-    private String patronymic;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", nullable = false)
+    private User author;
+    @Column(name = "review")
     private String review;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "date_of_creation")
     private Date dateOfCreation;
-    private Boolean hidden = false;
+    @Column(name = "hidden")
+    private boolean isHidden = false;
 
     public Long getId() {
         return id;
@@ -20,28 +49,12 @@ public class Review {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public User getAuthor() {
+        return author;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     public String getReview() {
@@ -60,11 +73,27 @@ public class Review {
         this.dateOfCreation = dateOfCreation;
     }
 
-    public Boolean getHidden() {
-        return hidden;
+    public boolean isHidden() {
+        return isHidden;
     }
 
-    public void setHidden(Boolean hidden) {
-        this.hidden = hidden;
+    public void setHidden(boolean hidden) {
+        this.isHidden = hidden;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Review)) return false;
+        Review review1 = (Review) o;
+        return isHidden == review1.isHidden &&
+                id.equals(review1.id) &&
+                review.equals(review1.review) &&
+                dateOfCreation.equals(review1.dateOfCreation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, review, dateOfCreation, isHidden);
     }
 }

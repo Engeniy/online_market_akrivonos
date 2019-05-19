@@ -1,9 +1,11 @@
 package ru.mail.krivonos.al.repository.model;
 
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,15 +14,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
-@Table(name = "T_Comment")
+@Table(name = "t_comment")
 @SQLDelete(sql =
-        "UPDATE T_Comment " +
-                "SET deleted = '1' " +
+        "UPDATE t_comment " +
+                "SET deleted = 1 " +
                 "WHERE id = ?")
-public class Comment {
+@Where(clause = "deleted = 0")
+public class Comment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,12 +33,12 @@ public class Comment {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "date_of_creation")
     private Date dateOfCreation;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id")
-    private User user;
+    private User author;
     @Column(name = "content")
     private String content;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "article_id")
     private Article article;
 
@@ -53,12 +58,12 @@ public class Comment {
         this.dateOfCreation = dateOfCreation;
     }
 
-    public User getUser() {
-        return user;
+    public User getAuthor() {
+        return author;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setAuthor(User author) {
+        this.author = author;
     }
 
     public String getContent() {
@@ -75,5 +80,20 @@ public class Comment {
 
     public void setArticle(Article article) {
         this.article = article;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Comment)) return false;
+        Comment comment = (Comment) o;
+        return Objects.equals(id, comment.id) &&
+                dateOfCreation.equals(comment.dateOfCreation) &&
+                content.equals(comment.content);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, dateOfCreation, content);
     }
 }

@@ -3,6 +3,7 @@ package ru.mail.krivonos.al.repository.model;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,20 +13,24 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
-@Table(name = "T_Article")
+@Table(name = "t_article")
 @SQLDelete(sql =
-        "UPDATE T_Article " +
-                "SET deleted = '1' " +
+        "UPDATE t_article " +
+                "SET deleted = 1 " +
                 "WHERE id = ?")
-@Where(clause = "deleted = '0'")
-public class Article {
+@Where(clause = "deleted = 0")
+public class Article implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,15 +41,16 @@ public class Article {
     private Date dateOfCreation;
     @Column(name = "title")
     private String title;
-    @ManyToOne
-    @JoinColumn(name = "author_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "author_id", nullable = false)
     private User author;
     @Column(name = "summary")
     private String summary;
     @Column(name = "content")
     private String content;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "article")
-    private List<Comment> comments;
+    @OrderBy(value = "date_of_creation desc")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "article", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -100,5 +106,22 @@ public class Article {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Article)) return false;
+        Article article = (Article) o;
+        return id.equals(article.id) &&
+                dateOfCreation.equals(article.dateOfCreation) &&
+                title.equals(article.title) &&
+                summary.equals(article.summary) &&
+                content.equals(article.content);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, dateOfCreation, title, summary, content);
     }
 }

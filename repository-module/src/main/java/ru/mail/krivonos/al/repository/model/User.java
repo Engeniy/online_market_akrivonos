@@ -1,16 +1,28 @@
 package ru.mail.krivonos.al.repository.model;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.util.Objects;
 
 @Entity
-@Table(name = "T_User")
+@Table(name = "t_user")
+@SQLDelete(sql =
+        "UPDATE t_user " +
+                "SET deleted = 1 " +
+                "WHERE id = ? AND unchangeable = 0")
+@Where(clause = "deleted = 0")
 public class User {
 
     @Id
@@ -23,17 +35,17 @@ public class User {
     private String name;
     @Column(name = "surname")
     private String surname;
-    @Column(name = "patronymic")
-    private String patronymic;
     @Column(name = "password")
     private String password;
     @Column(name = "unchangeable")
-    private Boolean unchangeable;
+    private boolean isUnchangeable;
     @Column(name = "deleted")
-    private Boolean deleted;
-    @ManyToOne
+    private boolean isDeleted;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private Role role;
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    private Profile profile;
 
     public Long getId() {
         return id;
@@ -67,14 +79,6 @@ public class User {
         this.surname = surname;
     }
 
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -83,20 +87,20 @@ public class User {
         this.password = password;
     }
 
-    public Boolean getUnchangeable() {
-        return unchangeable;
+    public boolean isUnchangeable() {
+        return isUnchangeable;
     }
 
-    public void setUnchangeable(Boolean unchangeable) {
-        this.unchangeable = unchangeable;
+    public void setUnchangeable(boolean unchangeable) {
+        this.isUnchangeable = unchangeable;
     }
 
-    public Boolean getDeleted() {
-        return deleted;
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
+    public void setDeleted(boolean deleted) {
+        this.isDeleted = deleted;
     }
 
     public Role getRole() {
@@ -105,5 +109,32 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return id.equals(user.id) &&
+                email.equals(user.email) &&
+                name.equals(user.name) &&
+                surname.equals(user.surname) &&
+                password.equals(user.password) &&
+                Objects.equals(isUnchangeable, user.isUnchangeable) &&
+                Objects.equals(isDeleted, user.isDeleted);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, name, surname, password, isUnchangeable, isDeleted);
     }
 }
