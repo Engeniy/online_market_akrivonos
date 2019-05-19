@@ -3,6 +3,7 @@ package ru.mail.krivonos.al.controller.config.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -18,6 +19,7 @@ import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.CUSTOME
 import static ru.mail.krivonos.al.controller.constant.URLConstants.*;
 
 @Configuration
+@Order(2)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService detailsService;
@@ -38,12 +40,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(USERS_PAGE_URL, USERS_ADD_PAGE_URL, USERS_DELETE_URL,
-                        USERS_PASSWORD_CHANGE_URL, REVIEWS_UPDATE_URL)
+                        USERS_PASSWORD_CHANGE_URL, REVIEWS_UPDATE_URL, REVIEWS_DELETE_URL)
                 .hasAuthority(ADMIN_AUTHORITY_NAME)
-                .antMatchers(PROFILE_PAGE_URL)
+                .antMatchers(PROFILE_PAGE_URL, FAVORITE_ARTICLES_URL, PROFILE_UPDATE_URL, PROFILE_PASSWORD_UPDATE_URL,
+                        ARTICLE_ADD_COMMENT_URL, ARTICLE_DELETE_COMMENT_URL)
                 .hasAuthority(CUSTOMER_AUTHORITY_NAME)
                 .antMatchers(HOMEPAGE_URL, REVIEWS_PAGE_URL, BOOTSTRAP_CONTENT_URL, FORBIDDEN_PAGE_URL,
-                        INTERNAL_ERROR_PAGE_URL, REVIEWS_DELETE_URL, ARTICLES_PAGE_URL, ARTICLE_PAGE_URL)
+                        INTERNAL_ERROR_PAGE_URL, ARTICLES_PAGE_URL, ARTICLE_PAGE_URL)
                 .permitAll()
                 .and()
                 .formLogin()

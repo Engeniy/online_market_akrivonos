@@ -6,7 +6,6 @@ import org.springframework.security.web.DefaultRedirectStrategy;
 import org.springframework.security.web.RedirectStrategy;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import ru.mail.krivonos.al.controller.constant.URLConstants;
 import ru.mail.krivonos.al.controller.exceptions.IllegalAuthorityStateException;
 import ru.mail.krivonos.al.controller.exceptions.IllegalResponseStateException;
 
