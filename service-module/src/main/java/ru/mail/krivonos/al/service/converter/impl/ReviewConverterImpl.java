@@ -34,7 +34,7 @@ public class ReviewConverterImpl implements ReviewConverter {
         review.setId(reviewDTO.getId());
         review.setAuthor(userConverterAggregator.getAuthorConverter().toEntity(reviewDTO.getAuthor()));
         review.setReview(reviewDTO.getReview());
-        review.setHidden(reviewDTO.getHidden());
+        review.setHidden(reviewDTO.isHidden());
         review.setDateOfCreation(reviewDTO.getDateOfCreation());
         return review;
     }

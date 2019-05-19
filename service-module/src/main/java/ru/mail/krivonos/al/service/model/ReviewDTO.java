@@ -8,7 +8,7 @@ public class ReviewDTO {
     private UserDTO author;
     private String review;
     private Date dateOfCreation;
-    private boolean hidden;
+    private boolean isHidden;
 
     public Long getId() {
         return id;
@@ -42,11 +42,11 @@ public class ReviewDTO {
         this.dateOfCreation = dateOfCreation;
     }
 
-    public boolean getHidden() {
-        return hidden;
+    public boolean isHidden() {
+        return isHidden;
     }
 
     public void setHidden(boolean hidden) {
-        this.hidden = hidden;
+        this.isHidden = hidden;
     }
 }

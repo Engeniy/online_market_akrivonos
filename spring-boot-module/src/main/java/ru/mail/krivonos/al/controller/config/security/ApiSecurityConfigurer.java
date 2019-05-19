@@ -20,7 +20,6 @@ import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.SECURE_
 public class ApiSecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
-
     private final PasswordEncoder passwordEncoder;
 
     @Autowired

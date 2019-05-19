@@ -94,7 +94,6 @@ public class ArticleServiceImpl implements ArticleService {
         return articleConverter.toDTO(article);
     }
 
-
     private List<ArticleDTO> getArticleDTOs(List<Article> articles) {
         return articles.stream()
                 .map(articleConverter::toDTO)

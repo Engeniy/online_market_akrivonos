@@ -27,7 +27,6 @@ public class ArticleController {
         this.articleService = articleService;
     }
 
-
     @GetMapping(ARTICLES_PAGE_URL)
     public String getArticles(
             @RequestParam(name = "page", defaultValue = "1") Integer pageNumber,

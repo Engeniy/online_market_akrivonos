@@ -56,7 +56,7 @@ public class ReviewServiceImpl implements ReviewService {
     public void updateHiddenStatus(List<ReviewDTO> reviews) {
         for (ReviewDTO review : reviews) {
             Review byId = reviewRepository.findById(review.getId());
-            byId.setHidden(review.getHidden());
+            byId.setHidden(review.isHidden());
             reviewRepository.merge(byId);
         }
     }

@@ -6,9 +6,7 @@ import java.util.List;
 public class PageDTO<T> {
 
     private int currentPageNumber;
-
     private int countOfPages;
-
     private List<T> list = new ArrayList<>();
 
     public int getCurrentPageNumber() {

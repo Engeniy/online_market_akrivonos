@@ -47,7 +47,6 @@ public class FavoriteController {
             @RequestParam(name = "article_id") Long articleId,
             @RequestParam(name = "page", defaultValue = "1") Integer pageNumber
     ) {
-
         FavoriteArticleKey favoriteArticleKey = new FavoriteArticleKey();
         favoriteArticleKey.setUserId(userId);
         favoriteArticleKey.setArticleId(articleId);

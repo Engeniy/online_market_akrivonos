@@ -51,7 +51,7 @@ public class AuthUserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return !userDTO.getDeleted();
+        return !userDTO.isDeleted();
     }
 
     public Long getUserID() {

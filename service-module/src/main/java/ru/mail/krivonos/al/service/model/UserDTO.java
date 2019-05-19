@@ -7,8 +7,8 @@ public class UserDTO {
     private String name;
     private String surname;
     private String password;
-    private boolean unchangeable;
-    private boolean deleted;
+    private boolean isUnchangeable;
+    private boolean isDeleted;
     private RoleDTO role;
     private ProfileDTO profile;
 
@@ -48,24 +48,24 @@ public class UserDTO {
         return password;
     }
 
-    public boolean getUnchangeable() {
-        return unchangeable;
+    public boolean isUnchangeable() {
+        return isUnchangeable;
     }
 
     public void setUnchangeable(boolean unchangeable) {
-        this.unchangeable = unchangeable;
+        this.isUnchangeable = unchangeable;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
-    public boolean getDeleted() {
-        return deleted;
+    public boolean isDeleted() {
+        return isDeleted;
     }
 
     public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+        this.isDeleted = deleted;
     }
 
     public RoleDTO getRole() {
