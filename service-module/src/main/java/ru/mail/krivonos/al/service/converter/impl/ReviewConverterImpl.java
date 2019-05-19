@@ -1,33 +1,38 @@
 package ru.mail.krivonos.al.service.converter.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.mail.krivonos.al.repository.model.Review;
 import ru.mail.krivonos.al.service.converter.ReviewConverter;
+import ru.mail.krivonos.al.service.converter.UserConverterAggregator;
 import ru.mail.krivonos.al.service.model.ReviewDTO;
 
 @Component("reviewConverter")
 public class ReviewConverterImpl implements ReviewConverter {
 
+    private final UserConverterAggregator userConverterAggregator;
+
+    @Autowired
+    public ReviewConverterImpl(UserConverterAggregator userConverterAggregator) {
+        this.userConverterAggregator = userConverterAggregator;
+    }
+
     @Override
     public ReviewDTO toDTO(Review review) {
         ReviewDTO reviewDTO = new ReviewDTO();
         reviewDTO.setId(review.getId());
-        reviewDTO.setName(review.getName());
-        reviewDTO.setSurname(review.getSurname());
-        reviewDTO.setPatronymic(review.getPatronymic());
+        reviewDTO.setAuthor(userConverterAggregator.getAuthorConverter().toDTO(review.getAuthor()));
         reviewDTO.setReview(review.getReview());
         reviewDTO.setDateOfCreation(review.getDateOfCreation());
-        reviewDTO.setHidden(review.getHidden());
+        reviewDTO.setHidden(review.isHidden());
         return reviewDTO;
     }
 
     @Override
-    public Review fromDTO(ReviewDTO reviewDTO) {
+    public Review toEntity(ReviewDTO reviewDTO) {
         Review review = new Review();
         review.setId(reviewDTO.getId());
-        review.setName(reviewDTO.getName());
-        review.setSurname(reviewDTO.getSurname());
-        review.setPatronymic(reviewDTO.getPatronymic());
+        review.setAuthor(userConverterAggregator.getAuthorConverter().toEntity(reviewDTO.getAuthor()));
         review.setReview(reviewDTO.getReview());
         review.setHidden(reviewDTO.getHidden());
         review.setDateOfCreation(reviewDTO.getDateOfCreation());

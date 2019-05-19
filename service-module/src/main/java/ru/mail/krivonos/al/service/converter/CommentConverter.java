@@ -7,5 +7,5 @@ public interface CommentConverter {
 
     CommentDTO toDTO(Comment comment);
 
-    Comment fromDTO(CommentDTO commentDTO);
+    Comment toEntity(CommentDTO commentDTO);
 }

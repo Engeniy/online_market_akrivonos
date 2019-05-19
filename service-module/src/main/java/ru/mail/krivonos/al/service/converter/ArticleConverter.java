@@ -7,5 +7,5 @@ public interface ArticleConverter {
 
     ArticleDTO toDTO(Article article);
 
-    Article fromDTO(ArticleDTO articleDTO);
+    Article toEntity(ArticleDTO articleDTO);
 }

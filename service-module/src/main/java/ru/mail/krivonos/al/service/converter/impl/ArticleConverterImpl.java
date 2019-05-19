@@ -1,6 +1,7 @@
 package ru.mail.krivonos.al.service.converter.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.mail.krivonos.al.repository.model.Article;
 import ru.mail.krivonos.al.repository.model.Comment;
@@ -20,7 +21,10 @@ public class ArticleConverterImpl implements ArticleConverter {
     private final UserConverter userConverter;
 
     @Autowired
-    public ArticleConverterImpl(CommentConverter commentConverter, UserConverter userConverter) {
+    public ArticleConverterImpl(
+            CommentConverter commentConverter,
+            @Qualifier("authorConverter") UserConverter userConverter
+    ) {
         this.commentConverter = commentConverter;
         this.userConverter = userConverter;
     }
@@ -39,8 +43,12 @@ public class ArticleConverterImpl implements ArticleConverter {
     }
 
     @Override
-    public Article fromDTO(ArticleDTO articleDTO) {
-        return null;
+    public Article toEntity(ArticleDTO articleDTO) {
+        Article article = new Article();
+        article.setContent(articleDTO.getContent());
+        article.setTitle(articleDTO.getTitle());
+        article.setAuthor(userConverter.toEntity(articleDTO.getAuthor()));
+        return article;
     }
 
     private List<CommentDTO> getCommentDTOs(List<Comment> comments) {
