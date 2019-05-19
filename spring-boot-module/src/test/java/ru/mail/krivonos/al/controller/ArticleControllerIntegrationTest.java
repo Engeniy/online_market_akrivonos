@@ -16,6 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ARTICLES_PAGE_URL;
+import static ru.mail.krivonos.al.controller.constant.URLConstants.ARTICLE_PAGE_URL;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
@@ -39,5 +40,19 @@ public class ArticleControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
                 .andExpect(content().string(CoreMatchers.containsString("Some summary")));
+    }
+
+    @Test
+    public void shouldReturnArticlePageForGetRequest() throws Exception {
+        mockMvc.perform(get(ARTICLE_PAGE_URL + "?article_number=1")).andExpect(status().isOk());
+    }
+
+    @Test
+    public void shouldReturnArticlePageWithCommentForArticlePageGetRequest() throws Exception {
+        this.mockMvc.perform(get(ARTICLE_PAGE_URL + "?article_number=1")
+                .accept(MediaType.parseMediaType("text/html;charset=UTF-8")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("text/html;charset=UTF-8"))
+                .andExpect(content().string(CoreMatchers.containsString("Some impressive comment.")));
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.mail.krivonos.al.service.model.ProfileDTO;
 import ru.mail.krivonos.al.service.model.RoleDTO;
 import ru.mail.krivonos.al.service.model.UserDTO;
 
@@ -38,9 +39,14 @@ public class UserControllerIntegrationTest {
     @Before
     public void init() {
         correctUserDTO = new UserDTO();
+        correctUserDTO.setId(2L);
         correctUserDTO.setEmail("krivonos-al@mail.ru");
         correctUserDTO.setName("Alex");
         correctUserDTO.setSurname("Krivonos");
+        ProfileDTO correctProfile = new ProfileDTO();
+        correctProfile.setAddress("Some address");
+        correctProfile.setTelephone("+375441111111");
+        correctUserDTO.setProfile(correctProfile);
         RoleDTO correctRole = new RoleDTO();
         correctRole.setId(1L);
         correctRole.setName("Sale User");
@@ -145,19 +151,9 @@ public class UserControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("user", correctUserDTO))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/private/users?updated"));
+                .andExpect(redirectedUrl("/private/users?page=1&updated"));
     }
 
-    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
-    @Test
-    public void shouldSendRedirectToUsersFirstPageWithNegativeParamForUnsuccessfulUpdateRolePostRequest()
-            throws Exception {
-        this.mockMvc.perform(post("/private/users/100/update")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .flashAttr("user", correctUserDTO))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/private/users?updated_zero"));
-    }
 
     @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
@@ -176,18 +172,7 @@ public class UserControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .param("user_ids", id.toString()))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/private/users?deleted"));
-    }
-
-    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
-    @Test
-    public void shouldSendRedirectToUsersFirstPageWithNegativeParamForUnsuccessfulDeletePostRequest() throws Exception {
-        Long id = 100L;
-        this.mockMvc.perform(post("/private/users/delete")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .param("user_ids", id.toString()))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/private/users?deleted_zero"));
+                .andExpect(redirectedUrl("/private/users?page=1&deleted"));
     }
 
     @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
@@ -205,16 +190,6 @@ public class UserControllerIntegrationTest {
         this.mockMvc.perform(post("/private/users/2/password")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/private/users?password_changed"));
-    }
-
-    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
-    @Test
-    public void shouldSendRedirectToUsersFirstPageWithNegativeParamForUnsuccessfulPasswordChangePostRequest()
-            throws Exception {
-        this.mockMvc.perform(post("/private/users/100/password")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/private/users?password_error"));
+                .andExpect(redirectedUrl("/private/users?page=1&password_changed"));
     }
 }

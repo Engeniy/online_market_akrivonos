@@ -49,10 +49,6 @@
         <addForeignKeyConstraint baseTableName="t_user"
                                  baseColumnNames="role_id"
                                  constraintName="role_id"
-                                 deferrable="false"
-                                 initiallyDeferred="false"
-                                 onDelete="NO ACTION"
-                                 onUpdate="NO ACTION"
                                  referencedTableName="t_role"
                                  referencedColumnNames="id"/>
     </changeSet>
@@ -97,14 +93,8 @@
             <column autoIncrement="true" name="id" type="BIGINT UNSIGNED">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="VARCHAR(20)">
+            <column name="author_id" type="BIGINT UNSIGNED">
                 <constraints nullable="false"/>
-            </column>
-            <column name="surname" type="VARCHAR(40)">
-                <constraints nullable="false"/>
-            </column>
-            <column name="patronymic" type="VARCHAR(40)">
-                <constraints nullable="true"/>
             </column>
             <column name="review" type="TEXT">
                 <constraints nullable="false"/>
@@ -119,6 +109,14 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+    </changeSet>
+
+    <changeSet id="REVIEW_TABLE_2" author="krivonos-al@mail.ru">
+        <addForeignKeyConstraint baseTableName="t_review"
+                                 baseColumnNames="author_id"
+                                 constraintName="review_author_id"
+                                 referencedTableName="t_user"
+                                 referencedColumnNames="id"/>
     </changeSet>
 
     <changeSet id="ARTICLE_TABLE_1" author="krivonos-al@mail.ru">
@@ -151,10 +149,6 @@
         <addForeignKeyConstraint baseTableName="t_article"
                                  baseColumnNames="author_id"
                                  constraintName="author_id"
-                                 deferrable="false"
-                                 initiallyDeferred="false"
-                                 onDelete="NO ACTION"
-                                 onUpdate="NO ACTION"
                                  referencedTableName="t_user"
                                  referencedColumnNames="id"/>
     </changeSet>
@@ -186,32 +180,24 @@
         <addForeignKeyConstraint baseTableName="t_comment"
                                  baseColumnNames="author_id"
                                  constraintName="comment_author_id"
-                                 deferrable="false"
-                                 initiallyDeferred="false"
-                                 onDelete="NO ACTION"
-                                 onUpdate="NO ACTION"
                                  referencedTableName="t_user"
                                  referencedColumnNames="id"/>
         <addForeignKeyConstraint baseTableName="t_comment"
                                  baseColumnNames="article_id"
                                  constraintName="article_id"
-                                 deferrable="false"
-                                 initiallyDeferred="false"
-                                 onDelete="NO ACTION"
-                                 onUpdate="NO ACTION"
                                  referencedTableName="t_article"
                                  referencedColumnNames="id"/>
     </changeSet>
-    
+
     <changeSet id="ARTICLE_INSERT_1" author="krivonos-al@mail.ru">
-    <insert tableName="t_article">
-        <column name="title" value="Some title bro!"/>
-        <column name="date_of_creation" valueComputed="NOW()"/>
-        <column name="author_id" value="1"/>
-        <column name="summary" value="Some summary"/>
-        <column name="content" value="There is some really important content."/>
-    </insert>
-</changeSet>
+        <insert tableName="t_article">
+            <column name="title" value="Some title bro!"/>
+            <column name="date_of_creation" valueComputed="NOW()"/>
+            <column name="author_id" value="1"/>
+            <column name="summary" value="Some summary"/>
+            <column name="content" value="There is some really important content."/>
+        </insert>
+    </changeSet>
 
     <changeSet id="ARTICLE_INSERT_2" author="krivonos-al@mail.ru">
         <insert tableName="t_article">
@@ -220,6 +206,88 @@
             <column name="author_id" value="1"/>
             <column name="summary" value="Second summary"/>
             <column name="content" value="There is some really important content Second."/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="COMMENT_INSERT_1" author="krivonos-al@mail.ru">
+        <insert tableName="t_comment">
+            <column name="date_of_creation" valueComputed="NOW()"/>
+            <column name="author_id" value="1"/>
+            <column name="content" value="Some impressive comment."/>
+            <column name="article_id" value="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="PROFILE_TABLE_1" author="krivonos-al@mail.ru">
+        <createTable tableName="t_profile">
+            <column name="user_id" type="BIGINT UNSIGNED">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="address" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="telephone" type="VARCHAR(13)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="PROFILE_TABLE_2" author="krivonos-al@mail.ru">
+        <addForeignKeyConstraint baseTableName="t_profile"
+                                 baseColumnNames="user_id"
+                                 constraintName="user_id"
+                                 referencedTableName="t_user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="PROFILE_INSERT_1" author="krivonos-al@mail.ru">
+        <insert tableName="t_profile">
+            <column name="user_id" value="1"/>
+            <column name="telephone" value="+375447337351"/>
+            <column name="address" value="Some address"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="FAVORITE_ARTICLES_TABLE_1" author="krivonos-al@mail.ru">
+        <createTable tableName="t_favorite_articles">
+            <column name="user_id" type="BIGINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="article_id" type="BIGINT UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <addUniqueConstraint tableName="t_favorite_articles" columnNames="user_id, article_id"/>
+        <addForeignKeyConstraint baseTableName="t_favorite_articles"
+                                 baseColumnNames="article_id"
+                                 constraintName="favorite_article_id"
+                                 referencedTableName="t_article"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="t_favorite_articles"
+                                 baseColumnNames="user_id"
+                                 constraintName="favorite_user_id"
+                                 referencedTableName="t_user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="USER_INSERT_2" author="krivonos-al@mail.ru">
+        <insert tableName="t_user">
+            <column name="email" value="api@api.com"/>
+            <column name="password" value="$2a$09$QQLe6OdlVTNL2o7Q8LJx3OpxVeiLjcLzBcE/EB70zwaw0l.uZdXIm"/>
+            <column name="name" value="Admin"/>
+            <column name="surname" value="Admin"/>
+            <column name="role_id" valueComputed="(SELECT id FROM t_role WHERE name = 'Secure API User')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="REVIEW_INSERT_1" author="krivonos-al@mail.ru">
+        <insert tableName="t_review">
+            <column name="date_of_creation" valueComputed="NOW()"/>
+            <column name="author_id" value="1"/>
+            <column name="review" value="There is some really important review."/>
         </insert>
     </changeSet>
 </databaseChangeLog>
