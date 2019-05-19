@@ -7,16 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.mail.krivonos.al.service.model.ArticleDTO;
-import ru.mail.krivonos.al.service.model.ProfileDTO;
-import ru.mail.krivonos.al.service.model.RoleDTO;
-import ru.mail.krivonos.al.service.model.UserDTO;
-
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
