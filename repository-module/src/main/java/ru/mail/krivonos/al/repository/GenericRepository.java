@@ -1,11 +1,8 @@
 package ru.mail.krivonos.al.repository;
 
-import java.sql.Connection;
 import java.util.List;
 
 public interface GenericRepository<I, T> {
-
-    Connection getConnection();
 
     void persist(T entity);
 
@@ -15,5 +12,13 @@ public interface GenericRepository<I, T> {
 
     T findById(I id);
 
+    List<T> findAll();
+
     List<T> findAll(int limit, int offset);
+
+    List<T> findAllWithDescendingOrder(int limit, int offset, String orderField);
+
+    List<T> findAllWithAscendingOrder(int limit, int offset, String orderField);
+
+    int getCountOfEntities();
 }
