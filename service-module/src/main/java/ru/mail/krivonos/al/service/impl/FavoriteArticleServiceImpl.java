@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static ru.mail.krivonos.al.service.constant.LimitConstants.ARTICLES_LIMIT;
-import static ru.mail.krivonos.al.service.constant.OrderConstants.DATE_OF_CREATION;
 
 @Service("favoriteArticleService")
 public class FavoriteArticleServiceImpl implements FavoriteArticleService {
@@ -57,7 +56,7 @@ public class FavoriteArticleServiceImpl implements FavoriteArticleService {
         pageDTO.setCurrentPageNumber(currentPageNumber);
         int offset = pageCountingService.getOffset(currentPageNumber, ARTICLES_LIMIT);
         List<FavoriteArticle> allByUserId = favoriteArticleRepository
-                .findAllByUserIdWithDescOrder(ARTICLES_LIMIT, offset, userId, DATE_OF_CREATION);
+                .findAllByUserId(ARTICLES_LIMIT, offset, userId);
         pageDTO.setList(getFavoriteArticleDTOs(allByUserId));
         return pageDTO;
     }

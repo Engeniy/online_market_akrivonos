@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface FavoriteArticleRepository extends GenericRepository<FavoriteArticleKey, FavoriteArticle> {
 
-    List<FavoriteArticle> findAllByUserIdWithDescOrder(int limit, int offset, Long userId, String orderField);
+    List<FavoriteArticle> findAllByUserId(int limit, int offset, Long userId);
 }

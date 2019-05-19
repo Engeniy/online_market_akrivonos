@@ -63,10 +63,10 @@
 <ul class="pagination justify-content-center">
     <div th:if="${page.countOfPages > 0}" th:each="page_number : ${#numbers.sequence(1, page.countOfPages)}">
         <li th:if="${page_number} == ${page.currentPageNumber}" class="page-item active">
-            <a class="page-link" th:href="@{/private/users/(page=${page_number})}" th:text="${page_number}"></a>
+            <a class="page-link" th:href="@{/reviews(page=${page_number})}" th:text="${page_number}"></a>
         </li>
         <li th:unless="${page_number} == ${page.currentPageNumber}" class="page-item">
-            <a class="page-link" th:href="@{/private/users/(page=${page_number})}" th:text="${page_number}"></a>
+            <a class="page-link" th:href="@{/reviews(page=${page_number})}" th:text="${page_number}"></a>
         </li>
     </div>
 </ul>

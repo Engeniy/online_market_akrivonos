@@ -14,9 +14,9 @@ public class FavoriteArticleRepositoryImpl extends GenericRepositoryImpl<Favorit
 
     @Override
     @SuppressWarnings("unchecked")
-    public List<FavoriteArticle> findAllByUserIdWithDescOrder(int limit, int offset, Long userId, String orderField) {
-        String query = String.format("from %s %s order by %s desc", entityClass.getName(),
-                " where user_id = :user_id", orderField);
+    public List<FavoriteArticle> findAllByUserId(int limit, int offset, Long userId) {
+        String query = String.format("from %s %s", entityClass.getName(),
+                " where user_id = :user_id");
         Query q = entityManager.createQuery(query)
                 .setMaxResults(limit)
                 .setFirstResult(offset)
