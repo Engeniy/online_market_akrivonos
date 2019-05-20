@@ -8,10 +8,10 @@ import java.util.Objects;
 @Embeddable
 public class FavoriteArticleKey implements Serializable {
 
-    @Column(name = "user_id")
+    @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(name = "article_id")
+    @Column(name = "article_id", nullable = false)
     private Long articleId;
 
     public Long getUserId() {

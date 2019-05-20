@@ -28,17 +28,17 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false, unique = true)
     private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
-    @Column(name = "review")
+    @Column(name = "review", nullable = false)
     private String review;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "date_of_creation")
+    @Column(name = "date_of_creation", nullable = false)
     private Date dateOfCreation;
-    @Column(name = "hidden")
+    @Column(name = "hidden", nullable = false)
     private boolean isHidden = false;
 
     public Long getId() {

@@ -29,17 +29,18 @@ public class Comment implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, unique = true)
     private Long id;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "date_of_creation")
+    @Column(name = "date_of_creation", nullable = false)
     private Date dateOfCreation;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "author_id", nullable = false)
     private User author;
-    @Column(name = "content")
+    @Column(name = "content", nullable = false)
     private String content;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "article_id")
+    @JoinColumn(name = "article_id", nullable = false)
     private Article article;
 
     public Long getId() {

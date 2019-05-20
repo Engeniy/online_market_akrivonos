@@ -34,9 +34,9 @@ public class Profile {
     @OneToOne(fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn
     private User user;
-    @Column(name = "address")
+    @Column(name = "address", nullable = false)
     private String address;
-    @Column(name = "telephone")
+    @Column(name = "telephone", nullable = false)
     private String telephone;
 
     public Long getUserId() {

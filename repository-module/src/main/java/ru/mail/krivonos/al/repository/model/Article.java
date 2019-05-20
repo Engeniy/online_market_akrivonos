@@ -34,19 +34,19 @@ public class Article implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", nullable = false, unique = true)
     private Long id;
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "date_of_creation")
+    @Column(name = "date_of_creation", nullable = false)
     private Date dateOfCreation;
-    @Column(name = "title")
+    @Column(name = "title", nullable = false)
     private String title;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", nullable = false)
     private User author;
-    @Column(name = "summary")
+    @Column(name = "summary", nullable = false)
     private String summary;
-    @Column(name = "content")
+    @Column(name = "content", nullable = false)
     private String content;
     @OrderBy(value = "date_of_creation desc")
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "article", cascade = CascadeType.ALL)
