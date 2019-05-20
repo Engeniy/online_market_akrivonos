@@ -34,6 +34,7 @@ public class ArticleApiController {
     }
 
     @GetMapping(API_ARTICLES_URL)
+    @SuppressWarnings("unchecked")
     public ResponseEntity<List<ArticleDTO>> getArticles(
             @RequestParam(name = "limit", defaultValue = "10") Integer limit,
             @RequestParam(name = "offset", defaultValue = "0") Integer offset
@@ -43,6 +44,7 @@ public class ArticleApiController {
     }
 
     @GetMapping(API_ARTICLES_WITH_ID_URL)
+    @SuppressWarnings("unchecked")
     public ResponseEntity<ArticleDTO> getArticle(
             @PathVariable("id") Long id
     ) {
@@ -51,6 +53,7 @@ public class ArticleApiController {
     }
 
     @PostMapping(API_ARTICLES_URL)
+    @SuppressWarnings("unchecked")
     public ResponseEntity<ArticleDTO> saveArticle(
             @RequestBody @Valid ArticleDTO articleDTO,
             Authentication authentication, BindingResult bindingResult
@@ -70,7 +73,7 @@ public class ArticleApiController {
     public ResponseEntity deleteArticle(
             @PathVariable("id") Long id
     ) {
-        ArticleDTO articleDTO = articleService.deleteArticle(id);
+        articleService.deleteArticle(id);
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 }
