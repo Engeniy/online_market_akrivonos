@@ -17,12 +17,14 @@
               style="padding: 20px; margin: 20px; width: 400px; height: 350px"
               th:action="@{#}" th:object="${article}"
               method="post">
+            <b class="text-lg-center"><span>Title:</span></b>
+            <span class="text-lg-center text-center" th:text="*{title}"></span>
             <b class="text-lg-center text">Written by:</b>
             <span class="text-lg-center"
                   th:text="${article.author.surname + ' ' + article.author.name}"></span>
             <b class="text-lg-center">Written:</b>
             <span class="text-lg-center text-center" th:text="*{dateOfCreation}"></span>
-            <b class="text-lg-center"><span>Review:</span></b>
+            <b class="text-lg-center"><span>Context:</span></b>
             <span class="text-lg-center text-center" th:text="*{content}"></span>
         </form>
 
