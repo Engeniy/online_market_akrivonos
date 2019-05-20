@@ -1,35 +1,24 @@
 package ru.mail.krivonos.al.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.mail.krivonos.al.repository.ReviewRepository;
 import ru.mail.krivonos.al.repository.model.Review;
 import ru.mail.krivonos.al.service.PageCountingService;
 import ru.mail.krivonos.al.service.ReviewService;
 import ru.mail.krivonos.al.service.converter.ReviewConverter;
-import ru.mail.krivonos.al.service.exceptions.ConnectionAutoCloseException;
-import ru.mail.krivonos.al.service.exceptions.ReviewServiceException;
+import ru.mail.krivonos.al.service.model.PageDTO;
 import ru.mail.krivonos.al.service.model.ReviewDTO;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.mail.krivonos.al.repository.constant.LimitConstants.USERS_LIMIT;
-import static ru.mail.krivonos.al.service.constant.ServiceMessageConstants.CONNECTION_CLOSE_ERROR_MESSAGE;
-import static ru.mail.krivonos.al.service.constant.ServiceMessageConstants.PAGES_COUNTING_EXCEPTION_MESSAGE;
+import static ru.mail.krivonos.al.service.constant.LimitConstants.REVIEWS_LIMIT;
+import static ru.mail.krivonos.al.service.constant.OrderConstants.DATE_OF_CREATION;
 
 @Service("reviewService")
 public class ReviewServiceImpl implements ReviewService {
-
-    private static final String REVIEWS_GETTING_EXCEPTION_MESSAGE = "Error while getting reviews list from data source.";
-    private static final String REVIEW_DELETING_EXCEPTION_MESSAGE = "Error while deleting review.";
-    private static final String HIDDEN_STATUS_UPDATE_ERROR_MESSAGE = "Error while updating hidden status.";
-
-    private static final Logger logger = LoggerFactory.getLogger(ReviewServiceImpl.class);
 
     private final ReviewRepository reviewRepository;
     private final ReviewConverter reviewConverter;
@@ -47,93 +36,41 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Override
-    public List<ReviewDTO> getReviews(int pageNumber) {
-        try (Connection connection = reviewRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                List<Review> reviews = reviewRepository.findReviews(connection, pageNumber);
-                List<ReviewDTO> reviewDTOs = getReviewDTOs(reviews);
-                connection.commit();
-                return reviewDTOs;
-            } catch (Exception e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new ReviewServiceException(REVIEWS_GETTING_EXCEPTION_MESSAGE, e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionAutoCloseException(CONNECTION_CLOSE_ERROR_MESSAGE, e);
+    @Transactional
+    public PageDTO<ReviewDTO> getReviews(int pageNumber) {
+        PageDTO<ReviewDTO> pageDTO = new PageDTO<>();
+        int countOfEntities = reviewRepository.getCountOfEntities();
+        int countOfPages = pageCountingService.countPages(countOfEntities, REVIEWS_LIMIT);
+        pageDTO.setCountOfPages(countOfPages);
+        int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
+        pageDTO.setCurrentPageNumber(currentPageNumber);
+        int offset = pageCountingService.getOffset(currentPageNumber, REVIEWS_LIMIT);
+        List<Review> reviews = reviewRepository.findAllWithDescendingOrder(REVIEWS_LIMIT, offset, DATE_OF_CREATION);
+        List<ReviewDTO> reviewDTOs = getReviewDTOs(reviews);
+        pageDTO.setList(reviewDTOs);
+        return pageDTO;
+    }
+
+    @Override
+    @Transactional
+    public void updateHiddenStatus(List<ReviewDTO> reviews) {
+        for (ReviewDTO review : reviews) {
+            Review byId = reviewRepository.findById(review.getId());
+            byId.setHidden(review.isHidden());
+            reviewRepository.merge(byId);
         }
     }
 
     @Override
-    public int getPagesNumber() {
-        try (Connection connection = reviewRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                int reviewsNumber = reviewRepository.getCountOfReviews(connection);
-                int pagesNumber = pageCountingService.countPages(reviewsNumber, USERS_LIMIT);
-                connection.commit();
-                return pagesNumber;
-            } catch (Exception e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new ReviewServiceException(PAGES_COUNTING_EXCEPTION_MESSAGE, e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionAutoCloseException(CONNECTION_CLOSE_ERROR_MESSAGE, e);
-        }
-    }
-
-    @Override
-    public int updateHiddenStatus(List<ReviewDTO> reviews) {
-        try (Connection connection = reviewRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                List<Review> reviewList = getReviews(reviews);
-                int updated = reviewRepository.updateHiddenStatus(connection, reviewList);
-                connection.commit();
-                return updated;
-            } catch (Exception e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new ReviewServiceException(HIDDEN_STATUS_UPDATE_ERROR_MESSAGE, e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionAutoCloseException(CONNECTION_CLOSE_ERROR_MESSAGE, e);
-        }
-    }
-
-    @Override
-    public int deleteReviewByID(Long id) {
-        try (Connection connection = reviewRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                int deleted = reviewRepository.deleteReviewByID(connection, id);
-                connection.commit();
-                return deleted;
-            } catch (Exception e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new ReviewServiceException(REVIEW_DELETING_EXCEPTION_MESSAGE, e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionAutoCloseException(CONNECTION_CLOSE_ERROR_MESSAGE, e);
-        }
+    @Transactional
+    public void deleteReviewByID(Long id) {
+        Review byId = reviewRepository.findById(id);
+        reviewRepository.remove(byId);
     }
 
     private List<ReviewDTO> getReviewDTOs(List<Review> reviews) {
         return reviews.stream()
                 .map(reviewConverter::toDTO)
-                .collect(Collectors.toList());
-    }
-
-    private List<Review> getReviews(List<ReviewDTO> reviews) {
-        return reviews.stream()
-                .map(reviewConverter::fromDTO)
                 .collect(Collectors.toList());
     }
 }

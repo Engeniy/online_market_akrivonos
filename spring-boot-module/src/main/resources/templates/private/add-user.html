@@ -33,10 +33,16 @@
                                class="form-control input-lg" placeholder="Surname" required maxlength="40"/>
                     </div>
                     <div class="form-group">
-                        <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('patronymic')}"
-                              th:errors="*{patronymic}">Patronymic error</span>
-                        <input th:field="*{patronymic}" type="text" name="patronymic" id="patronymic"
-                               class="form-control input-lg" placeholder="Patronymic" maxlength="40"/>
+                        <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('profile.address')}"
+                              th:errors="*{profile.address}">Address error</span>
+                        <input th:field="*{profile.address}" type="text" name="address" id="address"
+                               class="form-control input-lg" placeholder="Address" maxlength="30"/>
+                    </div>
+                    <div class="form-group">
+                        <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('profile.telephone')}"
+                              th:errors="*{profile.telephone}">Telephone error</span>
+                        <input th:field="*{profile.telephone}" type="text" name="telephone" id="telephone"
+                               class="form-control input-lg" placeholder="Telephone" maxlength="13"/>
                     </div>
                     <div class="form-group">
                         <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('role')}"

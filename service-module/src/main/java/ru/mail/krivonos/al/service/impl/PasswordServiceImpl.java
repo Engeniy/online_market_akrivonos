@@ -33,6 +33,17 @@ public class PasswordServiceImpl implements PasswordService {
     public String getPassword(String email) {
         String password = passwordGenerator.getPassword();
         mailService.sendMessage(email, password);
+        logger.info("New password for user with email: {} is {}", email, password);
         return passwordEncoder.encode(password);
+    }
+
+    @Override
+    public String encodePassword(String password) {
+        return passwordEncoder.encode(password);
+    }
+
+    @Override
+    public boolean matches(String password, String encodedPassword) {
+        return passwordEncoder.matches(password, encodedPassword);
     }
 }

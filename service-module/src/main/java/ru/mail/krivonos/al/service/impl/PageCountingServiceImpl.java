@@ -14,4 +14,18 @@ public class PageCountingServiceImpl implements PageCountingService {
         }
         return pagesNumber;
     }
+
+    @Override
+    public int getOffset(int pageNumber, int limit) {
+        return (pageNumber - 1) * limit;
+    }
+
+    @Override
+    public int getCurrentPageNumber(int pageNumber, int countOfPages) {
+        int currentPage = pageNumber;
+        if (pageNumber > countOfPages && countOfPages > 0) {
+            currentPage = countOfPages;
+        }
+        return currentPage;
+    }
 }

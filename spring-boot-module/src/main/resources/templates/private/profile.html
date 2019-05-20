@@ -1,0 +1,92 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Profile</title>
+    <link href="#" rel="stylesheet" th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap.min.css}" type="text/css"/>
+    <link href="#" rel="stylesheet" th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap.css}" type="text/css"/>
+    <link href="#" rel="stylesheet" th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap-grid-jsf.css}" type="text/css"/>
+
+</head>
+<body>
+<div th:replace="fragments/header.html"/>
+<div th:if="${param.updated}">
+    <div class="alert alert-success text-center">
+        Profile successfully updated.
+    </div>
+</div>
+<div th:if="${param.password_changed}">
+    <div class="alert alert-success text-center">
+        Password was successfully changed.
+    </div>
+</div>
+<div class="container align-self-center">
+    <div class="row" style="margin-top:20px">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            <form th:action="@{/private/profile/{id}/update(id=${user.id})}" th:object="${user}" method="post">
+                <fieldset>
+                    <h1>Edit your info:</h1>
+                    <div class="form-group">
+                        <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('name')}"
+                              th:errors="*{name}">
+                            Name error</span>
+                        <input th:field="*{name}" type="text" name="name" id="name" class="form-control input-lg"
+                               placeholder="Name" required maxlength="20"/>
+                    </div>
+                    <div class="form-group">
+                        <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('surname')}"
+                              th:errors="*{surname}">Surname error</span>
+                        <input th:field="*{surname}" type="text" name="surname" id="surname"
+                               class="form-control input-lg" placeholder="Surname" required maxlength="40"/>
+                    </div>
+                    <div class="form-group">
+                        <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('profile.address')}"
+                              th:errors="*{profile.address}">Address error</span>
+                        <input th:field="*{profile.address}" type="text" name="address" id="address"
+                               class="form-control input-lg" placeholder="Address" required maxlength="30"/>
+                    </div>
+                    <div class="form-group">
+                        <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('profile.telephone')}"
+                              th:errors="*{profile.telephone}">Telephone error</span>
+                        <input th:field="*{profile.telephone}" type="text" name="telephone" id="telephone"
+                               class="form-control input-lg" placeholder="Telephone" required maxlength="13"/>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Update"/>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            <form th:action="@{/private/profile/{id}/password(id=${user.id})}" th:object="${password_form}"
+                  method="post">
+                <fieldset>
+                    <h1>Change your password:</h1>
+                    <div class="form-group">
+                        <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('oldPassword')}"
+                              th:errors="*{oldPassword}">Old password error</span>
+                        <input th:field="*{oldPassword}" type="password" name="old-password" id="old-password"
+                               class="form-control input-lg" placeholder="Old password" required maxlength="40"/>
+                    </div>
+                    <div class="form-group">
+                        <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('newPassword')}"
+                              th:errors="*{newPassword}">New password error</span>
+                        <input th:field="*{newPassword}" type="password" name="new-password" id="new-password"
+                               class="form-control input-lg" placeholder="New password" required maxlength="30"/>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Change password"/>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/footer.html"/>
+</body>
+</html>

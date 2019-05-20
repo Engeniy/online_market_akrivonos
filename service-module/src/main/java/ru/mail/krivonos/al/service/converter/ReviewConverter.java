@@ -7,5 +7,5 @@ public interface ReviewConverter {
 
     ReviewDTO toDTO(Review review);
 
-    Review fromDTO(ReviewDTO reviewDTO);
+    Review toEntity(ReviewDTO reviewDTO);
 }

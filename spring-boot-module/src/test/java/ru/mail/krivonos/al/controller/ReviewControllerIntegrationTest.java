@@ -12,7 +12,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.mail.krivonos.al.controller.model.ReviewDTOForm;
+import ru.mail.krivonos.al.service.model.PageDTO;
 import ru.mail.krivonos.al.service.model.ReviewDTO;
 import ru.mail.krivonos.al.service.model.RoleDTO;
 import ru.mail.krivonos.al.service.model.UserDTO;
@@ -63,54 +63,36 @@ public class ReviewControllerIntegrationTest {
                 .andExpect(content().contentType("text/html;charset=UTF-8"));
     }
 
-    @Test
-    public void shouldSendRedirectToReviewsFirstPageWithPositiveParamForSuccessfulDeleteReviewPostRequest()
-            throws Exception {
-        this.mockMvc.perform(post("/reviews/1/delete")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/reviews?deleted"));
-    }
-
-    @Test
-    public void shouldSendRedirectToReviewsFirstPageWithNegativeParamForUnsuccessfulDeleteReviewPostRequest()
-            throws Exception {
-        this.mockMvc.perform(post("/reviews/100/delete")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/reviews?deleted_zero"));
-    }
-
     @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldSendRedirectToReviewsFirstPageWithPositiveParamForSuccessfulUpdateReviewsRequest()
             throws Exception {
-        ReviewDTOForm reviewDTOForm = new ReviewDTOForm();
+        PageDTO<ReviewDTO> reviewDTOForm = new PageDTO<>();
         List<ReviewDTO> reviewDTOs = new ArrayList<>();
         ReviewDTO reviewDTO = new ReviewDTO();
         reviewDTO.setId(1L);
         reviewDTO.setHidden(true);
         reviewDTOs.add(reviewDTO);
-        reviewDTOForm.setReviewList(reviewDTOs);
-        this.mockMvc.perform(post("/reviews/update")
+        reviewDTOForm.setList(reviewDTOs);
+        this.mockMvc.perform(post("/reviews/update?page=1")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("id", 1L)
                 .flashAttr("reviews", reviewDTOForm))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/reviews?updated"));
+                .andExpect(redirectedUrl("/reviews?page=1&updated"));
     }
 
     @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldSendRedirectToReviewsFirstPageWithNegativeParamForUnsuccessfulUpdateReviewsRequest()
             throws Exception {
-        ReviewDTOForm reviewDTOForm = new ReviewDTOForm();
+        PageDTO<ReviewDTO> reviewDTOForm = new PageDTO<>();
         List<ReviewDTO> reviewDTOs = new ArrayList<>();
-        reviewDTOForm.setReviewList(reviewDTOs);
-        this.mockMvc.perform(post("/reviews/update")
+        reviewDTOForm.setList(reviewDTOs);
+        this.mockMvc.perform(post("/reviews/update?page=1")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("reviews", reviewDTOForm))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/reviews?updated_zero"));
+                .andExpect(redirectedUrl("/reviews?page=1&updated_zero"));
     }
 }

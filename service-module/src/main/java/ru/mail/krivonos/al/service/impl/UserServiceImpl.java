@@ -1,215 +1,141 @@
 package ru.mail.krivonos.al.service.impl;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.mail.krivonos.al.repository.RoleRepository;
 import ru.mail.krivonos.al.repository.UserRepository;
+import ru.mail.krivonos.al.repository.model.Role;
 import ru.mail.krivonos.al.repository.model.User;
 import ru.mail.krivonos.al.service.PageCountingService;
 import ru.mail.krivonos.al.service.PasswordService;
 import ru.mail.krivonos.al.service.UserService;
-import ru.mail.krivonos.al.service.converter.UserConverter;
-import ru.mail.krivonos.al.service.exceptions.ConnectionAutoCloseException;
-import ru.mail.krivonos.al.service.exceptions.UserServiceException;
+import ru.mail.krivonos.al.service.converter.UserConverterAggregator;
+import ru.mail.krivonos.al.service.model.PageDTO;
+import ru.mail.krivonos.al.service.model.ProfileDTO;
 import ru.mail.krivonos.al.service.model.UserDTO;
 
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.mail.krivonos.al.repository.constant.LimitConstants.USERS_LIMIT;
-import static ru.mail.krivonos.al.service.constant.ServiceMessageConstants.CONNECTION_CLOSE_ERROR_MESSAGE;
-import static ru.mail.krivonos.al.service.constant.ServiceMessageConstants.PAGES_COUNTING_EXCEPTION_MESSAGE;
+import static ru.mail.krivonos.al.service.constant.LimitConstants.USERS_LIMIT;
+import static ru.mail.krivonos.al.service.constant.OrderConstants.EMAIL;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
 
-    private static final String USERS_GETTING_EXCEPTION_MESSAGE = "Error while getting users list from data source.";
-    private static final String USER_GETTING_EXCEPTION_MESSAGE = "Error while getting user from data source.";
-    private static final String USERS_DELETING_EXCEPTION_MESSAGE = "Error while deleting users.";
-    private static final String USER_ROLE_UPDATING_EXCEPTION_MESSAGE = "Error while updating user role.";
-    private static final String USER_SAVING_EXCEPTION_MESSAGE = "Error while saving user.";
-    private static final String PASSWORD_CHANGING_EXCEPTION_MESSAGE = "Error while changing password.";
-
-    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
-
     private final UserRepository userRepository;
-    private final UserConverter userConverter;
+    private final UserConverterAggregator userConverterAggregator;
     private final PasswordService passwordService;
     private final PageCountingService pageCountingService;
+    private final RoleRepository roleRepository;
 
     @Autowired
     public UserServiceImpl(
             UserRepository userRepository,
-            UserConverter userConverter,
+            UserConverterAggregator userConverterAggregator,
             PasswordService passwordService,
-            PageCountingService pageCountingService
-    ) {
+            PageCountingService pageCountingService,
+            RoleRepository roleRepository) {
         this.userRepository = userRepository;
-        this.userConverter = userConverter;
+        this.userConverterAggregator = userConverterAggregator;
         this.passwordService = passwordService;
         this.pageCountingService = pageCountingService;
+        this.roleRepository = roleRepository;
     }
 
     @Override
+    @Transactional
     public UserDTO getUserByEmail(String email) {
-        try (Connection connection = userRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                User userByEmail = userRepository.findUserByEmail(connection, email);
-                if (userByEmail != null) {
-                    UserDTO userDTO = userConverter.toDTO(userByEmail);
-                    connection.commit();
-                    return userDTO;
-                } else {
-                    return null;
-                }
-            } catch (Exception e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new UserServiceException(USER_GETTING_EXCEPTION_MESSAGE, e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionAutoCloseException(CONNECTION_CLOSE_ERROR_MESSAGE, e);
+        User userByEmail = userRepository.findUserByEmail(email);
+        if (userByEmail == null) {
+            return null;
         }
+        return userConverterAggregator.getUserAuthorizationConverter().toDTO(userByEmail);
     }
 
     @Override
-    public List<UserDTO> getUsers(Integer pageNumber) {
-        try (Connection connection = userRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                List<User> users = userRepository.findUsers(connection, pageNumber);
-                List<UserDTO> userDTOs = getUserDTOs(users);
-                connection.commit();
-                return userDTOs;
-            } catch (Exception e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new UserServiceException(USERS_GETTING_EXCEPTION_MESSAGE, e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionAutoCloseException(CONNECTION_CLOSE_ERROR_MESSAGE, e);
-        }
+    @Transactional
+    public PageDTO<UserDTO> getUsers(Integer pageNumber) {
+        PageDTO<UserDTO> pageDTO = new PageDTO<>();
+        int countOfEntities = userRepository.getCountOfEntities();
+        int countOfPages = pageCountingService.countPages(countOfEntities, USERS_LIMIT);
+        pageDTO.setCountOfPages(countOfPages);
+        int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
+        pageDTO.setCurrentPageNumber(currentPageNumber);
+        int offset = pageCountingService.getOffset(currentPageNumber, USERS_LIMIT);
+        List<User> users = userRepository.findAllWithAscendingOrder(USERS_LIMIT, offset, EMAIL);
+        pageDTO.setList(getUserDTOs(users));
+        return pageDTO;
     }
 
     @Override
-    public int updateRole(Long userID, Long roleID) {
-        try (Connection connection = userRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                int updated = userRepository.updateRole(connection, userID, roleID);
-                connection.commit();
-                return updated;
-            } catch (Exception e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new UserServiceException(USER_ROLE_UPDATING_EXCEPTION_MESSAGE, e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionAutoCloseException(CONNECTION_CLOSE_ERROR_MESSAGE, e);
-        }
+    @Transactional
+    public void updateRole(Long userID, Long roleID) {
+        Role role = roleRepository.findById(roleID);
+        User user = userRepository.findById(userID);
+        user.setRole(role);
+        userRepository.merge(user);
     }
 
     @Override
+    @Transactional
     public void add(UserDTO userDTO) {
-        try (Connection connection = userRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                User user = userConverter.fromDTO(userDTO);
-                user.setPassword(passwordService.getPassword(user.getEmail()));
-                userRepository.saveUser(connection, user);
-                connection.commit();
-            } catch (Exception e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new UserServiceException(USER_SAVING_EXCEPTION_MESSAGE, e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionAutoCloseException(CONNECTION_CLOSE_ERROR_MESSAGE, e);
+        User user = userConverterAggregator.getUserAuthorizationConverter().toEntity(userDTO);
+        user.setPassword(passwordService.getPassword(user.getEmail()));
+        user.getProfile().setUser(user);
+        userRepository.persist(user);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUsers(Long[] userIDs) {
+        for (Long userID : userIDs) {
+            User user = userRepository.findById(userID);
+            userRepository.remove(user);
         }
     }
 
     @Override
-    public int getPagesNumber() {
-        try (Connection connection = userRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                int usersNumber = userRepository.getCountOfUsers(connection);
-                int pagesNumber = pageCountingService.countPages(usersNumber, USERS_LIMIT);
-                connection.commit();
-                return pagesNumber;
-            } catch (Exception e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new UserServiceException(PAGES_COUNTING_EXCEPTION_MESSAGE, e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionAutoCloseException(CONNECTION_CLOSE_ERROR_MESSAGE, e);
-        }
+    @Transactional
+    public void changePassword(Long userID) {
+        User userByID = userRepository.findById(userID);
+        String password = passwordService.getPassword(userByID.getEmail());
+        userByID.setPassword(password);
+        userRepository.merge(userByID);
     }
 
     @Override
-    public int deleteUsers(Long[] userIDs) {
-        try (Connection connection = userRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                int deleted = userRepository.deleteUsers(connection, userIDs);
-                connection.commit();
-                return deleted;
-            } catch (Exception e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new UserServiceException(USERS_DELETING_EXCEPTION_MESSAGE, e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionAutoCloseException(CONNECTION_CLOSE_ERROR_MESSAGE, e);
-        }
+    @Transactional
+    public UserDTO getUserByID(Long userID) {
+        User byId = userRepository.findById(userID);
+        return userConverterAggregator.getUserForProfileConverter().toDTO(byId);
     }
 
     @Override
-    public int changePassword(Long userID) {
-        try (Connection connection = userRepository.getConnection()) {
-            connection.setAutoCommit(false);
-            try {
-                User userByID = userRepository.findUserByID(connection, userID);
-                if (userByID == null) {
-                    connection.commit();
-                    return 0;
-                }
-                String password = passwordService.getPassword(userByID.getEmail());
-                int changed = userRepository.changePassword(connection, userID, password);
-                connection.commit();
-                return changed;
-            } catch (Exception e) {
-                connection.rollback();
-                logger.error(e.getMessage(), e);
-                throw new UserServiceException(PASSWORD_CHANGING_EXCEPTION_MESSAGE, e);
-            }
-        } catch (SQLException e) {
-            logger.error(e.getMessage(), e);
-            throw new ConnectionAutoCloseException(CONNECTION_CLOSE_ERROR_MESSAGE, e);
-        }
+    @Transactional
+    public void updateProfile(UserDTO userDTO) {
+        User user = userRepository.findById(userDTO.getId());
+        user.setName(userDTO.getName());
+        user.setSurname(userDTO.getSurname());
+        ProfileDTO profile = userDTO.getProfile();
+        user.getProfile().setAddress(profile.getAddress());
+        user.getProfile().setTelephone(profile.getTelephone());
+        userRepository.merge(user);
+    }
+
+    @Override
+    @Transactional
+    public void updatePassword(UserDTO userDTO) {
+        User user = userRepository.findById(userDTO.getId());
+        String encodedPassword = passwordService.encodePassword(userDTO.getPassword());
+        user.setPassword(encodedPassword);
+        userRepository.merge(user);
     }
 
     private List<UserDTO> getUserDTOs(List<User> users) {
         return users.stream()
-                .map(userConverter::toDTO)
-                .peek(this::preparePatronymic)
+                .map(userConverterAggregator.getUserForShowingConverter()::toDTO)
                 .collect(Collectors.toList());
-    }
-
-    private void preparePatronymic(UserDTO userDTO) {
-        if (userDTO.getPatronymic() == null) {
-            userDTO.setPatronymic("");
-        }
     }
 }

@@ -7,5 +7,5 @@ public interface RoleConverter {
 
     RoleDTO toDTO(Role role);
 
-    Role fromDTO(RoleDTO roleDTO);
+    Role toEntity(RoleDTO roleDTO);
 }

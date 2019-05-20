@@ -7,5 +7,5 @@ public interface UserConverter {
 
     UserDTO toDTO(User user);
 
-    User fromDTO(UserDTO userDTO);
+    User toEntity(UserDTO userDTO);
 }

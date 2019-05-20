@@ -11,7 +11,7 @@
 </head>
 <body>
 <div th:replace="fragments/header.html"/>
-<div th:if="${reviews.reviewList.isEmpty()}">
+<div th:if="${page.list.isEmpty()}">
     <div class="alert alert-info text-center">
         There is no reviews at the moment.
     </div>
@@ -26,32 +26,22 @@
         Review was successfully deleted.
     </div>
 </div>
-<div th:if="${param.updated_zero}">
-    <div class="alert alert-danger text-center">
-        Reviews statuses wasn't updated or no reviews was chosen.
-    </div>
-</div>
-<div th:if="${param.deleted_zero}">
-    <div class="alert alert-danger text-center">
-        Review wasn't deleted.
-    </div>
-</div>
 <div class="align-self-center container-fluid justify-content-center">
     <div class="card-group">
-        <div th:each="review,stat : ${reviews.reviewList}" style="width: 20%">
+        <div th:each="review,stat : ${page.list}" style="width: 20%">
             <form action="#" class="card border-dark"
                   style="padding: 20px; margin: 20px; width: 350px; height: 450px"
-                  th:action="@{/reviews/{id}/delete(id=${review.id})}" th:object="${review}"
-                  method="post">
+                  th:action="@{/reviews/{id}/delete(id=${review.id}, page = ${page.currentPageNumber})}"
+                  th:object="${review}" method="post">
                 <label>
                     <input class="checkbox top-left" type="checkbox" form="update"
-                           th:field="${reviews.reviewList[__${stat.index}__].hidden}">
+                           th:field="${page.list[__${stat.index}__].hidden}">
                     <input hidden form="update" th:name="id" th:value="${review.id}"
-                           th:field="${reviews.reviewList[__${stat.index}__].id}">
+                           th:field="${page.list[__${stat.index}__].id}">
                 </label>
                 <b class="text-lg-center text">Written by:</b>
                 <span class="text-lg-center"
-                      th:text="${review.surname + ' ' + review.name + ' ' + review.patronymic}"></span>
+                      th:text="${review.author.surname + ' ' + review.author.name}"></span>
                 <b class="text-lg-center">Written:</b>
                 <span class="text-lg-center text-center" th:text="*{dateOfCreation}"></span>
                 <b class="text-lg-center"><span>Review:</span></b>
@@ -65,18 +55,18 @@
         </div>
     </div>
 </div>
-<form id="update" style="margin-left: 40%" action="#" th:action="@{/reviews/update}" th:object="${reviews}"
-      method="post">
-    <input th:if="${!reviews.reviewList.isEmpty()}" class="btn btn-primary" style="width: 35%" type="submit"
-           value="Update">
+<form id="update" style="margin-left: 40%" action="#" th:action="@{/reviews/update(page = ${page.currentPageNumber})}"
+      th:object="${page}" method="post">
+    <input th:if="${!page.list.isEmpty()}" class="btn btn-primary" style="width: 35%" type="submit"
+           value="Update chosen">
 </form>
 <ul class="pagination justify-content-center">
-    <div th:if="${pages > 0}" th:each="page : ${#numbers.sequence(1, pages)}">
-        <li th:if="${page} == ${current_page}" class="page-item active">
-            <a class="page-link" th:href="@{/private/users/(page=${page})}" th:text="${page}"></a>
+    <div th:if="${page.countOfPages > 0}" th:each="page_number : ${#numbers.sequence(1, page.countOfPages)}">
+        <li th:if="${page_number} == ${page.currentPageNumber}" class="page-item active">
+            <a class="page-link" th:href="@{/reviews(page=${page_number})}" th:text="${page_number}"></a>
         </li>
-        <li th:unless="${page} == ${current_page}" class="page-item">
-            <a class="page-link" th:href="@{/private/users/(page=${page})}" th:text="${page}"></a>
+        <li th:unless="${page_number} == ${page.currentPageNumber}" class="page-item">
+            <a class="page-link" th:href="@{/reviews(page=${page_number})}" th:text="${page_number}"></a>
         </li>
     </div>
 </ul>

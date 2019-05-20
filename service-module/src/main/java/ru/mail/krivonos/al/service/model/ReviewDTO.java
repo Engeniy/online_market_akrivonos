@@ -5,12 +5,10 @@ import java.util.Date;
 public class ReviewDTO {
 
     private Long id;
-    private String name;
-    private String surname;
-    private String patronymic;
+    private UserDTO author;
     private String review;
     private Date dateOfCreation;
-    private Boolean hidden;
+    private boolean isHidden;
 
     public Long getId() {
         return id;
@@ -20,28 +18,12 @@ public class ReviewDTO {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public UserDTO getAuthor() {
+        return author;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getPatronymic() {
-        return patronymic;
-    }
-
-    public void setPatronymic(String patronymic) {
-        this.patronymic = patronymic;
+    public void setAuthor(UserDTO author) {
+        this.author = author;
     }
 
     public String getReview() {
@@ -60,11 +42,11 @@ public class ReviewDTO {
         this.dateOfCreation = dateOfCreation;
     }
 
-    public Boolean getHidden() {
-        return hidden;
+    public boolean isHidden() {
+        return isHidden;
     }
 
-    public void setHidden(Boolean hidden) {
-        this.hidden = hidden;
+    public void setHidden(boolean hidden) {
+        this.isHidden = hidden;
     }
 }
