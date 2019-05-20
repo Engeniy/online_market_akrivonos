@@ -12,10 +12,10 @@ public class UserRepositoryImpl extends GenericRepositoryImpl<Long, User> implem
 
     @Override
     public User findUserByEmail(String email) {
-        String query = String.format("from %s %s", entityClass.getName(), " where email = :email");
-        Query q = entityManager.createQuery(query).setParameter("email", email);
+        String queryString = String.format("from %s %s", entityClass.getName(), " where email = :email");
+        Query query = entityManager.createQuery(queryString).setParameter("email", email);
         try {
-            return (User) q.getSingleResult();
+            return (User) query.getSingleResult();
         } catch (NoResultException e) {
             return null;
         }

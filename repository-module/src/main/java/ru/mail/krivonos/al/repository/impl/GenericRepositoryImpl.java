@@ -46,39 +46,39 @@ public class GenericRepositoryImpl<I, T> implements GenericRepository<I, T> {
     @Override
     @SuppressWarnings("unchecked")
     public List<T> findAll() {
-        String query = String.format("from %s %s", entityClass.getName(), " c");
-        Query q = entityManager.createQuery(query);
-        return q.getResultList();
+        String queryString = String.format("from %s %s", entityClass.getName(), " c");
+        Query query = entityManager.createQuery(queryString);
+        return query.getResultList();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<T> findAll(int limit, int offset) {
-        String query = String.format("from %s %s", entityClass.getName(), " c");
-        Query q = entityManager.createQuery(query)
+        String queryString = String.format("from %s %s", entityClass.getName(), " c");
+        Query query = entityManager.createQuery(queryString)
                 .setMaxResults(limit)
                 .setFirstResult(offset);
-        return q.getResultList();
+        return query.getResultList();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<T> findAllWithDescendingOrder(int limit, int offset, String orderField) {
-        String query = String.format("from %s order by %s desc", entityClass.getName(), orderField);
-        Query q = entityManager.createQuery(query)
+        String queryString = String.format("from %s order by %s desc", entityClass.getName(), orderField);
+        Query query = entityManager.createQuery(queryString)
                 .setMaxResults(limit)
                 .setFirstResult(offset);
-        return q.getResultList();
+        return query.getResultList();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public List<T> findAllWithAscendingOrder(int limit, int offset, String orderField) {
-        String query = String.format("from %s order by %s asc", entityClass.getName(), orderField);
-        Query q = entityManager.createQuery(query)
+        String queryString = String.format("from %s order by %s asc", entityClass.getName(), orderField);
+        Query query = entityManager.createQuery(queryString)
                 .setMaxResults(limit)
                 .setFirstResult(offset);
-        return q.getResultList();
+        return query.getResultList();
     }
 
     @Override

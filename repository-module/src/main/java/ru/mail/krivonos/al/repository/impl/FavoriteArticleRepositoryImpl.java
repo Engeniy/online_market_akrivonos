@@ -15,12 +15,12 @@ public class FavoriteArticleRepositoryImpl extends GenericRepositoryImpl<Favorit
     @Override
     @SuppressWarnings("unchecked")
     public List<FavoriteArticle> findAllByUserId(int limit, int offset, Long userId) {
-        String query = String.format("from %s %s", entityClass.getName(),
+        String queryString = String.format("from %s %s", entityClass.getName(),
                 " where user_id = :user_id");
-        Query q = entityManager.createQuery(query)
+        Query query = entityManager.createQuery(queryString)
                 .setMaxResults(limit)
                 .setFirstResult(offset)
                 .setParameter("user_id", userId);
-        return q.getResultList();
+        return query.getResultList();
     }
 }
