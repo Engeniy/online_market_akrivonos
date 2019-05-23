@@ -21,6 +21,9 @@ public class URLConstants {
     public static final String BOOTSTRAP_CONTENT_URL = "/webjars/**";
     public static final String ARTICLES_PAGE_URL = "/articles";
     public static final String ARTICLE_PAGE_URL = "/article";
+    public static final String ADD_ARTICLE_PAGE_URL = "/private/articles/add";
+    public static final String DELETE_ARTICLE_URL = "/private/articles/delete";
+    public static final String EDIT_ARTICLE_URL = "/private/articles/edit";
     public static final String ARTICLE_ADD_COMMENT_URL = "/article/comment";
     public static final String ARTICLE_DELETE_COMMENT_URL = "/article/comment/delete";
     public static final String PROFILE_PAGE_URL = "/private/profile";

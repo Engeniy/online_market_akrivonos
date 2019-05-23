@@ -16,6 +16,7 @@ import ru.mail.krivonos.al.controller.config.security.handler.AppAuthenticationS
 
 import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.ADMIN_AUTHORITY_NAME;
 import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.CUSTOMER_AUTHORITY_NAME;
+import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.SALE_AUTHORITY_NAME;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.*;
 
 @Configuration
@@ -45,6 +46,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(PROFILE_PAGE_URL, FAVORITE_ARTICLES_URL, PROFILE_UPDATE_URL, PROFILE_PASSWORD_UPDATE_URL,
                         ARTICLE_ADD_COMMENT_URL, ARTICLE_DELETE_COMMENT_URL)
                 .hasAuthority(CUSTOMER_AUTHORITY_NAME)
+                .antMatchers(ARTICLES_PAGE_URL, ARTICLE_PAGE_URL, ADD_ARTICLE_PAGE_URL, ARTICLE_DELETE_COMMENT_URL,
+                        DELETE_ARTICLE_URL, EDIT_ARTICLE_URL)
+                .hasAuthority(SALE_AUTHORITY_NAME)
                 .antMatchers(HOMEPAGE_URL, REVIEWS_PAGE_URL, BOOTSTRAP_CONTENT_URL, FORBIDDEN_PAGE_URL,
                         INTERNAL_ERROR_PAGE_URL, ARTICLES_PAGE_URL, ARTICLE_PAGE_URL)
                 .permitAll()
