@@ -290,4 +290,14 @@
             <column name="review" value="There is some really important review."/>
         </insert>
     </changeSet>
+
+    <changeSet id="USER_INSERT_3" author="krivonos-al@mail.ru">
+        <insert tableName="t_user">
+            <column name="email" value="sale@sale.com"/>
+            <column name="password" value="$2a$09$QQLe6OdlVTNL2o7Q8LJx3OpxVeiLjcLzBcE/EB70zwaw0l.uZdXIm"/>
+            <column name="name" value="Sale"/>
+            <column name="surname" value="Sale"/>
+            <column name="role_id" valueComputed="(SELECT id FROM t_role WHERE name = 'Sale User')"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

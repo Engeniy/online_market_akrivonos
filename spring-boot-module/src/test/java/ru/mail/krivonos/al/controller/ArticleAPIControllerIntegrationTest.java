@@ -12,6 +12,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import ru.mail.krivonos.al.service.model.ArticleDTO;
 
+import java.util.Date;
+
 @RunWith(SpringRunner.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
@@ -45,6 +47,7 @@ public class ArticleAPIControllerIntegrationTest {
         ArticleDTO articleDTO = new ArticleDTO();
         articleDTO.setContent("Hello");
         articleDTO.setTitle("Title");
+        articleDTO.setDateOfCreation(new Date());
         restTemplate.withBasicAuth("api@api.com", "admin");
         ArticleDTO admins = restTemplate
                 .withBasicAuth("api@api.com", "admin")
