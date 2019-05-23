@@ -30,6 +30,7 @@ public class URLConstants {
     public static final String PROFILE_UPDATE_URL = "/private/profile/{id}/update";
     public static final String PROFILE_PASSWORD_UPDATE_URL = "/private/profile/{id}/password";
     public static final String FAVORITE_ARTICLES_URL = "/private/articles/favorites";
+    public static final String ITEMS_PAGE_URL = "/items";
 
     private URLConstants() {
     }

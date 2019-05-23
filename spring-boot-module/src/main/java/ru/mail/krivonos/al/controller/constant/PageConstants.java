@@ -14,6 +14,7 @@ public class PageConstants {
     public static final String PROFILE_PAGE = "private/profile";
     public static final String FAVORITE_ARTICLES_PAGE = "private/favorite-articles";
     public static final String ARTICLE_EDIT_PAGE = "private/edit-article";
+    public static final String ITEMS_PAGE = "items";
 
     private PageConstants() {
     }
