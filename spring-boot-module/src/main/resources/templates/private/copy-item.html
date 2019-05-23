@@ -1,0 +1,52 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Copy item</title>
+    <link href="#" th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<div th:replace="fragments/header.html"/>
+<div class="container align-self-center">
+    <div class="row" style="margin-top:20px">
+        <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+            <form action="#" th:action="@{/private/items/add}" th:object="${item}" method="post">
+                <fieldset>
+                    <h1>Please edit what you need:</h1>
+                    <div class="form-group">
+                        <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('name')}"
+                              th:errors="*{name}">Name error</span>
+                        <input th:field="*{name}" type="text" name="name" id="name" class="form-control input-lg"
+                               placeholder="Name" required maxlength="30"/>
+                    </div>
+                    <div class="form-group">
+                        <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('uniqueNumber')}"
+                              th:errors="*{uniqueNumber}">Unique number error</span>
+                        <input th:field="*{uniqueNumber}" type="text" name="uniqueNumber" id="uniqueNumber" class="form-control input-lg"
+                               placeholder="Unique number" required maxlength="6"/>
+                    </div>
+                    <div class="form-group">
+                        <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('price')}"
+                              th:errors="*{price}">Price error</span>
+                        <input th:field="*{price}" type="text" name="price" id="price" class="form-control input-lg"
+                               placeholder="Price: 00.00" required/>
+                    </div>
+                    <div class="form-group">
+                        <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('description')}"
+                              th:errors="*{description}">Description error</span>
+                        <textarea th:field="*{description}" type="text" name="description" id="description"
+                                  class="form-control" placeholder="Description" required
+                                  maxlength="200"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Add"/>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+</div>
+<div th:replace="fragments/footer.html"/>
+</body>
+</html>
