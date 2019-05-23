@@ -300,4 +300,36 @@
             <column name="role_id" valueComputed="(SELECT id FROM t_role WHERE name = 'Sale User')"/>
         </insert>
     </changeSet>
+
+    <changeSet id="ITEM_TABLE_1" author="krivonos-al@mail.ru">
+        <createTable tableName="t_item">
+            <column autoIncrement="true" name="id" type="BIGINT UNSIGNED">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unique_number" type="VARCHAR(6)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="price" type="DECIMAL(30, 2) UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="ITEM_INSERT_1" author="krivonos-al@mail.ru">
+        <insert tableName="t_item">
+            <column name="name" value="Cat collar"/>
+            <column name="unique_number" value="111110"/>
+            <column name="price" value="2.65"/>
+            <column name="description" value="Cat collar description."/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
