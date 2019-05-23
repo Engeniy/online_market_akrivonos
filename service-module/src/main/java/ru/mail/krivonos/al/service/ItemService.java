@@ -6,4 +6,10 @@ import ru.mail.krivonos.al.service.model.ItemDTO;
 public interface ItemService {
 
     PageDTO<ItemDTO> getItems(int pageNumber);
+
+    void deleteItem(Long itemId);
+
+    ItemDTO getItemById(Long itemId);
+
+    void add(ItemDTO itemDTO);
 }

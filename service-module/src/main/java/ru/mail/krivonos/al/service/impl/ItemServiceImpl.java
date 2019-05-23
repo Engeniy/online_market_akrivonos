@@ -2,6 +2,7 @@ package ru.mail.krivonos.al.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.mail.krivonos.al.repository.ItemRepository;
 import ru.mail.krivonos.al.repository.model.Item;
 import ru.mail.krivonos.al.service.ItemService;
@@ -34,6 +35,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public PageDTO<ItemDTO> getItems(int pageNumber) {
         PageDTO<ItemDTO> pageDTO = new PageDTO<>();
         int countOfEntities = itemRepository.getCountOfEntities();
@@ -46,6 +48,27 @@ public class ItemServiceImpl implements ItemService {
         List<ItemDTO> itemDTOs = getItemDTOs(items);
         pageDTO.setList(itemDTOs);
         return pageDTO;
+    }
+
+    @Override
+    @Transactional
+    public void deleteItem(Long itemId) {
+        Item item = itemRepository.findById(itemId);
+        itemRepository.remove(item);
+    }
+
+    @Override
+    @Transactional
+    public ItemDTO getItemById(Long itemId) {
+        Item item = itemRepository.findById(itemId);
+        return itemConverter.toDTO(item);
+    }
+
+    @Override
+    @Transactional
+    public void add(ItemDTO itemDTO) {
+        Item item = itemConverter.toEntity(itemDTO);
+        itemRepository.persist(item);
     }
 
     private List<ItemDTO> getItemDTOs(List<Item> items) {
