@@ -49,7 +49,7 @@ public class ArticleServiceImpl implements ArticleService {
     public PageDTO<ArticleDTO> getArticles(int pageNumber) {
         PageDTO<ArticleDTO> pageDTO = new PageDTO();
         int countOfEntities = articleRepository.getCountOfEntities();
-        int countOfPages = pageCountingService.countPages(countOfEntities, ARTICLES_LIMIT);
+        int countOfPages = pageCountingService.getCountOfPages(countOfEntities, ARTICLES_LIMIT);
         pageDTO.setCountOfPages(countOfPages);
         int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
         pageDTO.setCurrentPageNumber(currentPageNumber);

@@ -40,7 +40,7 @@ public class ReviewServiceImpl implements ReviewService {
     public PageDTO<ReviewDTO> getReviews(int pageNumber) {
         PageDTO<ReviewDTO> pageDTO = new PageDTO<>();
         int countOfEntities = reviewRepository.getCountOfEntities();
-        int countOfPages = pageCountingService.countPages(countOfEntities, REVIEWS_LIMIT);
+        int countOfPages = pageCountingService.getCountOfPages(countOfEntities, REVIEWS_LIMIT);
         pageDTO.setCountOfPages(countOfPages);
         int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
         pageDTO.setCurrentPageNumber(currentPageNumber);
