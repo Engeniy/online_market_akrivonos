@@ -11,6 +11,7 @@ public class URLParametersConstants {
     public static final String ARTICLE_NUMBER_PARAM = "article_number=";
     public static final String PAGE_NUMBER_PARAM = "page=";
     public static final String FAVORITE_ADDED_PARAM = "favorite_added";
+    public static final String COPIED_PARAM = "copied";
 
     private URLParametersConstants() {
     }
