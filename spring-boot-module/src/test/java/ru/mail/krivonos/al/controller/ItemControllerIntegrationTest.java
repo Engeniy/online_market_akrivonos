@@ -26,6 +26,7 @@ import static ru.mail.krivonos.al.controller.constant.URLConstants.ITEMS_ADD_URL
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ITEMS_COPY_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ITEMS_DELETE_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ITEMS_PAGE_URL;
+import static ru.mail.krivonos.al.controller.constant.URLConstants.ITEM_PAGE_URL;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
@@ -85,5 +86,15 @@ public class ItemControllerIntegrationTest {
                 .flashAttr("item", itemDTO))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl(ITEMS_PAGE_URL + "?copied"));
+    }
+
+    @WithMockUser(authorities = {SALE_AUTHORITY_NAME})
+    @Test
+    public void requestForItemPageSuccessfullyProcessed() throws Exception {
+        this.mockMvc.perform(get(ITEM_PAGE_URL + "?item_number=1")
+                .accept(MediaType.parseMediaType("text/html;charset=UTF-8")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("text/html;charset=UTF-8"))
+                .andExpect(content().string(CoreMatchers.containsString("Cat collar")));
     }
 }
