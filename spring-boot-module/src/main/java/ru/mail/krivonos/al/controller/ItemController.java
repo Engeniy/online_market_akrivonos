@@ -13,10 +13,12 @@ import ru.mail.krivonos.al.service.model.PageDTO;
 
 import static ru.mail.krivonos.al.controller.constant.PageConstants.ITEMS_PAGE;
 import static ru.mail.krivonos.al.controller.constant.PageConstants.ITEM_COPY_PAGE;
+import static ru.mail.krivonos.al.controller.constant.PageConstants.ITEM_PAGE;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ITEMS_ADD_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ITEMS_COPY_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ITEMS_DELETE_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ITEMS_PAGE_URL;
+import static ru.mail.krivonos.al.controller.constant.URLConstants.ITEM_PAGE_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.REDIRECT_WITH_PARAMETER_TEMPLATE;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.REDIRECT_WITH_TWO_PARAMETERS_TEMPLATE;
 import static ru.mail.krivonos.al.controller.constant.URLParametersConstants.COPIED_PARAM;
@@ -65,5 +67,14 @@ public class ItemController {
     public String deleteItem(@ModelAttribute("item") ItemDTO itemDTO) {
         itemService.add(itemDTO);
         return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, ITEMS_PAGE_URL, COPIED_PARAM);
+    }
+
+    @GetMapping(ITEM_PAGE_URL)
+    public String getItemPage(
+            @RequestParam(name = "item_number") Long itemId, Model model
+    ) {
+        ItemDTO item = itemService.getItemById(itemId);
+        model.addAttribute("item", item);
+        return ITEM_PAGE;
     }
 }
