@@ -12,50 +12,52 @@
 <body>
 <div th:replace="fragments/header.html"/>
 <div class="align-self-center container-fluid justify-content-center">
-<div class="card border-dark text-center" style="padding: 20px; margin-top: 30px; margin-left: 10%; width: 80%; height: auto">
+    <div class="card border-dark text-center"
+         style="padding: 20px; margin-top: 30px; margin-left: 10%; width: 80%; height: auto">
         <form action="#" th:action="@{#}" th:object="${article}" method="post">
             <b class="text-lg-center"><span>Title:</span></b>
             <br><span class="text-lg-center text-center" th:text="*{title}"></span>
             <br><b class="text-lg-center text">Written by:</b>
             <br><span class="text-lg-center"
-                  th:text="${article.author.surname + ' ' + article.author.name}"></span>
+                      th:text="${article.author.surname + ' ' + article.author.name}"></span>
             <br><b class="text-lg-center">Written:</b>
             <br><span class="text-lg-center text-center" th:text="*{dateOfCreation}"></span>
             <br><b class="text-lg-center"><span>Context:</span></b>
             <br><span class="text-lg-center text-center" th:text="*{content}"></span>
             <div sec:authorize="isAuthenticated()">
                     <span sec:authorize="hasAuthority('Sale User')">
-                <br><a class="btn-link" th:href="@{/private/articles/edit(article_number = ${article.id})}" th:text="Edit"></a>
+                <br><a class="btn-link" th:href="@{/private/articles/edit(article_number = ${article.id})}"
+                       th:text="Edit"></a>
                     </span>
             </div>
         </form>
-</div>
+    </div>
     <div class="card-group">
         <div th:each="comment : ${article.comments}" style="width: 70%; margin-left: 15%">
             <div class="card border-dark text-center" style="padding: 20px; margin-top: 10px; height: auto">
-            <form action="#"
-                  th:action="@{/article/comment/delete(comment_id = ${comment.id}, article_number = ${article.id})}"
-                  th:object="${comment}"
-                  method="post">
-                <b class="text-lg-center text">Written by:</b>
-                <span class="text-lg-center"
-                      th:text="${comment.author.surname + ' ' + comment.author.name}"></span>
-                <b class="text-lg-center">Written:</b>
-                <span class="text-lg-center text-center" th:text="*{dateOfCreation}"></span>
-                <b class="text-lg-center"><span>Comment:</span></b>
-                <span class="text-lg-center text-center" th:text="*{content}"></span>
-                <div sec:authorize="isAuthenticated()">
+                <form action="#"
+                      th:action="@{/article/comment/delete(comment_id = ${comment.id}, article_number = ${article.id})}"
+                      th:object="${comment}"
+                      method="post">
+                    <b class="text-lg-center text">Written by:</b>
+                    <span class="text-lg-center"
+                          th:text="${comment.author.surname + ' ' + comment.author.name}"></span>
+                    <b class="text-lg-center">Written:</b>
+                    <span class="text-lg-center text-center" th:text="*{dateOfCreation}"></span>
+                    <b class="text-lg-center"><span>Comment:</span></b>
+                    <span class="text-lg-center text-center" th:text="*{content}"></span>
+                    <div sec:authorize="isAuthenticated()">
                     <span sec:authorize="hasAuthority('Customer User')">
                 <br><input th:if="${user.userID} == ${comment.author.id}" class="btn btn-secondary" type="submit"
                            value="Delete">
                     </span>
-                </div>
-                <div sec:authorize="isAuthenticated()">
+                    </div>
+                    <div sec:authorize="isAuthenticated()">
                     <span sec:authorize="hasAuthority('Sale User')">
                 <br><input class="btn btn-secondary" type="submit" value="Delete">
                     </span>
-                </div>
-            </form>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -70,8 +72,8 @@
                               th:errors="*{content}">
                             Content error</span>
                         <textarea th:field="*{content}" type="text" name="content" id="content"
-                               class="form-control input-lg"
-                               placeholder="Your comment" required maxlength="200"/>
+                                  class="form-control input-lg"
+                                  placeholder="Your comment" required maxlength="200"/>
                     </div>
                     <div class="row">
                         <div class="col-xs-6 col-sm-6 col-md-6">

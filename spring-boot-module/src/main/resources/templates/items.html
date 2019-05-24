@@ -38,6 +38,7 @@
                 <span class="text-lg-center" th:text="*{uniqueNumber}"></span>
                 <b class="text-lg-center"><span>Price:</span></b>
                 <span class="text-lg-center text-center" th:text="*{price}"></span>
+                <a class="nav-link" href="#" th:href="@{/article(item_number = ${item.id})}">More</a>
                 <div sec:authorize="isAuthenticated() && hasAuthority('Sale User')">
                     <br><input class="btn btn-secondary" type="submit" value="delete">
                     <br><input class="btn btn-secondary" type="submit" value="Copy" formmethod="post"
