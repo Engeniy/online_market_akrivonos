@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.SALE_AUTHORITY_NAME;
+import static ru.mail.krivonos.al.controller.constant.URLConstants.ITEMS_ADD_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ITEMS_COPY_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ITEMS_DELETE_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ITEMS_PAGE_URL;
@@ -42,6 +43,7 @@ public class ItemControllerIntegrationTest {
         mockMvc.perform(get(ITEMS_PAGE_URL)).andExpect(status().isOk());
     }
 
+    @WithMockUser(authorities = {SALE_AUTHORITY_NAME})
     @Test
     public void requestForItemsPageSuccessfullyProcessed() throws Exception {
         this.mockMvc.perform(get(ITEMS_PAGE_URL)
@@ -60,9 +62,10 @@ public class ItemControllerIntegrationTest {
                 .andExpect(redirectedUrl(ITEMS_PAGE_URL + "?page=1&deleted"));
     }
 
+    @WithMockUser(authorities = {SALE_AUTHORITY_NAME})
     @Test
     public void requestForItemCopyPageSuccessfullyProcessed() throws Exception {
-        this.mockMvc.perform(get(ITEMS_COPY_URL + "?item_number=1")
+        this.mockMvc.perform(post(ITEMS_COPY_URL + "?item_number=1")
                 .accept(MediaType.parseMediaType("text/html;charset=UTF-8")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"))
@@ -77,7 +80,7 @@ public class ItemControllerIntegrationTest {
         itemDTO.setDescription("Description");
         itemDTO.setUniqueNumber("12345");
         itemDTO.setPrice(BigDecimal.valueOf(1.32));
-        this.mockMvc.perform(post(ITEMS_COPY_URL)
+        this.mockMvc.perform(post(ITEMS_ADD_URL)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("item", itemDTO))
                 .andExpect(status().isFound())
