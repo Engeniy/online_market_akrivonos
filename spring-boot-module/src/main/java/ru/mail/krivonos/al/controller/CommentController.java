@@ -3,6 +3,7 @@ package ru.mail.krivonos.al.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.mail.krivonos.al.service.CommentService;
@@ -11,6 +12,7 @@ import ru.mail.krivonos.al.service.model.UserDTO;
 
 import javax.validation.Valid;
 
+import static ru.mail.krivonos.al.controller.constant.PageConstants.ARTICLE_PAGE;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ARTICLE_ADD_COMMENT_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ARTICLE_DELETE_COMMENT_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ARTICLE_PAGE_URL;
@@ -31,10 +33,10 @@ public class CommentController {
     public String addComment(
             @RequestParam(name = "article_number") Long articleId,
             @RequestParam(name = "author_id") Long authorId,
-            @Valid CommentDTO commentDTO, BindingResult bindingResult
+            @ModelAttribute("comment") @Valid CommentDTO commentDTO, BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
-            return "article";
+            return ARTICLE_PAGE;
         }
         UserDTO userDTO = new UserDTO();
         userDTO.setId(authorId);
