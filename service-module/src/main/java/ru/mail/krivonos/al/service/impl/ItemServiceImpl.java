@@ -7,6 +7,7 @@ import ru.mail.krivonos.al.repository.ItemRepository;
 import ru.mail.krivonos.al.repository.model.Item;
 import ru.mail.krivonos.al.service.ItemService;
 import ru.mail.krivonos.al.service.PageCountingService;
+import ru.mail.krivonos.al.service.constant.OrderConstants;
 import ru.mail.krivonos.al.service.converter.ItemConverter;
 import ru.mail.krivonos.al.service.model.ItemDTO;
 import ru.mail.krivonos.al.service.model.PageDTO;
@@ -51,24 +52,43 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    public List<ItemDTO> getItems(int limit, int offset) {
+        List<Item> items = itemRepository.findAllWithAscendingOrder(limit, offset, OrderConstants.NAME);
+        return getItemDTOs(items);
+    }
+
+    @Override
     @Transactional
     public void deleteItem(Long itemId) {
         Item item = itemRepository.findById(itemId);
-        itemRepository.remove(item);
+        if (item != null) {
+            itemRepository.remove(item);
+        }
     }
 
     @Override
     @Transactional
     public ItemDTO getItemById(Long itemId) {
         Item item = itemRepository.findById(itemId);
+        if (item == null) {
+            return null;
+        }
         return itemConverter.toDTO(item);
     }
 
     @Override
     @Transactional
-    public void add(ItemDTO itemDTO) {
+    public boolean isUnique(String uniqueNumber) {
+        Item item = itemRepository.findItemByUniqueNumber(uniqueNumber);
+        return item == null;
+    }
+
+    @Override
+    @Transactional
+    public ItemDTO add(ItemDTO itemDTO) {
         Item item = itemConverter.toEntity(itemDTO);
         itemRepository.persist(item);
+        return itemConverter.toDTO(item);
     }
 
     private List<ItemDTO> getItemDTOs(List<Item> items) {
