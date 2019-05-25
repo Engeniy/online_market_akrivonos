@@ -20,6 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.CUSTOMER_AUTHORITY_NAME;
 import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.SALE_AUTHORITY_NAME;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ADD_ARTICLE_PAGE_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ARTICLES_PAGE_URL;
@@ -37,12 +38,13 @@ public class ArticleControllerIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
 
-
+    @WithUserDetails("sale@sale.com")
     @Test
     public void shouldReturnArticlesPageForGetRequest() throws Exception {
         mockMvc.perform(get(ARTICLES_PAGE_URL)).andExpect(status().isOk());
     }
 
+    @WithUserDetails("sale@sale.com")
     @Test
     public void requestForArticlesPageSuccessfullyProcessed() throws Exception {
         this.mockMvc.perform(get(ARTICLES_PAGE_URL)
@@ -52,11 +54,13 @@ public class ArticleControllerIntegrationTest {
                 .andExpect(content().string(CoreMatchers.containsString("Some summary")));
     }
 
+    @WithUserDetails("sale@sale.com")
     @Test
     public void shouldReturnArticlePageForGetRequest() throws Exception {
         mockMvc.perform(get(ARTICLE_PAGE_URL + "?article_number=1")).andExpect(status().isOk());
     }
 
+    @WithUserDetails("sale@sale.com")
     @Test
     public void shouldReturnArticlePageWithCommentForArticlePageGetRequest() throws Exception {
         this.mockMvc.perform(get(ARTICLE_PAGE_URL + "?article_number=1")
