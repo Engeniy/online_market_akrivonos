@@ -20,16 +20,16 @@ import javax.validation.Valid;
 
 import static ru.mail.krivonos.al.controller.constant.PageConstants.ADD_ARTICLE_PAGE;
 import static ru.mail.krivonos.al.controller.constant.PageConstants.ARTICLES_PAGE;
-import static ru.mail.krivonos.al.controller.constant.PageConstants.ARTICLE_PAGE;
 import static ru.mail.krivonos.al.controller.constant.PageConstants.ARTICLE_EDIT_PAGE;
+import static ru.mail.krivonos.al.controller.constant.PageConstants.ARTICLE_PAGE;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ADD_ARTICLE_PAGE_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ARTICLES_PAGE_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ARTICLE_PAGE_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.DELETE_ARTICLE_URL;
+import static ru.mail.krivonos.al.controller.constant.URLConstants.EDIT_ARTICLE_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.REDIRECT_WITH_DECIMAL_PARAMETER_TEMPLATE;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.REDIRECT_WITH_PARAMETER_TEMPLATE;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.REDIRECT_WITH_TWO_PARAMETERS_TEMPLATE;
-import static ru.mail.krivonos.al.controller.constant.URLConstants.EDIT_ARTICLE_URL;
 import static ru.mail.krivonos.al.controller.constant.URLParametersConstants.ADDED_PARAM;
 import static ru.mail.krivonos.al.controller.constant.URLParametersConstants.ARTICLE_NUMBER_PARAM;
 import static ru.mail.krivonos.al.controller.constant.URLParametersConstants.DELETED_POSITIVE_PARAM;

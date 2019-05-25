@@ -16,7 +16,8 @@
                         <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('dateOfCreation')}"
                               th:errors="*{dateOfCreation}">
                             Date error</span>
-                        <input th:field="*{dateOfCreation}" type="datetime-local" name="dateOfCreation" id="dateOfCreation" class="form-control input-lg"
+                        <input th:field="*{dateOfCreation}" type="datetime-local" name="dateOfCreation"
+                               id="dateOfCreation" class="form-control input-lg"
                                required/>
                     </div>
                     <div class="form-group">
@@ -30,7 +31,7 @@
                         <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('content')}"
                               th:errors="*{content}">Content error</span>
                         <textarea th:field="*{content}" type="text" name="content" id="content"
-                               class="form-control" placeholder="Content" rows="5" required maxlength="1000"/>
+                                  class="form-control" placeholder="Content" rows="5" required maxlength="1000"/>
                     </div>
                     <div class="row">
                         <div class="col-xs-6 col-sm-6 col-md-6">

@@ -1,7 +1,7 @@
 package ru.mail.krivonos.al.service;
 
-import ru.mail.krivonos.al.service.model.PageDTO;
 import ru.mail.krivonos.al.service.model.ItemDTO;
+import ru.mail.krivonos.al.service.model.PageDTO;
 
 import java.util.List;
 

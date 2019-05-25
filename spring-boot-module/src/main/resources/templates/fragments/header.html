@@ -30,14 +30,14 @@
                     </li>
                 </div>
                 <div sec:authorize="isAuthenticated()">
-                <li sec:authorize="hasAuthority('Administrator')" class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{/reviews}">Reviews</a>
-                </li>
+                    <li sec:authorize="hasAuthority('Administrator')" class="nav-item">
+                        <a class="nav-link" href="#" th:href="@{/reviews}">Reviews</a>
+                    </li>
                 </div>
                 <div sec:authorize="isAuthenticated()">
-                <li sec:authorize="hasAuthority('Customer User') || hasAuthority('Sale User')" class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{/articles}">Articles</a>
-                </li>
+                    <li sec:authorize="hasAuthority('Customer User') || hasAuthority('Sale User')" class="nav-item">
+                        <a class="nav-link" href="#" th:href="@{/articles}">Articles</a>
+                    </li>
                 </div>
                 <li sec:authorize="isAuthenticated()" class="nav-item">
                     <a class="nav-link" href="#" th:href="@{/logout}">Logout</a>

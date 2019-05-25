@@ -1,7 +1,5 @@
 package ru.mail.krivonos.al.service.model;
 
-import java.math.BigDecimal;
-
 public class ItemDTO {
 
     private Long id;
