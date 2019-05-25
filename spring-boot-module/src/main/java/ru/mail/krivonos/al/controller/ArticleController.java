@@ -68,7 +68,7 @@ public class ArticleController {
             AuthUserPrincipal userPrincipal = (AuthUserPrincipal) authentication.getPrincipal();
             model.addAttribute("user", userPrincipal);
         }
-        ArticleDTO articleDTO = articleService.getArticle(id);
+        ArticleDTO articleDTO = articleService.getArticleById(id);
         model.addAttribute("article", articleDTO);
         model.addAttribute("comment", new CommentDTO());
         return ARTICLE_PAGE;
@@ -112,7 +112,7 @@ public class ArticleController {
     public String getArticleEditPage(
             @RequestParam("article_number") Long articleId, Model model
     ) {
-        ArticleDTO article = articleService.getArticle(articleId);
+        ArticleDTO article = articleService.getArticleById(articleId);
         model.addAttribute("article", article);
         return ARTICLE_EDIT_PAGE;
     }

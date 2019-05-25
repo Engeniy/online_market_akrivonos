@@ -3,10 +3,12 @@ package ru.mail.krivonos.al.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.mail.krivonos.al.controller.validator.ItemValidator;
 import ru.mail.krivonos.al.service.ItemService;
 import ru.mail.krivonos.al.service.model.ItemDTO;
 import ru.mail.krivonos.al.service.model.PageDTO;
@@ -29,10 +31,15 @@ import static ru.mail.krivonos.al.controller.constant.URLParametersConstants.PAG
 public class ItemController {
 
     private final ItemService itemService;
+    private final ItemValidator itemValidator;
 
     @Autowired
-    public ItemController(ItemService itemService) {
+    public ItemController(
+            ItemService itemService,
+            ItemValidator itemValidator
+    ) {
         this.itemService = itemService;
+        this.itemValidator = itemValidator;
     }
 
     @GetMapping(ITEMS_PAGE_URL)
@@ -64,7 +71,13 @@ public class ItemController {
     }
 
     @PostMapping(ITEMS_ADD_URL)
-    public String deleteItem(@ModelAttribute("item") ItemDTO itemDTO) {
+    public String addItem(
+            @ModelAttribute("item") ItemDTO itemDTO, BindingResult bindingResult
+    ) {
+        itemValidator.validate(itemDTO, bindingResult);
+        if (bindingResult.hasErrors()) {
+            return ITEM_COPY_PAGE;
+        }
         itemService.add(itemDTO);
         return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, ITEMS_PAGE_URL, COPIED_PARAM);
     }
