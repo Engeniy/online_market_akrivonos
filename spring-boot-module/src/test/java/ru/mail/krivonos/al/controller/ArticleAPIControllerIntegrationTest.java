@@ -61,5 +61,9 @@ public class ArticleAPIControllerIntegrationTest {
         restTemplate
                 .withBasicAuth("api@api.com", "admin")
                 .delete("http://localhost:8080/api/v1/articles/1", ResponseEntity.class);
+        ArticleDTO articleDTO = restTemplate
+                .withBasicAuth("api@api.com", "admin")
+                .getForObject("http://localhost:8080/api/v1/articles/1", ArticleDTO.class);
+        Assert.assertNull(articleDTO);
     }
 }

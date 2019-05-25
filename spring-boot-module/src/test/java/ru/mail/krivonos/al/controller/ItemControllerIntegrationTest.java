@@ -80,7 +80,7 @@ public class ItemControllerIntegrationTest {
         itemDTO.setName("Item");
         itemDTO.setDescription("Description");
         itemDTO.setUniqueNumber("12345");
-        itemDTO.setPrice(BigDecimal.valueOf(1.32));
+        itemDTO.setPrice(BigDecimal.valueOf(2.35).toString());
         this.mockMvc.perform(post(ITEMS_ADD_URL)
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("item", itemDTO))
