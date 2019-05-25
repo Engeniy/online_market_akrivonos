@@ -332,4 +332,14 @@
             <column name="description" value="Cat collar description."/>
         </insert>
     </changeSet>
+
+    <changeSet id="USER_INSERT_4" author="krivonos-al@mail.ru">
+        <insert tableName="t_user">
+            <column name="email" value="customer@customer.com"/>
+            <column name="password" value="$2a$09$QQLe6OdlVTNL2o7Q8LJx3OpxVeiLjcLzBcE/EB70zwaw0l.uZdXIm"/>
+            <column name="name" value="Customer"/>
+            <column name="surname" value="Customer"/>
+            <column name="role_id" valueComputed="(SELECT id FROM t_role WHERE name = 'Customer User')"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

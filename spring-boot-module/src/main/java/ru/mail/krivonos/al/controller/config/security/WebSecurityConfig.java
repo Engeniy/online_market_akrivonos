@@ -41,16 +41,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(USERS_PAGE_URL, USERS_ADD_PAGE_URL, USERS_DELETE_URL,
-                        USERS_PASSWORD_CHANGE_URL, REVIEWS_UPDATE_URL, REVIEWS_DELETE_URL)
+                        USERS_PASSWORD_CHANGE_URL, REVIEWS_PAGE_URL, REVIEWS_UPDATE_URL, REVIEWS_DELETE_URL)
                 .hasAuthority(ADMIN_AUTHORITY_NAME)
                 .antMatchers(PROFILE_PAGE_URL, FAVORITE_ARTICLES_URL, PROFILE_UPDATE_URL, PROFILE_PASSWORD_UPDATE_URL,
-                        ARTICLE_ADD_COMMENT_URL, ARTICLE_DELETE_COMMENT_URL)
+                        ARTICLE_ADD_COMMENT_URL)
                 .hasAuthority(CUSTOMER_AUTHORITY_NAME)
-                .antMatchers(ARTICLES_PAGE_URL, ARTICLE_PAGE_URL, ADD_ARTICLE_PAGE_URL, ARTICLE_DELETE_COMMENT_URL,
-                        DELETE_ARTICLE_URL, EDIT_ARTICLE_URL, ITEMS_PAGE_URL, ITEMS_ADD_URL, ITEMS_COPY_URL, ITEMS_DELETE_URL)
+                .antMatchers(ADD_ARTICLE_PAGE_URL, DELETE_ARTICLE_URL, EDIT_ARTICLE_URL, ITEMS_PAGE_URL, ITEMS_ADD_URL,
+                        ITEMS_COPY_URL, ITEMS_DELETE_URL)
                 .hasAuthority(SALE_AUTHORITY_NAME)
-                .antMatchers(HOMEPAGE_URL, REVIEWS_PAGE_URL, BOOTSTRAP_CONTENT_URL, FORBIDDEN_PAGE_URL,
-                        INTERNAL_ERROR_PAGE_URL, ARTICLES_PAGE_URL, ARTICLE_PAGE_URL)
+                .antMatchers(ARTICLES_PAGE_URL, ARTICLE_PAGE_URL, ARTICLE_DELETE_COMMENT_URL)
+                .hasAnyAuthority(CUSTOMER_AUTHORITY_NAME, SALE_AUTHORITY_NAME)
+                .antMatchers(HOMEPAGE_URL, BOOTSTRAP_CONTENT_URL, FORBIDDEN_PAGE_URL,
+                        INTERNAL_ERROR_PAGE_URL)
                 .permitAll()
                 .and()
                 .formLogin()
