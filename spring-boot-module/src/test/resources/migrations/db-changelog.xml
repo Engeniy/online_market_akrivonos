@@ -342,4 +342,12 @@
             <column name="role_id" valueComputed="(SELECT id FROM t_role WHERE name = 'Customer User')"/>
         </insert>
     </changeSet>
+
+    <changeSet id="PROFILE_INSERT_2" author="krivonos-al@mail.ru">
+        <insert tableName="t_profile">
+            <column name="user_id" value="4"/>
+            <column name="telephone" value="+375447337351"/>
+            <column name="address" value="Some address"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>
