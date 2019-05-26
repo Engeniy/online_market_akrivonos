@@ -25,6 +25,6 @@ public class MailServiceImpl implements MailService {
         mailMessage.setTo(email);
         mailMessage.setSubject(SUBJECT);
         mailMessage.setText(String.format(TEXT_TEMPLATE, message));
-//        mailSender.send(mailMessage);
+        mailSender.send(mailMessage);
     }
 }

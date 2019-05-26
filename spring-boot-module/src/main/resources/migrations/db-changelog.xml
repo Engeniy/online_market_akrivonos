@@ -259,15 +259,6 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="ITEM_INSERT_1" author="krivonos-al@mail.ru">
-        <insert tableName="t_item">
-            <column name="name" value="Cat collar"/>
-            <column name="unique_number" value="111110"/>
-            <column name="price" value="2.65"/>
-            <column name="description" value="Cat collar description."/>
-        </insert>
-    </changeSet>
-
     <changeSet id="USER_INSERT_2" author="krivonos-al@mail.ru">
         <insert tableName="t_user">
             <column name="email" value="api@api.com"/>
