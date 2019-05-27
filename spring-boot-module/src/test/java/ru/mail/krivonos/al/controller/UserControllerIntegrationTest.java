@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.ADMIN_AUTHORITY_NAME;
 import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.CUSTOMER_AUTHORITY_NAME;
+import static ru.mail.krivonos.al.controller.constant.URLConstants.PROFILE_PAGE_URL;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
@@ -168,7 +170,6 @@ public class UserControllerIntegrationTest {
         )
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/private/users?added"));
-        Long[] ids = new Long[1];
         Long id = 2L;
         this.mockMvc.perform(post("/private/users/delete")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -220,17 +221,13 @@ public class UserControllerIntegrationTest {
                 .andExpect(redirectedUrl("/private/profile?password_changed"));
     }
 
-    @WithMockUser(authorities = {CUSTOMER_AUTHORITY_NAME})
+    @WithUserDetails("customer@customer.com")
     @Test
-    public void shouldSendRedirectToArticlePageWithPositiveParamForSuccessfulUpdatePasswordPostRequest()
-            throws Exception {
-        UserPasswordForm userPasswordForm = new UserPasswordForm();
-        userPasswordForm.setOldPassword("admin");
-        userPasswordForm.setNewPassword("admin1");
-        this.mockMvc.perform(post("/private/profile/1/password")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .flashAttr("password_form", userPasswordForm))
-                .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/private/profile?password_changed"));
+    public void requestForProfilePageSuccessfullyProcessed() throws Exception {
+        this.mockMvc.perform(get(PROFILE_PAGE_URL)
+                .accept(MediaType.parseMediaType("text/html;charset=UTF-8")))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("text/html;charset=UTF-8"))
+                .andExpect(content().string(CoreMatchers.containsString("Customer")));
     }
 }

@@ -10,13 +10,13 @@ public class PageCountingServiceTest {
 
     @Test
     public void shouldReturnTwoPagesForTwentyItemsWithLimitTen() {
-        int pagesNumber = pageCountingService.countPages(20, 10);
+        int pagesNumber = pageCountingService.getCountOfPages(20, 10);
         Assert.assertEquals(2, pagesNumber);
     }
 
     @Test
     public void shouldReturnTreePagesForTwentyOneItemWithLimitTen() {
-        int pagesNumber = pageCountingService.countPages(21, 10);
+        int pagesNumber = pageCountingService.getCountOfPages(21, 10);
         Assert.assertEquals(3, pagesNumber);
     }
 }

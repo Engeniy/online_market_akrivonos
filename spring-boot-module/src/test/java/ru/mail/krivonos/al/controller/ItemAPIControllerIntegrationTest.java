@@ -10,60 +10,59 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
-import ru.mail.krivonos.al.service.model.ArticleDTO;
-
-import java.util.Date;
+import ru.mail.krivonos.al.service.model.ItemDTO;
 
 @RunWith(SpringRunner.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
-public class ArticleAPIControllerIntegrationTest {
+public class ItemAPIControllerIntegrationTest {
 
     @Autowired
     private TestRestTemplate restTemplate;
 
     @Test
-    public void shouldGetArticles() {
+    public void shouldGetItems() {
         restTemplate.withBasicAuth("api@api.com", "admin");
-        ArticleDTO[] admins = restTemplate
+        ItemDTO[] items = restTemplate
                 .withBasicAuth("api@api.com", "admin")
-                .getForObject("http://localhost:8080/api/v1/articles", ArticleDTO[].class);
-        Assert.assertNotNull(admins);
+                .getForObject("http://localhost:8080/api/v1/items", ItemDTO[].class);
+        Assert.assertNotNull(items);
     }
 
     @Test
-    public void shouldGetArticle() {
+    public void shouldGetItem() {
         restTemplate.withBasicAuth("api@api.com", "admin");
         Long id = 1L;
-        ArticleDTO articleDTO = restTemplate
+        ItemDTO itemDTO = restTemplate
                 .withBasicAuth("api@api.com", "admin")
-                .getForObject("http://localhost:8080/api/v1/articles/1", ArticleDTO.class);
-        Assert.assertEquals(id, articleDTO.getId());
+                .getForObject("http://localhost:8080/api/v1/items/1", ItemDTO.class);
+        Assert.assertEquals(id, itemDTO.getId());
     }
 
     @Test
-    public void shouldSaveArticle() {
-        ArticleDTO articleDTO = new ArticleDTO();
-        articleDTO.setContent("Hello");
-        articleDTO.setTitle("Title");
-        articleDTO.setDateOfCreation(new Date());
+    public void shouldSaveItem() {
+        ItemDTO itemDTO = new ItemDTO();
+        itemDTO.setName("Name");
+        itemDTO.setUniqueNumber("123456");
+        itemDTO.setPrice("1.23");
+        itemDTO.setDescription("Description");
         restTemplate.withBasicAuth("api@api.com", "admin");
-        ArticleDTO admins = restTemplate
+        ItemDTO admins = restTemplate
                 .withBasicAuth("api@api.com", "admin")
-                .postForObject("http://localhost:8080/api/v1/articles", articleDTO, ArticleDTO.class);
+                .postForObject("http://localhost:8080/api/v1/items", itemDTO, ItemDTO.class);
         Assert.assertNotNull(admins.getId());
     }
 
     @Test
-    public void shouldDeleteArticle() {
+    public void shouldDeleteItem() {
         restTemplate.withBasicAuth("api@api.com", "admin");
         restTemplate
                 .withBasicAuth("api@api.com", "admin")
-                .delete("http://localhost:8080/api/v1/articles/1", ResponseEntity.class);
-        ArticleDTO articleDTO = restTemplate
+                .delete("http://localhost:8080/api/v1/items/1", ResponseEntity.class);
+        ItemDTO itemDTO = restTemplate
                 .withBasicAuth("api@api.com", "admin")
-                .getForObject("http://localhost:8080/api/v1/articles/1", ArticleDTO.class);
-        Assert.assertNull(articleDTO);
+                .getForObject("http://localhost:8080/api/v1/items/1", ItemDTO.class);
+        Assert.assertNull(itemDTO);
     }
 }

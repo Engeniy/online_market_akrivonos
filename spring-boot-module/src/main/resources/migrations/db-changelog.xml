@@ -235,4 +235,65 @@
                                  referencedTableName="t_user"
                                  referencedColumnNames="id"/>
     </changeSet>
+
+    <changeSet id="ITEM_TABLE_1" author="krivonos-al@mail.ru">
+        <createTable tableName="t_item">
+            <column autoIncrement="true" name="id" type="BIGINT UNSIGNED">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(30)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="unique_number" type="VARCHAR(6)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="price" type="DECIMAL(30, 2) UNSIGNED">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description" type="VARCHAR(200)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="deleted" type="BOOLEAN" defaultValueBoolean="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="USER_INSERT_2" author="krivonos-al@mail.ru">
+        <insert tableName="t_user">
+            <column name="email" value="api@api.com"/>
+            <column name="password" value="$2a$09$QQLe6OdlVTNL2o7Q8LJx3OpxVeiLjcLzBcE/EB70zwaw0l.uZdXIm"/>
+            <column name="name" value="Api Admin"/>
+            <column name="surname" value="Api Admin"/>
+            <column name="role_id" valueComputed="(SELECT id FROM t_role WHERE name = 'Secure API User')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="USER_INSERT_3" author="krivonos-al@mail.ru">
+        <insert tableName="t_user">
+            <column name="email" value="sale@sale.com"/>
+            <column name="password" value="$2a$09$QQLe6OdlVTNL2o7Q8LJx3OpxVeiLjcLzBcE/EB70zwaw0l.uZdXIm"/>
+            <column name="name" value="Sale"/>
+            <column name="surname" value="Sale"/>
+            <column name="role_id" valueComputed="(SELECT id FROM t_role WHERE name = 'Sale User')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="USER_INSERT_4" author="krivonos-al@mail.ru">
+        <insert tableName="t_user">
+            <column name="email" value="customer@customer.com"/>
+            <column name="password" value="$2a$09$QQLe6OdlVTNL2o7Q8LJx3OpxVeiLjcLzBcE/EB70zwaw0l.uZdXIm"/>
+            <column name="name" value="Customer"/>
+            <column name="surname" value="Customer"/>
+            <column name="role_id" valueComputed="(SELECT id FROM t_role WHERE name = 'Customer User')"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="PROFILE_INSERT_1" author="krivonos-al@mail.ru">
+        <insert tableName="t_profile">
+            <column name="user_id" valueComputed="(SELECT id FROM t_user WHERE email = 'customer@customer.com')"/>
+            <column name="telephone" value="+375447337351"/>
+            <column name="address" value="Some address"/>
+        </insert>
+    </changeSet>
 </databaseChangeLog>

@@ -21,12 +21,20 @@ public class URLConstants {
     public static final String BOOTSTRAP_CONTENT_URL = "/webjars/**";
     public static final String ARTICLES_PAGE_URL = "/articles";
     public static final String ARTICLE_PAGE_URL = "/article";
+    public static final String ADD_ARTICLE_PAGE_URL = "/private/articles/add";
+    public static final String DELETE_ARTICLE_URL = "/private/articles/delete";
+    public static final String EDIT_ARTICLE_URL = "/private/articles/edit";
     public static final String ARTICLE_ADD_COMMENT_URL = "/article/comment";
     public static final String ARTICLE_DELETE_COMMENT_URL = "/article/comment/delete";
     public static final String PROFILE_PAGE_URL = "/private/profile";
     public static final String PROFILE_UPDATE_URL = "/private/profile/{id}/update";
     public static final String PROFILE_PASSWORD_UPDATE_URL = "/private/profile/{id}/password";
     public static final String FAVORITE_ARTICLES_URL = "/private/articles/favorites";
+    public static final String ITEMS_PAGE_URL = "/items";
+    public static final String ITEM_PAGE_URL = "/item";
+    public static final String ITEMS_DELETE_URL = "/private/items/delete";
+    public static final String ITEMS_COPY_URL = "/private/items/copy";
+    public static final String ITEMS_ADD_URL = "/private/items/add";
 
     private URLConstants() {
     }

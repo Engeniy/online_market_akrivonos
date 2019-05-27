@@ -1,0 +1,30 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Item</title>
+    <link href="#" rel="stylesheet" th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap.min.css}" type="text/css"/>
+    <link href="#" rel="stylesheet" th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap.css}" type="text/css"/>
+    <link href="#" rel="stylesheet" th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap-grid-jsf.css}" type="text/css"/>
+
+</head>
+<body>
+<div th:replace="fragments/header.html"/>
+<div class="align-self-center container-fluid justify-content-center">
+    <div class="card border-dark text-center"
+         style="padding: 20px; margin-top: 30px; margin-left: 10%; width: 80%; height: auto">
+        <form action="#" th:action="@{#}" th:object="${item}" method="post">
+            <b class="text-lg-center"><span>Name:</span></b>
+            <br><span class="text-lg-center text-center" th:text="*{name}"></span>
+            <br><b class="text-lg-center"><span>Unique number:</span></b>
+            <br><span class="text-lg-center text-center" th:text="*{uniqueNumber}"></span>
+            <br><b class="text-lg-center"><span>Price:</span></b>
+            <br><span class="text-lg-center text-center" th:text="*{price}"></span>
+            <br><b class="text-lg-center"><span>Description:</span></b>
+            <br><span class="text-lg-center text-center" th:text="*{description}"></span>
+        </form>
+    </div>
+</div>
+<div th:replace="fragments/footer.html"/>
+</body>
+</html>

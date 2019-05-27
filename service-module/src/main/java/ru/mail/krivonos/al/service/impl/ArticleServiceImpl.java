@@ -49,7 +49,7 @@ public class ArticleServiceImpl implements ArticleService {
     public PageDTO<ArticleDTO> getArticles(int pageNumber) {
         PageDTO<ArticleDTO> pageDTO = new PageDTO();
         int countOfEntities = articleRepository.getCountOfEntities();
-        int countOfPages = pageCountingService.countPages(countOfEntities, ARTICLES_LIMIT);
+        int countOfPages = pageCountingService.getCountOfPages(countOfEntities, ARTICLES_LIMIT);
         pageDTO.setCountOfPages(countOfPages);
         int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
         pageDTO.setCurrentPageNumber(currentPageNumber);
@@ -69,8 +69,11 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional
-    public ArticleDTO getArticle(Long articleID) {
+    public ArticleDTO getArticleById(Long articleID) {
         Article article = articleRepository.findById(articleID);
+        if (article == null) {
+            return null;
+        }
         return articleConverter.toDTO(article);
     }
 
@@ -80,7 +83,11 @@ public class ArticleServiceImpl implements ArticleService {
         Article article = articleConverter.toEntity(articleDTO);
         User author = userRepository.findById(article.getAuthor().getId());
         article.setAuthor(author);
-        article.setDateOfCreation(new Date());
+        if (articleDTO.getDateOfCreation() == null) {
+            article.setDateOfCreation(new Date());
+        } else {
+            article.setDateOfCreation(articleDTO.getDateOfCreation());
+        }
         article.setSummary(getSummary(article.getContent()));
         articleRepository.persist(article);
         return articleConverter.toDTO(article);
@@ -90,7 +97,20 @@ public class ArticleServiceImpl implements ArticleService {
     @Transactional
     public void deleteArticle(Long articleId) {
         Article article = articleRepository.findById(articleId);
-        articleRepository.remove(article);
+        if (article != null) {
+            articleRepository.remove(article);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void update(ArticleDTO articleDTO) {
+        Article article = articleRepository.findById(articleDTO.getId());
+        article.setDateOfCreation(new Date());
+        article.setTitle(articleDTO.getTitle());
+        article.setContent(articleDTO.getContent());
+        article.setSummary(getSummary(articleDTO.getContent()));
+        articleRepository.merge(article);
     }
 
     private List<ArticleDTO> getArticleDTOs(List<Article> articles) {

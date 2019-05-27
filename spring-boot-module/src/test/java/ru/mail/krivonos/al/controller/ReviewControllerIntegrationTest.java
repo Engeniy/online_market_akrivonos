@@ -50,11 +50,13 @@ public class ReviewControllerIntegrationTest {
         correctUserDTO.setRole(correctRole);
     }
 
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void shouldReturnReviewsPageForGetRequestWithPageNumber() throws Exception {
         mockMvc.perform(get("/reviews")).andExpect(status().isOk());
     }
 
+    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
     @Test
     public void requestForReviewsPageSuccessfullyProcessed() throws Exception {
         this.mockMvc.perform(get("/reviews")

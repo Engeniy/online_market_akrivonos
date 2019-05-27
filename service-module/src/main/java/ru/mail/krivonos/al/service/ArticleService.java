@@ -11,9 +11,11 @@ public interface ArticleService {
 
     List<ArticleDTO> getArticles(int limit, int offset);
 
-    ArticleDTO getArticle(Long articleID);
+    ArticleDTO getArticleById(Long articleID);
 
     ArticleDTO add(ArticleDTO articleDTO);
 
     void deleteArticle(Long articleId);
+
+    void update(ArticleDTO articleDTO);
 }

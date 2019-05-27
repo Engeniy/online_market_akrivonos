@@ -17,7 +17,9 @@ import java.util.Collection;
 
 import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.ADMIN_AUTHORITY_NAME;
 import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.CUSTOMER_AUTHORITY_NAME;
+import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.SALE_AUTHORITY_NAME;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ARTICLES_PAGE_URL;
+import static ru.mail.krivonos.al.controller.constant.URLConstants.ITEMS_PAGE_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.USERS_PAGE_URL;
 
 public class AppAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
@@ -49,6 +51,9 @@ public class AppAuthenticationSuccessHandler implements AuthenticationSuccessHan
                     break;
                 case CUSTOMER_AUTHORITY_NAME:
                     targetURL = ARTICLES_PAGE_URL;
+                    break;
+                case SALE_AUTHORITY_NAME:
+                    targetURL = ITEMS_PAGE_URL;
                     break;
             }
         }

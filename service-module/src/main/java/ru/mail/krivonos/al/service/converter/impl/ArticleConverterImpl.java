@@ -47,6 +47,7 @@ public class ArticleConverterImpl implements ArticleConverter {
         Article article = new Article();
         article.setContent(articleDTO.getContent());
         article.setTitle(articleDTO.getTitle());
+        article.setDateOfCreation(articleDTO.getDateOfCreation());
         article.setAuthor(userConverter.toEntity(articleDTO.getAuthor()));
         return article;
     }

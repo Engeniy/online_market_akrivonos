@@ -7,7 +7,7 @@ import ru.mail.krivonos.al.service.PageCountingService;
 public class PageCountingServiceImpl implements PageCountingService {
 
     @Override
-    public int countPages(int itemsNumber, int pageLimit) {
+    public int getCountOfPages(int itemsNumber, int pageLimit) {
         int pagesNumber = itemsNumber / pageLimit;
         if (itemsNumber > (pagesNumber * pageLimit)) {
             pagesNumber += 1;

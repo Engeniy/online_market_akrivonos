@@ -48,7 +48,7 @@ public class ArticleApiController {
     public ResponseEntity<ArticleDTO> getArticle(
             @PathVariable("id") Long id
     ) {
-        ArticleDTO article = articleService.getArticle(id);
+        ArticleDTO article = articleService.getArticleById(id);
         return new ResponseEntity(article, HttpStatus.OK);
     }
 

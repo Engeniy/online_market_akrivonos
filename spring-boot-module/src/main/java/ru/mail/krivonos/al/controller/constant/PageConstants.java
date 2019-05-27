@@ -10,8 +10,13 @@ public class PageConstants {
     public static final String INTERNAL_ERROR_PAGE = "error/500";
     public static final String ARTICLES_PAGE = "articles";
     public static final String ARTICLE_PAGE = "article";
+    public static final String ADD_ARTICLE_PAGE = "private/add-article";
     public static final String PROFILE_PAGE = "private/profile";
     public static final String FAVORITE_ARTICLES_PAGE = "private/favorite-articles";
+    public static final String ARTICLE_EDIT_PAGE = "private/edit-article";
+    public static final String ITEMS_PAGE = "items";
+    public static final String ITEM_PAGE = "item";
+    public static final String ITEM_COPY_PAGE = "private/copy-item";
 
     private PageConstants() {
     }

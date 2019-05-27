@@ -1,5 +1,7 @@
 package ru.mail.krivonos.al.service.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -9,6 +11,7 @@ import java.util.List;
 public class ArticleDTO {
 
     private Long id;
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private Date dateOfCreation;
     @NotNull
     @Size(max = 30)

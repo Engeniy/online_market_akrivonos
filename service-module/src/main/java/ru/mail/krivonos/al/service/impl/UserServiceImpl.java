@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
     public PageDTO<UserDTO> getUsers(Integer pageNumber) {
         PageDTO<UserDTO> pageDTO = new PageDTO<>();
         int countOfEntities = userRepository.getCountOfEntities();
-        int countOfPages = pageCountingService.countPages(countOfEntities, USERS_LIMIT);
+        int countOfPages = pageCountingService.getCountOfPages(countOfEntities, USERS_LIMIT);
         pageDTO.setCountOfPages(countOfPages);
         int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
         pageDTO.setCurrentPageNumber(currentPageNumber);
