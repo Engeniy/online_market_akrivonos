@@ -25,6 +25,7 @@ public class OrderConverterImpl implements OrderConverter {
     public OrderDTO toDTO(Order order) {
         OrderDTO orderDTO = new OrderDTO();
         orderDTO.setId(order.getId());
+        orderDTO.setOrderNumber(order.getOrderNumber());
         orderDTO.setQuantity(order.getQuantity());
         orderDTO.setStatus(order.getStatus());
         orderDTO.setUser(userConverterAggregator.getOrderUserConverter().toDTO(order.getUser()));

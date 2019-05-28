@@ -7,6 +7,7 @@ import java.math.BigDecimal;
 public class OrderDTO {
 
     private Long id;
+    private Long orderNumber;
     private Integer quantity;
     private OrderStatusEnum status;
     private UserDTO user;
@@ -19,6 +20,14 @@ public class OrderDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(Long orderNumber) {
+        this.orderNumber = orderNumber;
     }
 
     public Integer getQuantity() {

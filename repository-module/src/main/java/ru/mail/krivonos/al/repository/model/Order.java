@@ -31,6 +31,8 @@ public class Order {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
+    @Column(name = "order_number", nullable = false, unique = true)
+    private Long orderNumber;
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
     @Column(name = "status", nullable = false)
@@ -54,6 +56,14 @@ public class Order {
         this.id = id;
     }
 
+    public Long getOrderNumber() {
+        return orderNumber;
+    }
+
+    public void setOrderNumber(Long orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
     public Integer getQuantity() {
         return quantity;
     }
@@ -68,6 +78,14 @@ public class Order {
 
     public void setStatus(OrderStatusEnum status) {
         this.status = status;
+    }
+
+    public Date getDateOfCreation() {
+        return dateOfCreation;
+    }
+
+    public void setDateOfCreation(Date dateOfCreation) {
+        this.dateOfCreation = dateOfCreation;
     }
 
     public User getUser() {
