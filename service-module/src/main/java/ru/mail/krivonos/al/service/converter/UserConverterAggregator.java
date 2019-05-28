@@ -9,4 +9,6 @@ public interface UserConverterAggregator {
     UserConverter getAuthorConverter();
 
     UserConverter getUserForShowingConverter();
+
+    UserConverter getOrderUserConverter();
 }
