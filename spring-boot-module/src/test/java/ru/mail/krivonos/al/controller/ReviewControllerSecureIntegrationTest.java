@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -35,9 +36,15 @@ public class ReviewControllerSecureIntegrationTest {
                 .build();
     }
 
-    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
+    @WithUserDetails("admin@admin.com")
     @Test
-    public void shouldSucceedForReviewsPage() throws Exception {
+    public void shouldSucceedForReviewsPageForAdmin() throws Exception {
+        mockMvc.perform(get("/reviews")).andExpect(status().isOk());
+    }
+
+    @WithUserDetails("customer@customer.com")
+    @Test
+    public void shouldSucceedForReviewsPageForCustomer() throws Exception {
         mockMvc.perform(get("/reviews")).andExpect(status().isOk());
     }
 }

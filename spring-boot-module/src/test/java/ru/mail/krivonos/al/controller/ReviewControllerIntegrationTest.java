@@ -9,9 +9,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.mail.krivonos.al.controller.model.ReviewDTOForm;
 import ru.mail.krivonos.al.service.model.PageDTO;
 import ru.mail.krivonos.al.service.model.ReviewDTO;
 import ru.mail.krivonos.al.service.model.RoleDTO;
@@ -50,13 +52,13 @@ public class ReviewControllerIntegrationTest {
         correctUserDTO.setRole(correctRole);
     }
 
-    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
+    @WithUserDetails("admin@admin.com")
     @Test
     public void shouldReturnReviewsPageForGetRequestWithPageNumber() throws Exception {
         mockMvc.perform(get("/reviews")).andExpect(status().isOk());
     }
 
-    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
+    @WithUserDetails("admin@admin.com")
     @Test
     public void requestForReviewsPageSuccessfullyProcessed() throws Exception {
         this.mockMvc.perform(get("/reviews")
@@ -65,17 +67,17 @@ public class ReviewControllerIntegrationTest {
                 .andExpect(content().contentType("text/html;charset=UTF-8"));
     }
 
-    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
+    @WithUserDetails("admin@admin.com")
     @Test
     public void shouldSendRedirectToReviewsFirstPageWithPositiveParamForSuccessfulUpdateReviewsRequest()
             throws Exception {
-        PageDTO<ReviewDTO> reviewDTOForm = new PageDTO<>();
+        ReviewDTOForm reviewDTOForm = new ReviewDTOForm();
         List<ReviewDTO> reviewDTOs = new ArrayList<>();
         ReviewDTO reviewDTO = new ReviewDTO();
         reviewDTO.setId(1L);
         reviewDTO.setHidden(true);
         reviewDTOs.add(reviewDTO);
-        reviewDTOForm.setList(reviewDTOs);
+        reviewDTOForm.setReviewList(reviewDTOs);
         this.mockMvc.perform(post("/reviews/update?page=1")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("id", 1L)
@@ -84,17 +86,30 @@ public class ReviewControllerIntegrationTest {
                 .andExpect(redirectedUrl("/reviews?page=1&updated"));
     }
 
-    @WithMockUser(authorities = {ADMIN_AUTHORITY_NAME})
+    @WithUserDetails("admin@admin.com")
     @Test
     public void shouldSendRedirectToReviewsFirstPageWithNegativeParamForUnsuccessfulUpdateReviewsRequest()
             throws Exception {
-        PageDTO<ReviewDTO> reviewDTOForm = new PageDTO<>();
+        ReviewDTOForm reviewDTOForm = new ReviewDTOForm();
         List<ReviewDTO> reviewDTOs = new ArrayList<>();
-        reviewDTOForm.setList(reviewDTOs);
+        reviewDTOForm.setReviewList(reviewDTOs);
         this.mockMvc.perform(post("/reviews/update?page=1")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("reviews", reviewDTOForm))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/reviews?page=1&updated_zero"));
+    }
+
+    @WithUserDetails("customer@customer.com")
+    @Test
+    public void shouldSendRedirectToReviewsPageWithPositiveParamForSuccessfulAddReviewRequest()
+            throws Exception {
+        ReviewDTO reviewDTO = new ReviewDTO();
+        reviewDTO.setReview("Some review.");
+        this.mockMvc.perform(post("/reviews/add")
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+                .flashAttr("review", reviewDTO))
+                .andExpect(status().isFound())
+                .andExpect(redirectedUrl("/reviews?added"));
     }
 }
