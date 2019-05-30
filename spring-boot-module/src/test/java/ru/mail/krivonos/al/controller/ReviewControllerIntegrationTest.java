@@ -8,13 +8,11 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.mail.krivonos.al.controller.model.ReviewDTOForm;
-import ru.mail.krivonos.al.service.model.PageDTO;
+import ru.mail.krivonos.al.controller.model.ReviewForm;
 import ru.mail.krivonos.al.service.model.ReviewDTO;
 import ru.mail.krivonos.al.service.model.RoleDTO;
 import ru.mail.krivonos.al.service.model.UserDTO;
@@ -27,7 +25,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.ADMIN_AUTHORITY_NAME;
 
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
@@ -71,17 +68,17 @@ public class ReviewControllerIntegrationTest {
     @Test
     public void shouldSendRedirectToReviewsFirstPageWithPositiveParamForSuccessfulUpdateReviewsRequest()
             throws Exception {
-        ReviewDTOForm reviewDTOForm = new ReviewDTOForm();
+        ReviewForm reviewForm = new ReviewForm();
         List<ReviewDTO> reviewDTOs = new ArrayList<>();
         ReviewDTO reviewDTO = new ReviewDTO();
         reviewDTO.setId(1L);
         reviewDTO.setHidden(true);
         reviewDTOs.add(reviewDTO);
-        reviewDTOForm.setReviewList(reviewDTOs);
+        reviewForm.setReviewList(reviewDTOs);
         this.mockMvc.perform(post("/reviews/update?page=1")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("id", 1L)
-                .flashAttr("reviews", reviewDTOForm))
+                .flashAttr("reviews", reviewForm))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/reviews?page=1&updated"));
     }
@@ -90,12 +87,12 @@ public class ReviewControllerIntegrationTest {
     @Test
     public void shouldSendRedirectToReviewsFirstPageWithNegativeParamForUnsuccessfulUpdateReviewsRequest()
             throws Exception {
-        ReviewDTOForm reviewDTOForm = new ReviewDTOForm();
+        ReviewForm reviewForm = new ReviewForm();
         List<ReviewDTO> reviewDTOs = new ArrayList<>();
-        reviewDTOForm.setReviewList(reviewDTOs);
+        reviewForm.setReviewList(reviewDTOs);
         this.mockMvc.perform(post("/reviews/update?page=1")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-                .flashAttr("reviews", reviewDTOForm))
+                .flashAttr("reviews", reviewForm))
                 .andExpect(status().isFound())
                 .andExpect(redirectedUrl("/reviews?page=1&updated_zero"));
     }
