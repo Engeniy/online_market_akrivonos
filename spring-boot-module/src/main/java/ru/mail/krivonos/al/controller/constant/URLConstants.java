@@ -16,6 +16,7 @@ public class URLConstants {
     public static final String USERS_DELETE_URL = "/private/users/delete";
     public static final String USERS_PASSWORD_CHANGE_URL = "/private/users/{id}/password";
     public static final String REVIEWS_PAGE_URL = "/reviews";
+    public static final String REVIEWS_ADD_PAGE_URL = "/reviews/add";
     public static final String REVIEWS_DELETE_URL = "/reviews/{id}/delete";
     public static final String REVIEWS_UPDATE_URL = "/reviews/update";
     public static final String BOOTSTRAP_CONTENT_URL = "/webjars/**";
@@ -35,6 +36,10 @@ public class URLConstants {
     public static final String ITEMS_DELETE_URL = "/private/items/delete";
     public static final String ITEMS_COPY_URL = "/private/items/copy";
     public static final String ITEMS_ADD_URL = "/private/items/add";
+    public static final String ORDERS_PAGE_URL = "/orders";
+    public static final String ORDER_PAGE_URL = "/order";
+    public static final String ORDER_UPDATE_URL = "/order/update";
+    public static final String ORDERS_ADD_URL = "/orders/add";
 
     private URLConstants() {
     }

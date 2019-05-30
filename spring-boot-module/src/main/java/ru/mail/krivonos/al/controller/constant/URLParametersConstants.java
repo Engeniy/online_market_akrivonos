@@ -12,6 +12,10 @@ public class URLParametersConstants {
     public static final String PAGE_NUMBER_PARAM = "page=";
     public static final String FAVORITE_ADDED_PARAM = "favorite_added";
     public static final String COPIED_PARAM = "copied";
+    public static final String ORDER_CREATED_PARAM = "order_created";
+    public static final String ITEM_NUMBER_PARAM = "item_number=";
+    public static final String ORDER_NUMBER_PARAM = "order_number=";
+    public static final String INVALID_QUANTITY_PARAM = "invalid_quantity";
 
     private URLParametersConstants() {
     }
