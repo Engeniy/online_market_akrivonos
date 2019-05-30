@@ -21,7 +21,6 @@ import java.util.Objects;
         "UPDATE t_profile " +
                 "SET deleted = 1 " +
                 "WHERE user_id = ?")
-@Where(clause = "deleted = 0")
 public class Profile {
 
     @GenericGenerator(

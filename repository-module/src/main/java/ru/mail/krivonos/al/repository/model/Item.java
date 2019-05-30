@@ -19,7 +19,6 @@ import java.util.Objects;
         "UPDATE t_item " +
                 "SET deleted = 1 " +
                 "WHERE id = ?")
-@Where(clause = "deleted = 0")
 public class Item implements Serializable {
 
     @Id
@@ -34,6 +33,8 @@ public class Item implements Serializable {
     private BigDecimal price;
     @Column(name = "description", nullable = false, length = 200)
     private String description;
+    @Column(name = "deleted", nullable = false)
+    private boolean isDeleted = false;
 
     public Long getId() {
         return id;

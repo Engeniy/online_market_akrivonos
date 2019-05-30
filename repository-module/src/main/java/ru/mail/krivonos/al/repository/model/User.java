@@ -22,7 +22,6 @@ import java.util.Objects;
         "UPDATE t_user " +
                 "SET deleted = 1 " +
                 "WHERE id = ? AND unchangeable = 0")
-@Where(clause = "deleted = 0")
 public class User {
 
     @Id
@@ -40,7 +39,7 @@ public class User {
     @Column(name = "unchangeable", nullable = false)
     private boolean isUnchangeable;
     @Column(name = "deleted", nullable = false)
-    private boolean isDeleted;
+    private boolean isDeleted = false;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
