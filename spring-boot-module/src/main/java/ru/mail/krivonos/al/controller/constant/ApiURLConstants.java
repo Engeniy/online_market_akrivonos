@@ -9,6 +9,9 @@ public class ApiURLConstants {
     public static final String API_V1_URL = "/api/v1/**";
     public static final String API_ITEMS_URL = "/api/v1/items";
     public static final String API_ITEMS_WITH_ID_URL = "/api/v1/items/{id}";
+    public static final String API_ORDERS_URL = "/api/v1/orders";
+    public static final String API_ORDERS_WITH_ID_URL = "/api/v1/orders/{id}";
+    public static final String API_ROLES_URL = "/api/v1/roles";
 
     private ApiURLConstants() {
     }
