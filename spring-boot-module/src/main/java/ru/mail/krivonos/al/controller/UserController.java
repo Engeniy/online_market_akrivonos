@@ -2,6 +2,7 @@ package ru.mail.krivonos.al.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -137,9 +138,10 @@ public class UserController {
     }
 
     @GetMapping(PROFILE_PAGE_URL)
-    public String getProfilePage(Authentication authentication, Model model) {
-        AuthUserPrincipal authUserPrincipal = (AuthUserPrincipal) authentication.getPrincipal();
-        UserDTO userDTO = userService.getUserByID(authUserPrincipal.getUserID());
+    public String getProfilePage(
+            @AuthenticationPrincipal AuthUserPrincipal userPrincipal, Model model
+    ) {
+        UserDTO userDTO = userService.getUserByID(userPrincipal.getUserID());
         model.addAttribute("user", userDTO);
         model.addAttribute("password_form", new UserPasswordForm());
         return PROFILE_PAGE;

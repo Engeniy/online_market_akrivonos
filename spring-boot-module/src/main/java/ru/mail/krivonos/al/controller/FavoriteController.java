@@ -2,6 +2,7 @@ package ru.mail.krivonos.al.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,9 +34,8 @@ public class FavoriteController {
     @GetMapping(FAVORITE_ARTICLES_URL)
     public String getFavoriteArticles(
             @RequestParam(name = "page", defaultValue = "1") Integer page,
-            Authentication authentication, Model model
+            @AuthenticationPrincipal AuthUserPrincipal userPrincipal, Model model
     ) {
-        AuthUserPrincipal userPrincipal = (AuthUserPrincipal) authentication.getPrincipal();
         PageDTO<FavoriteArticleDTO> pageDTO = favoriteArticleService.getArticlesByUserId(page, userPrincipal.getUserID());
         model.addAttribute("page", pageDTO);
         return FAVORITE_ARTICLES_PAGE;

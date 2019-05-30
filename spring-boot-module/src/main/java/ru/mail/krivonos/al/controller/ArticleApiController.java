@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,12 +57,11 @@ public class ArticleApiController {
     @SuppressWarnings("unchecked")
     public ResponseEntity<ArticleDTO> saveArticle(
             @RequestBody @Valid ArticleDTO articleDTO,
-            Authentication authentication, BindingResult bindingResult
+            @AuthenticationPrincipal AuthUserPrincipal userPrincipal, BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        AuthUserPrincipal userPrincipal = (AuthUserPrincipal) authentication.getPrincipal();
         UserDTO author = new UserDTO();
         author.setId(userPrincipal.getUserID());
         articleDTO.setAuthor(author);

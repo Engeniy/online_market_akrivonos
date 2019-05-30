@@ -2,6 +2,7 @@ package ru.mail.krivonos.al.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -48,12 +49,9 @@ public class ArticleController {
     @GetMapping(ARTICLES_PAGE_URL)
     public String getArticles(
             @RequestParam(name = "page", defaultValue = "1") Integer pageNumber,
-            Authentication authentication, Model model
+            @AuthenticationPrincipal AuthUserPrincipal userPrincipal, Model model
     ) {
-        if (authentication != null) {
-            AuthUserPrincipal userPrincipal = (AuthUserPrincipal) authentication.getPrincipal();
-            model.addAttribute("user", userPrincipal);
-        }
+        model.addAttribute("user", userPrincipal);
         PageDTO<ArticleDTO> pageDTO = articleService.getArticles(pageNumber);
         model.addAttribute("page", pageDTO);
         return ARTICLES_PAGE;
@@ -62,12 +60,9 @@ public class ArticleController {
     @GetMapping(ARTICLE_PAGE_URL)
     public String getArticle(
             @RequestParam(name = "article_number") Long id,
-            Authentication authentication, Model model
+            @AuthenticationPrincipal AuthUserPrincipal userPrincipal, Model model
     ) {
-        if (authentication != null) {
-            AuthUserPrincipal userPrincipal = (AuthUserPrincipal) authentication.getPrincipal();
-            model.addAttribute("user", userPrincipal);
-        }
+        model.addAttribute("user", userPrincipal);
         ArticleDTO articleDTO = articleService.getArticleById(id);
         model.addAttribute("article", articleDTO);
         model.addAttribute("comment", new CommentDTO());
@@ -85,12 +80,11 @@ public class ArticleController {
     @PostMapping(ADD_ARTICLE_PAGE_URL)
     public String saveArticle(
             @ModelAttribute("article") @Valid ArticleDTO articleDTO,
-            BindingResult bindingResult, Authentication authentication
+            @AuthenticationPrincipal AuthUserPrincipal userPrincipal, BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
             return ADD_ARTICLE_PAGE;
         }
-        AuthUserPrincipal userPrincipal = (AuthUserPrincipal) authentication.getPrincipal();
         UserDTO userDTO = new UserDTO();
         userDTO.setId(userPrincipal.getUserID());
         articleDTO.setAuthor(userDTO);

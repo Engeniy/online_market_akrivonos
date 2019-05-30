@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.mail.krivonos.al.controller.validator.ItemValidator;
 import ru.mail.krivonos.al.service.ItemService;
 import ru.mail.krivonos.al.service.model.ItemDTO;
+import ru.mail.krivonos.al.service.model.OrderDTO;
 import ru.mail.krivonos.al.service.model.PageDTO;
 
 import static ru.mail.krivonos.al.controller.constant.PageConstants.ITEMS_PAGE;
@@ -48,6 +49,7 @@ public class ItemController {
     ) {
         PageDTO<ItemDTO> pageDTO = itemService.getItems(pageNumber);
         model.addAttribute("page", pageDTO);
+        model.addAttribute("order", new OrderDTO());
         return ITEMS_PAGE;
     }
 
