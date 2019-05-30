@@ -3,10 +3,9 @@ package ru.mail.krivonos.al.repository.impl;
 import ru.mail.krivonos.al.repository.GenericRepository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
@@ -45,6 +44,20 @@ public class GenericRepositoryImpl<I, T> implements GenericRepository<I, T> {
 
     @Override
     @SuppressWarnings("unchecked")
+    public T findByIdNotDeleted(I id) {
+        String queryString = String.format("from %s %s", entityClass.getName(),
+                " where id = :id and deleted = 0");
+        Query query = entityManager.createQuery(queryString);
+        query.setParameter("id", id);
+        try {
+            return (T) query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public List<T> findAll() {
         String queryString = String.format("from %s %s", entityClass.getName(), " c");
         Query query = entityManager.createQuery(queryString);
@@ -63,6 +76,17 @@ public class GenericRepositoryImpl<I, T> implements GenericRepository<I, T> {
 
     @Override
     @SuppressWarnings("unchecked")
+    public List<T> findAllNotDeletedWithAscendingOrder(int limit, int offset, String orderField) {
+        String queryString = String.format("from %s where deleted = 0 order by %s asc",
+                entityClass.getName(), orderField);
+        Query query = entityManager.createQuery(queryString)
+                .setMaxResults(limit)
+                .setFirstResult(offset);
+        return query.getResultList();
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public List<T> findAllWithDescendingOrder(int limit, int offset, String orderField) {
         String queryString = String.format("from %s order by %s desc", entityClass.getName(), orderField);
         Query query = entityManager.createQuery(queryString)
@@ -72,20 +96,16 @@ public class GenericRepositoryImpl<I, T> implements GenericRepository<I, T> {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public List<T> findAllWithAscendingOrder(int limit, int offset, String orderField) {
-        String queryString = String.format("from %s order by %s asc", entityClass.getName(), orderField);
-        Query query = entityManager.createQuery(queryString)
-                .setMaxResults(limit)
-                .setFirstResult(offset);
-        return query.getResultList();
+    public int getCountOfEntities() {
+        String queryString = String.format("select count(*) from %s", entityClass.getName());
+        Query query = entityManager.createQuery(queryString);
+        return ((Number) query.getSingleResult()).intValue();
     }
 
     @Override
-    public int getCountOfEntities() {
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Long> criteriaQuery = criteriaBuilder.createQuery(Long.class);
-        criteriaQuery.select(criteriaBuilder.count(criteriaQuery.from(entityClass)));
-        return Math.toIntExact(entityManager.createQuery(criteriaQuery).getSingleResult());
+    public int getCountOfNotDeletedEntities() {
+        String queryString = String.format("select count(*) from %s where deleted = 0", entityClass.getName());
+        Query query = entityManager.createQuery(queryString);
+        return ((Number) query.getSingleResult()).intValue();
     }
 }
