@@ -7,7 +7,7 @@ public interface UserService {
 
     UserDTO getUserByEmail(String email);
 
-    PageDTO<UserDTO> getUsers(Integer pageNumber);
+    PageDTO<UserDTO> getUsers(int pageNumber);
 
     void updateRole(Long userID, Long roleID);
 

@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public PageDTO<UserDTO> getUsers(Integer pageNumber) {
+    public PageDTO<UserDTO> getUsers(int pageNumber) {
         PageDTO<UserDTO> pageDTO = new PageDTO<>();
         int countOfEntities = userRepository.getCountOfNotDeletedEntities();
         System.out.println("Count - " + countOfEntities);
@@ -109,8 +109,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDTO getUserByID(Long userID) {
-        User byId = userRepository.findByIdNotDeleted(userID);
-        return userConverterAggregator.getUserForProfileConverter().toDTO(byId);
+        User user = userRepository.findByIdNotDeleted(userID);
+        if (user == null) {
+            return null;
+        }
+        return userConverterAggregator.getUserForProfileConverter().toDTO(user);
     }
 
     @Override

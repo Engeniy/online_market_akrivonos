@@ -1,13 +1,15 @@
 package ru.mail.krivonos.al.service;
 
-import org.springframework.transaction.annotation.Transactional;
 import ru.mail.krivonos.al.service.model.OrderDTO;
 import ru.mail.krivonos.al.service.model.PageDTO;
 
+import java.util.List;
+
 public interface OrderService {
 
-    PageDTO<OrderDTO> getOrders(Integer pageNumber);
+    PageDTO<OrderDTO> getOrders(int pageNumber);
 
+    List<OrderDTO> getOrders(int limit, int offset);
 
     PageDTO<OrderDTO> getOrdersByUserID(Long userID, Integer pageNumber);
 
@@ -15,6 +17,7 @@ public interface OrderService {
 
     OrderDTO updateOrderStatus(OrderDTO orderDTO);
 
-    @Transactional
     void add(OrderDTO orderDTO);
+
+    OrderDTO getOrderByID(Long id);
 }

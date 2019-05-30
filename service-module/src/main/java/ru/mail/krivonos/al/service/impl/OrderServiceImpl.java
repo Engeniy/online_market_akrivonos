@@ -52,13 +52,20 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public PageDTO<OrderDTO> getOrders(Integer pageNumber) {
+    public PageDTO<OrderDTO> getOrders(int pageNumber) {
         PageDTO<OrderDTO> pageDTO = new PageDTO<>();
         int offset = getOffsetAndSetPages(pageDTO, pageNumber);
         List<Order> orders = orderRepository.findAllWithDescendingOrder(ORDERS_LIMIT, offset, DATE_OF_CREATION);
         List<OrderDTO> orderDTOs = getOrderDTOs(orders);
         pageDTO.setList(orderDTOs);
         return pageDTO;
+    }
+
+    @Override
+    @Transactional
+    public List<OrderDTO> getOrders(int limit, int offset) {
+        List<Order> orders = orderRepository.findAll(limit, offset);
+        return getOrderDTOs(orders);
     }
 
     @Override
@@ -101,6 +108,16 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderNumber(getOrderNumber());
         order.setStatus(OrderStatusEnum.NEW);
         orderRepository.persist(order);
+    }
+
+    @Override
+    @Transactional
+    public OrderDTO getOrderByID(Long id) {
+        Order order = orderRepository.findById(id);
+        if (order == null) {
+            return null;
+        }
+        return orderConverter.toDTO(order);
     }
 
     private List<OrderDTO> getOrderDTOs(List<Order> orders) {
