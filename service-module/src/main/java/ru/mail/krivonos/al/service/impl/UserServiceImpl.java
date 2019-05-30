@@ -58,13 +58,14 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public PageDTO<UserDTO> getUsers(Integer pageNumber) {
         PageDTO<UserDTO> pageDTO = new PageDTO<>();
-        int countOfEntities = userRepository.getCountOfEntities();
+        int countOfEntities = userRepository.getCountOfNotDeletedEntities();
+        System.out.println("Count - " + countOfEntities);
         int countOfPages = pageCountingService.getCountOfPages(countOfEntities, USERS_LIMIT);
         pageDTO.setCountOfPages(countOfPages);
         int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
         pageDTO.setCurrentPageNumber(currentPageNumber);
         int offset = pageCountingService.getOffset(currentPageNumber, USERS_LIMIT);
-        List<User> users = userRepository.findAllWithAscendingOrder(USERS_LIMIT, offset, EMAIL);
+        List<User> users = userRepository.findAllNotDeletedWithAscendingOrder(USERS_LIMIT, offset, EMAIL);
         pageDTO.setList(getUserDTOs(users));
         return pageDTO;
     }
@@ -108,14 +109,14 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDTO getUserByID(Long userID) {
-        User byId = userRepository.findById(userID);
+        User byId = userRepository.findByIdNotDeleted(userID);
         return userConverterAggregator.getUserForProfileConverter().toDTO(byId);
     }
 
     @Override
     @Transactional
     public void updateProfile(UserDTO userDTO) {
-        User user = userRepository.findById(userDTO.getId());
+        User user = userRepository.findByIdNotDeleted(userDTO.getId());
         user.setName(userDTO.getName());
         user.setSurname(userDTO.getSurname());
         ProfileDTO profile = userDTO.getProfile();
@@ -127,7 +128,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updatePassword(UserDTO userDTO) {
-        User user = userRepository.findById(userDTO.getId());
+        User user = userRepository.findByIdNotDeleted(userDTO.getId());
         String encodedPassword = passwordService.encodePassword(userDTO.getPassword());
         user.setPassword(encodedPassword);
         userRepository.merge(user);

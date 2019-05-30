@@ -23,6 +23,9 @@ public class PageCountingServiceImpl implements PageCountingService {
     @Override
     public int getCurrentPageNumber(int pageNumber, int countOfPages) {
         int currentPage = pageNumber;
+        if (pageNumber <= 0) {
+            currentPage = 1;
+        }
         if (pageNumber > countOfPages && countOfPages > 0) {
             currentPage = countOfPages;
         }
