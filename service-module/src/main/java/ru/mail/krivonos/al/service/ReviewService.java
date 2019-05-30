@@ -1,5 +1,6 @@
 package ru.mail.krivonos.al.service;
 
+import org.springframework.transaction.annotation.Transactional;
 import ru.mail.krivonos.al.service.model.PageDTO;
 import ru.mail.krivonos.al.service.model.ReviewDTO;
 
@@ -12,4 +13,9 @@ public interface ReviewService {
     void updateHiddenStatus(List<ReviewDTO> reviews);
 
     void deleteReviewByID(Long id);
+
+    void add(ReviewDTO reviewDTO);
+
+    @Transactional
+    PageDTO<ReviewDTO> getNotHiddenReviews(int pageNumber);
 }

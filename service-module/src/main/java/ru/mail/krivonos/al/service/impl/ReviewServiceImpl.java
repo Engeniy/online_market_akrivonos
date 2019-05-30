@@ -4,16 +4,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mail.krivonos.al.repository.ReviewRepository;
+import ru.mail.krivonos.al.repository.UserRepository;
 import ru.mail.krivonos.al.repository.model.Review;
+import ru.mail.krivonos.al.repository.model.User;
 import ru.mail.krivonos.al.service.PageCountingService;
 import ru.mail.krivonos.al.service.ReviewService;
 import ru.mail.krivonos.al.service.converter.ReviewConverter;
 import ru.mail.krivonos.al.service.model.PageDTO;
 import ru.mail.krivonos.al.service.model.ReviewDTO;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.mail.krivonos.al.service.constant.LimitConstants.ORDERS_LIMIT;
 import static ru.mail.krivonos.al.service.constant.LimitConstants.REVIEWS_LIMIT;
 import static ru.mail.krivonos.al.service.constant.OrderConstants.DATE_OF_CREATION;
 
@@ -22,16 +26,19 @@ public class ReviewServiceImpl implements ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final ReviewConverter reviewConverter;
+    private final UserRepository userRepository;
     private final PageCountingService pageCountingService;
 
     @Autowired
     public ReviewServiceImpl(
             ReviewRepository reviewRepository,
             ReviewConverter reviewConverter,
+            UserRepository userRepository,
             PageCountingService pageCountingService
     ) {
         this.reviewRepository = reviewRepository;
         this.reviewConverter = reviewConverter;
+        this.userRepository = userRepository;
         this.pageCountingService = pageCountingService;
     }
 
@@ -40,11 +47,7 @@ public class ReviewServiceImpl implements ReviewService {
     public PageDTO<ReviewDTO> getReviews(int pageNumber) {
         PageDTO<ReviewDTO> pageDTO = new PageDTO<>();
         int countOfEntities = reviewRepository.getCountOfEntities();
-        int countOfPages = pageCountingService.getCountOfPages(countOfEntities, REVIEWS_LIMIT);
-        pageDTO.setCountOfPages(countOfPages);
-        int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
-        pageDTO.setCurrentPageNumber(currentPageNumber);
-        int offset = pageCountingService.getOffset(currentPageNumber, REVIEWS_LIMIT);
+        int offset = getOffsetAndSetPages(pageDTO, pageNumber, countOfEntities);
         List<Review> reviews = reviewRepository.findAllWithDescendingOrder(REVIEWS_LIMIT, offset, DATE_OF_CREATION);
         List<ReviewDTO> reviewDTOs = getReviewDTOs(reviews);
         pageDTO.setList(reviewDTOs);
@@ -68,9 +71,39 @@ public class ReviewServiceImpl implements ReviewService {
         reviewRepository.remove(byId);
     }
 
+    @Override
+    @Transactional
+    public void add(ReviewDTO reviewDTO) {
+        Review review = reviewConverter.toEntity(reviewDTO);
+        review.setDateOfCreation(new Date());
+        User user = userRepository.findByIdNotDeleted(reviewDTO.getAuthor().getId());
+        review.setAuthor(user);
+        reviewRepository.persist(review);
+    }
+
+    @Override
+    @Transactional
+    public PageDTO<ReviewDTO> getNotHiddenReviews(int pageNumber) {
+        PageDTO<ReviewDTO> pageDTO = new PageDTO<>();
+        int countOfEntities = reviewRepository.getCountOfNotHiddenEntities();
+        int offset = getOffsetAndSetPages(pageDTO, pageNumber, countOfEntities);
+        List<Review> reviews = reviewRepository.findNotHiddenReviews(REVIEWS_LIMIT, offset);
+        List<ReviewDTO> reviewDTOs = getReviewDTOs(reviews);
+        pageDTO.setList(reviewDTOs);
+        return pageDTO;
+    }
+
     private List<ReviewDTO> getReviewDTOs(List<Review> reviews) {
         return reviews.stream()
                 .map(reviewConverter::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    private int getOffsetAndSetPages(PageDTO<ReviewDTO> pageDTO, Integer pageNumber, int countOfEntities) {
+        int countOfPages = pageCountingService.getCountOfPages(countOfEntities, REVIEWS_LIMIT);
+        pageDTO.setCountOfPages(countOfPages);
+        int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
+        pageDTO.setCurrentPageNumber(currentPageNumber);
+        return pageCountingService.getOffset(currentPageNumber, REVIEWS_LIMIT);
     }
 }
