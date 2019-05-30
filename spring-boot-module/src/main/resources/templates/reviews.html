@@ -11,6 +11,21 @@
 </head>
 <body>
 <div th:replace="fragments/header.html"/>
+<div sec:authorize="isAuthenticated() && hasAuthority('Customer User')">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="favorites">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{/reviews/add}">Add review</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
 <div th:if="${page.list.isEmpty()}">
     <div class="alert alert-info text-center">
         There is no reviews at the moment.
@@ -26,40 +41,45 @@
         Review was successfully deleted.
     </div>
 </div>
+<div th:if="${param.added}">
+    <div class="alert alert-success text-center">
+        Review was successfully added.
+    </div>
+</div>
 <div class="align-self-center container-fluid justify-content-center">
     <div class="card-group">
-        <div th:each="review,stat : ${page.list}" style="width: 20%">
-            <form action="#" class="card border-dark"
-                  style="padding: 20px; margin: 20px; width: 350px; height: 450px"
+        <div th:each="review,stat : ${reviews.reviewList}" style="width: 20%">
+            <form action="#" class="card border-dark" style="padding: 20px; margin: 20px; width: 350px; height: 450px"
                   th:action="@{/reviews/{id}/delete(id=${review.id}, page = ${page.currentPageNumber})}"
                   th:object="${review}" method="post">
-                <label>
-                    <input class="checkbox top-left" type="checkbox" form="update"
-                           th:field="${page.list[__${stat.index}__].hidden}">
-                    <input hidden form="update" th:name="id" th:value="${review.id}"
-                           th:field="${page.list[__${stat.index}__].id}">
-                </label>
+                <div sec:authorize="isAuthenticated() && hasAuthority('Administrator')">
+                    <label>
+                        <input class="checkbox top-left" type="checkbox" form="update"
+                               th:field="${reviews.reviewList[__${stat.index}__].hidden}">
+                        <input hidden form="update" th:name="id" th:value="${review.id}"
+                               th:field="${reviews.reviewList[__${stat.index}__].id}">
+                    </label>
+                </div>
                 <b class="text-lg-center text">Written by:</b>
-                <span class="text-lg-center"
-                      th:text="${review.author.surname + ' ' + review.author.name}"></span>
+                <span class="text-lg-center" th:text="${review.author.surname + ' ' + review.author.name}"></span>
                 <b class="text-lg-center">Written:</b>
                 <span class="text-lg-center text-center" th:text="*{dateOfCreation}"></span>
                 <b class="text-lg-center"><span>Review:</span></b>
                 <span class="text-lg-center text-center" th:text="*{review}"></span>
-                <div sec:authorize="isAuthenticated()">
-                    <span sec:authorize="hasAuthority('Administrator')">
-                <br><input class="btn btn-secondary" type="submit" value="Delete">
-                    </span>
+                <div class="text-center" sec:authorize="isAuthenticated() && hasAuthority('Administrator')">
+                    <br><input class="btn btn-secondary" type="submit" value="Delete">
                 </div>
             </form>
         </div>
     </div>
 </div>
-<form id="update" style="margin-left: 40%" action="#" th:action="@{/reviews/update(page = ${page.currentPageNumber})}"
-      th:object="${page}" method="post">
-    <input th:if="${!page.list.isEmpty()}" class="btn btn-primary" style="width: 35%" type="submit"
-           value="Update chosen">
-</form>
+<div sec:authorize="isAuthenticated() && hasAuthority('Administrator')">
+    <form id="update" style="margin-left: 40%" action="#"
+          th:action="@{/reviews/update(page = ${page.currentPageNumber})}" th:object="${page}" method="post">
+        <input th:if="${!page.list.isEmpty()}" class="btn btn-primary" style="width: 35%" type="submit"
+               value="Update chosen">
+    </form>
+</div>
 <ul class="pagination justify-content-center">
     <div th:if="${page.countOfPages > 0}" th:each="page_number : ${#numbers.sequence(1, page.countOfPages)}">
         <li th:if="${page_number} == ${page.currentPageNumber}" class="page-item active">

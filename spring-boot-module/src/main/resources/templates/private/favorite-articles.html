@@ -50,9 +50,7 @@
                 <span class="text-lg-center text-center" th:text="*{dateOfCreation}"></span>
                 <b class="text-lg-center"><span>Summary:</span></b>
                 <span class="text-lg-center text-center" th:text="*{summary}"></span>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{/article(article_number = ${favorite.article.id})}">More</a>
-                </li>
+                    <a class="text-center" href="#" th:href="@{/article(article_number = ${favorite.article.id})}">More</a>
             </form>
         </div>
     </div>

@@ -26,6 +26,16 @@
         Item was successfully copied.
     </div>
 </div>
+<div th:if="${param.order_created}">
+    <div class="alert alert-success text-center">
+        Item was successfully ordered.
+    </div>
+</div>
+<div th:if="${param.invalid_quantity}">
+    <div class="alert alert-danger text-center">
+        Invalid quantity for order.
+    </div>
+</div>
 <div class="align-self-center container-fluid justify-content-center">
     <div class="card-group">
         <div th:each="item : ${page.list}" style="width: 20%">
@@ -38,9 +48,18 @@
                 <span class="text-lg-center" th:text="*{uniqueNumber}"></span>
                 <b class="text-lg-center"><span>Price:</span></b>
                 <span class="text-lg-center text-center" th:text="*{price}"></span>
-                <a class="nav-link" href="#" th:href="@{/item(item_number = ${item.id})}">More</a>
-                <div sec:authorize="isAuthenticated() && hasAuthority('Sale User')">
-                    <br><input class="btn btn-secondary" type="submit" value="delete">
+                <div class="text-center" sec:authorize="isAuthenticated() && hasAuthority('Customer User')">
+                    <b class="text-lg-center"><span>Quantity:</span></b>
+                    <br><input th:field="${order.quantity}" type="number" name="quantity" id="quantity" class="input-sm"
+                               placeholder="0" required min="1"/>
+                </div>
+                <br><a class="text-center" href="#" th:href="@{/item(item_number = ${item.id})}">More</a>
+                <div class="text-center" sec:authorize="isAuthenticated() && hasAuthority('Customer User')">
+                    <br><input class="btn btn-secondary" type="submit" value="Order" formmethod="post"
+                               th:formaction="@{/orders/add(item_number = ${item.id}, page = ${page.currentPageNumber})}">
+                </div>
+                <div class="text-center" sec:authorize="isAuthenticated() && hasAuthority('Sale User')">
+                    <br><input class="btn btn-secondary" type="submit" value="Delete">
                     <br><input class="btn btn-secondary" type="submit" value="Copy" formmethod="post"
                                th:formaction="@{/private/items/copy(item_number=*{id})}">
                 </div>
@@ -49,10 +68,6 @@
     </div>
 </div>
 <div class="container">
-    <form id="delete" style="margin-left: 40%" action="#"
-          th:action="@{/private/users/delete(page = ${page.currentPageNumber})}" method="post">
-        <input class="btn btn-primary" style="width: 35%" type="submit" value="Delete marked">
-    </form>
     <ul class="pagination justify-content-center">
         <div th:if="${page.countOfPages > 0}" th:each="page_number : ${#numbers.sequence(1, page.countOfPages)}">
             <li th:if="${page_number} == ${page.currentPageNumber}" class="page-item active">

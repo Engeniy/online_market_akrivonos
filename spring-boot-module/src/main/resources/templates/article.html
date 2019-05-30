@@ -71,7 +71,7 @@
                         <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('content')}"
                               th:errors="*{content}">
                             Content error</span>
-                        <textarea th:field="*{content}" type="text" name="content" id="content"
+                        <textarea th:field="*{content}" type="text" name="content" id="content" style="resize: none"
                                   class="form-control input-lg"
                                   placeholder="Your comment" required maxlength="200"/>
                     </div>

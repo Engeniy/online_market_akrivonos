@@ -11,39 +11,35 @@
 </head>
 <body>
 <div th:replace="fragments/header.html"/>
-<div sec:authorize="isAuthenticated()">
-    <div sec:authorize="hasAuthority('Customer User')">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="favorites">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" th:href="@{/private/articles/favorites}">Favorite articles</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </div>
+<div sec:authorize="isAuthenticated() && hasAuthority('Customer User')">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="favorites">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{/private/articles/favorites}">Favorite articles</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 </div>
-<div sec:authorize="isAuthenticated()">
-    <div sec:authorize="hasAuthority('Sale User')">
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="add article">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#" th:href="@{/private/articles/add}">Add article</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </div>
+<div sec:authorize="isAuthenticated() && hasAuthority('Sale User')">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="add article">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{/private/articles/add}">Add article</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
 </div>
 <div th:if="${page.list.isEmpty()}">
     <div class="alert alert-info text-center">
@@ -78,19 +74,15 @@
                 <b class="text-lg-center"><span>Summary:</span></b>
                 <span class="text-lg-center text-center" th:text="*{summary}"></span>
                 <a class="nav-link" href="#" th:href="@{/article(article_number = ${article.id})}">More</a>
-                <div sec:authorize="isAuthenticated()">
-                    <span sec:authorize="hasAuthority('Customer User')">
+                <div class="text-center" sec:authorize="isAuthenticated() && hasAuthority('Customer User')">
                 <br><input class="btn btn-secondary" type="submit" value="Add to favorites" formmethod="post"
                            th:formaction="@{/private/articles/favorites(user_id = ${user.userID},
                            article_id = ${article.id}, page = ${page.currentPageNumber})}">
-                    </span>
                 </div>
-                <div sec:authorize="isAuthenticated()">
-                    <span sec:authorize="hasAuthority('Sale User')">
+                <div sec:authorize="isAuthenticated() && hasAuthority('Sale User')">
                 <br><input class="btn btn-secondary" type="submit" value="Delete" formmethod="post"
                            th:formaction="@{/private/articles/delete(article_id = ${article.id},
                            page = ${page.currentPageNumber})}">
-                    </span>
                 </div>
             </form>
         </div>
