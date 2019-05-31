@@ -15,7 +15,9 @@ public interface ItemService {
 
     ItemDTO getItemById(Long itemId);
 
-    boolean isUnique(String uniqueNumber);
+    boolean isNotUnique(String uniqueNumber);
 
     ItemDTO add(ItemDTO itemDTO);
+
+    void add(List<ItemDTO> items);
 }

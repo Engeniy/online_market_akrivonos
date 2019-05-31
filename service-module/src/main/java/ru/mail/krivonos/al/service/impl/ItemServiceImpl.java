@@ -79,9 +79,9 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public boolean isUnique(String uniqueNumber) {
+    public boolean isNotUnique(String uniqueNumber) {
         Item item = itemRepository.findItemByUniqueNumber(uniqueNumber);
-        return item == null;
+        return item != null;
     }
 
     @Override
@@ -90,6 +90,14 @@ public class ItemServiceImpl implements ItemService {
         Item item = itemConverter.toEntity(itemDTO);
         itemRepository.persist(item);
         return itemConverter.toDTO(item);
+    }
+
+    @Override
+    @Transactional
+    public void add(List<ItemDTO> items) {
+        for (ItemDTO item : items) {
+            itemRepository.persist(itemConverter.toEntity(item));
+        }
     }
 
     private List<ItemDTO> getItemDTOs(List<Item> items) {
