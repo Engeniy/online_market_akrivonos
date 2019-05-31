@@ -3,6 +3,7 @@ package ru.mail.krivonos.al.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import ru.mail.krivonos.al.service.XMLParsingService;
 import ru.mail.krivonos.al.service.exceptions.ItemParsingException;
 import ru.mail.krivonos.al.service.model.ItemDTO;
@@ -11,7 +12,7 @@ import ru.mail.krivonos.al.service.model.ItemsDTO;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import java.io.InputStream;
+import java.io.IOException;
 import java.util.List;
 
 @Service("xmlParsingService")
@@ -22,13 +23,13 @@ public class XMLParsingServiceImpl implements XMLParsingService {
     private static final Logger logger = LoggerFactory.getLogger(XMLParsingServiceImpl.class);
 
     @Override
-    public List<ItemDTO> getItems(InputStream fileContent) {
+    public List<ItemDTO> getItems(MultipartFile file) {
         try {
             JAXBContext context = JAXBContext.newInstance(ItemsDTO.class);
             Unmarshaller unmarshaller = context.createUnmarshaller();
-            ItemsDTO itemsDTO = (ItemsDTO) unmarshaller.unmarshal(fileContent);
+            ItemsDTO itemsDTO = (ItemsDTO) unmarshaller.unmarshal(file.getInputStream());
             return itemsDTO.getItems();
-        } catch (JAXBException e) {
+        } catch (JAXBException | IOException e) {
             logger.error(e.getMessage(), e);
             throw new ItemParsingException(ITEMS_PARSING_EXCEPTION_MESSAGE);
         }
