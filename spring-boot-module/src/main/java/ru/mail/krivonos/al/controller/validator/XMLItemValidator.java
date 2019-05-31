@@ -56,7 +56,7 @@ public class XMLItemValidator implements Validator {
         if (itemDTO.getDescription() != null && itemDTO.getDescription().length() > DESCRIPTION_MAX_LENGTH) {
             errors.rejectValue("file", "file");
         }
-        if (!itemService.isUnique(itemDTO.getUniqueNumber())) {
+        if (itemService.isNotUnique(itemDTO.getUniqueNumber())) {
             errors.rejectValue("file", "file");
         }
     }

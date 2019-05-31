@@ -2,7 +2,6 @@ package ru.mail.krivonos.al.service.model;
 
 import ru.mail.krivonos.al.repository.model.OrderStatusEnum;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;

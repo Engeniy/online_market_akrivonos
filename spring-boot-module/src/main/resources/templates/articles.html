@@ -75,13 +75,13 @@
                 <span class="text-lg-center text-center" th:text="*{summary}"></span>
                 <a class="nav-link" href="#" th:href="@{/article(article_number = ${article.id})}">More</a>
                 <div class="text-center" sec:authorize="isAuthenticated() && hasAuthority('Customer User')">
-                <br><input class="btn btn-secondary" type="submit" value="Add to favorites" formmethod="post"
-                           th:formaction="@{/private/articles/favorites(user_id = ${user.userID},
+                    <br><input class="btn btn-secondary" type="submit" value="Add to favorites" formmethod="post"
+                               th:formaction="@{/private/articles/favorites(user_id = ${user.userID},
                            article_id = ${article.id}, page = ${page.currentPageNumber})}">
                 </div>
                 <div sec:authorize="isAuthenticated() && hasAuthority('Sale User')">
-                <br><input class="btn btn-secondary" type="submit" value="Delete" formmethod="post"
-                           th:formaction="@{/private/articles/delete(article_id = ${article.id},
+                    <br><input class="btn btn-secondary" type="submit" value="Delete" formmethod="post"
+                               th:formaction="@{/private/articles/delete(article_id = ${article.id},
                            page = ${page.currentPageNumber})}">
                 </div>
             </form>

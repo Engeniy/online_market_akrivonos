@@ -325,15 +325,15 @@
             </column>
         </createTable>
         <addUniqueConstraint tableName="t_favorite_articles" columnNames="user_id, article_id"/>
-    <addForeignKeyConstraint baseTableName="t_order"
-                             baseColumnNames="item_id"
-                             constraintName="order_item_id"
-                             referencedTableName="t_item"
-                             referencedColumnNames="id"/>
-    <addForeignKeyConstraint baseTableName="t_order"
-                             baseColumnNames="user_id"
-                             constraintName="order_user_id"
-                             referencedTableName="t_user"
-                             referencedColumnNames="id"/>
-</changeSet>
+        <addForeignKeyConstraint baseTableName="t_order"
+                                 baseColumnNames="item_id"
+                                 constraintName="order_item_id"
+                                 referencedTableName="t_item"
+                                 referencedColumnNames="id"/>
+        <addForeignKeyConstraint baseTableName="t_order"
+                                 baseColumnNames="user_id"
+                                 constraintName="order_user_id"
+                                 referencedTableName="t_user"
+                                 referencedColumnNames="id"/>
+    </changeSet>
 </databaseChangeLog>

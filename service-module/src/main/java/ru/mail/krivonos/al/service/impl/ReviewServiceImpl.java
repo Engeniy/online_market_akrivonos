@@ -17,7 +17,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.mail.krivonos.al.service.constant.LimitConstants.ORDERS_LIMIT;
 import static ru.mail.krivonos.al.service.constant.LimitConstants.REVIEWS_LIMIT;
 import static ru.mail.krivonos.al.service.constant.OrderConstants.DATE_OF_CREATION;
 

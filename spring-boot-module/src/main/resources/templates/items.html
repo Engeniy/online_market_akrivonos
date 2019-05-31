@@ -11,6 +11,21 @@
 </head>
 <body>
 <div th:replace="fragments/header.html"/>
+<div sec:authorize="isAuthenticated() && hasAuthority('Sale User')">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="favorites">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" th:href="@{/private/items/upload}">Upload items</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>
 <div th:if="${page.list.isEmpty()}">
     <div class="alert alert-info text-center">
         There is no items at the moment.
@@ -29,6 +44,11 @@
 <div th:if="${param.order_created}">
     <div class="alert alert-success text-center">
         Item was successfully ordered.
+    </div>
+</div>
+<div th:if="${param.uploaded}">
+    <div class="alert alert-success text-center">
+        Items was successfully uploaded.
     </div>
 </div>
 <div th:if="${param.invalid_quantity}">

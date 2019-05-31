@@ -49,7 +49,7 @@ public class ItemValidator implements Validator {
         if (itemDTO.getDescription() != null && itemDTO.getDescription().length() > DESCRIPTION_MAX_LENGTH) {
             errors.rejectValue("description", "item.description.length");
         }
-        if (!itemService.isUnique(itemDTO.getUniqueNumber())) {
+        if (itemService.isNotUnique(itemDTO.getUniqueNumber())) {
             errors.rejectValue("uniqueNumber", "item.unique_number.not_unique");
         }
     }

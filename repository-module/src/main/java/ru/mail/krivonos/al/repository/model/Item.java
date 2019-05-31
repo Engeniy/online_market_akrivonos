@@ -1,7 +1,6 @@
 package ru.mail.krivonos.al.repository.model;
 
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

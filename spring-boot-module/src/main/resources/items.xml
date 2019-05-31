@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Items xmlns="https://www.it-academy.by"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.it-academy.by itemschema.xsd">
+    <Item>
+        <name>Colored collar</name>
+        <description>Beautiful collar for your pet.</description>
+        <price>19.2</price>
+        <uniqueNumber>180664</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Spiked collar</name>
+        <description>Collar for your aggressive monster pet.</description>
+        <price>23.16</price>
+        <uniqueNumber>180668</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Anti-flea collar</name>
+        <description>Collar for pet with flea problems.</description>
+        <price>31.28</price>
+        <uniqueNumber>180673</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Small dog vitamins</name>
+        <description>Vitamins for small dogs and puppies.</description>
+        <price>11.34</price>
+        <uniqueNumber>180814</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Big dog vitamins</name>
+        <description>Vitamins for big dogs.</description>
+        <price>14.72</price>
+        <uniqueNumber>180817</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Cat vitamins</name>
+        <description>Vitamins for your cat health.</description>
+        <price>13.99</price>
+        <uniqueNumber>180821</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Big litter</name>
+        <description>Litter for you big dog or you can use it by yourself.</description>
+        <price>34.50</price>
+        <uniqueNumber>180313</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Medium litter</name>
+        <description>Litter for you medium size dog or very big cat.</description>
+        <price>29.99</price>
+        <uniqueNumber>180312</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Small litter</name>
+        <description>Litter for you small dog or cat.</description>
+        <price>24.99</price>
+        <uniqueNumber>180311</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Scraper</name>
+        <description>Useful item to direct you pets aggression and save sofa.</description>
+        <price>29.99</price>
+        <uniqueNumber>180136</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Toy mouse</name>
+        <description>It can entertain you cat for some minutes while you're having a break.</description>
+        <price>13.55</price>
+        <uniqueNumber>180574</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Toy bone</name>
+        <description>It can entertain you dog for some days but then you will new a new one.</description>
+        <price>10.00</price>
+        <uniqueNumber>180538</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Pet hairbrush</name>
+        <description>Make you pet beautiful and elegant.</description>
+        <price>13.78</price>
+        <uniqueNumber>180267</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Cat house</name>
+        <description>Beautiful house for your lovely pet.</description>
+        <price>45.63</price>
+        <uniqueNumber>180928</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Wooden kennel</name>
+        <description>A new house for your dog.</description>
+        <price>79.50</price>
+        <uniqueNumber>180934</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Metal kennel</name>
+        <description>Safe and comfortable kennel for your dog.</description>
+        <price>88.35</price>
+        <uniqueNumber>180972</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Wooden cage</name>
+        <description>Beautiful house for your bird made with only natural materials.</description>
+        <price>44.99</price>
+        <uniqueNumber>180924</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Metal cage</name>
+        <description>Standard cage for any type of bird.</description>
+        <price>38.74</price>
+        <uniqueNumber>180981</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Cat food</name>
+        <description>Tasty and balanced delicacy for every cat.</description>
+        <price>12.60</price>
+        <uniqueNumber>180186</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Dog food</name>
+        <description>With this food any dog will become younger and stronger.</description>
+        <price>14.30</price>
+        <uniqueNumber>180192</uniqueNumber>
+    </Item>
+    <Item>
+        <name>Tray filler</name>
+        <description>No comments! It's too private!.</description>
+        <price>8.75</price>
+        <uniqueNumber>180399</uniqueNumber>
+    </Item>
+</Items>

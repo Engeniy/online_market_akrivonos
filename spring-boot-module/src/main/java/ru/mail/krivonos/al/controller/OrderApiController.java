@@ -7,15 +7,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.mail.krivonos.al.service.ArticleService;
 import ru.mail.krivonos.al.service.OrderService;
-import ru.mail.krivonos.al.service.model.ArticleDTO;
 import ru.mail.krivonos.al.service.model.OrderDTO;
 
 import java.util.List;
 
-import static ru.mail.krivonos.al.controller.constant.ApiURLConstants.API_ARTICLES_URL;
-import static ru.mail.krivonos.al.controller.constant.ApiURLConstants.API_ARTICLES_WITH_ID_URL;
 import static ru.mail.krivonos.al.controller.constant.ApiURLConstants.API_ORDERS_URL;
 import static ru.mail.krivonos.al.controller.constant.ApiURLConstants.API_ORDERS_WITH_ID_URL;
 
