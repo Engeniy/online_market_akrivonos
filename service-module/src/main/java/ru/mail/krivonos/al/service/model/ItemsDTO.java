@@ -2,12 +2,13 @@ package ru.mail.krivonos.al.service.model;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.ArrayList;
 import java.util.List;
 
 @XmlRootElement(name = "Items", namespace = "https://www.it-academy.by")
 public class ItemsDTO {
 
-    private List<ItemDTO> items;
+    private List<ItemDTO> items = new ArrayList<>();
 
     public List<ItemDTO> getItems() {
         return items;
