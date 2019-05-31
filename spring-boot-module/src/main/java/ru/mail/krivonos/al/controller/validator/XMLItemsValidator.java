@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import ru.mail.krivonos.al.service.ItemService;
 import ru.mail.krivonos.al.service.model.ItemDTO;
 
 import java.util.List;
@@ -11,11 +12,11 @@ import java.util.List;
 @Component("xmlItemsValidator")
 public class XMLItemsValidator implements Validator {
 
-    private final XMLItemValidator itemValidator;
+    private final ItemService itemService;
 
     @Autowired
-    public XMLItemsValidator(XMLItemValidator itemValidator) {
-        this.itemValidator = itemValidator;
+    public XMLItemsValidator(ItemService itemService) {
+        this.itemService = itemService;
     }
 
     @Override
@@ -28,7 +29,9 @@ public class XMLItemsValidator implements Validator {
     public void validate(Object o, Errors errors) {
         List<ItemDTO> items = (List<ItemDTO>) o;
         for (ItemDTO item : items) {
-            itemValidator.validate(item, errors);
+            if (itemService.isNotUnique(item.getUniqueNumber())) {
+                errors.rejectValue("file", "file");
+            }
         }
     }
 }

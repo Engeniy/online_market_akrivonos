@@ -20,6 +20,7 @@ import java.io.InputStream;
 @Component("xmlFileValidator")
 public class XMLFileValidator implements Validator {
 
+    private static final String SCHEMA_FILE_LOCATION = "classpath:itemschema.xsd";
     private static final String SCHEMA_NOT_FOUND_MESSAGE = "Can't find schema file.";
 
     @Override
@@ -31,7 +32,7 @@ public class XMLFileValidator implements Validator {
     public void validate(Object o, Errors errors) {
         File schemaFile;
         try {
-            schemaFile = ResourceUtils.getFile("classpath:itemschema.xsd");
+            schemaFile = ResourceUtils.getFile(SCHEMA_FILE_LOCATION);
         } catch (FileNotFoundException e) {
             throw new SchemaFileNotFoundException(SCHEMA_NOT_FOUND_MESSAGE);
         }
