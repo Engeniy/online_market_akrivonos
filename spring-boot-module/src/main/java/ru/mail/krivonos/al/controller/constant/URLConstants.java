@@ -36,6 +36,7 @@ public class URLConstants {
     public static final String ITEMS_DELETE_URL = "/private/items/delete";
     public static final String ITEMS_COPY_URL = "/private/items/copy";
     public static final String ITEMS_ADD_URL = "/private/items/add";
+    public static final String ITEMS_UPLOAD_PAGE_URL = "/private/items/upload";
     public static final String ORDERS_PAGE_URL = "/orders";
     public static final String ORDER_PAGE_URL = "/order";
     public static final String ORDER_UPDATE_URL = "/order/update";

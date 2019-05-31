@@ -47,7 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         ARTICLE_ADD_COMMENT_URL, REVIEWS_ADD_PAGE_URL, ORDERS_ADD_URL)
                 .hasAuthority(CUSTOMER_AUTHORITY_NAME)
                 .antMatchers(ADD_ARTICLE_PAGE_URL, DELETE_ARTICLE_URL, EDIT_ARTICLE_URL, ITEMS_ADD_URL, ORDER_PAGE_URL,
-                        ITEMS_COPY_URL, ITEMS_DELETE_URL)
+                        ITEMS_COPY_URL, ITEMS_DELETE_URL, ITEMS_UPLOAD_PAGE_URL)
                 .hasAuthority(SALE_AUTHORITY_NAME)
                 .antMatchers(ARTICLES_PAGE_URL, ARTICLE_PAGE_URL, ARTICLE_DELETE_COMMENT_URL, ITEMS_PAGE_URL,
                         ITEM_PAGE_URL, ORDERS_PAGE_URL)

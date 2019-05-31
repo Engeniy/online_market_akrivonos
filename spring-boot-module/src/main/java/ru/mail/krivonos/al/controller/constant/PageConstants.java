@@ -17,6 +17,7 @@ public class PageConstants {
     public static final String ARTICLE_EDIT_PAGE = "private/edit-article";
     public static final String ITEMS_PAGE = "items";
     public static final String ITEM_PAGE = "item";
+    public static final String ITEMS_UPLOAD_PAGE = "private/upload";
     public static final String ITEM_COPY_PAGE = "private/copy-item";
     public static final String ORDERS_PAGE = "orders";
     public static final String ORDER_PAGE = "order";

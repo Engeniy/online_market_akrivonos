@@ -4,8 +4,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import ru.mail.krivonos.al.controller.constant.URLConstants;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static ru.mail.krivonos.al.controller.constant.URLConstants.INTERNAL_ERROR_PAGE_URL;
+import static ru.mail.krivonos.al.controller.constant.URLConstants.REDIRECT_TEMPLATE;
 
 @ControllerAdvice
 public class AppExceptionHandler {
@@ -18,6 +22,6 @@ public class AppExceptionHandler {
     public String defaultErrorHandler(HttpServletRequest request, Exception e) {
         logger.error(URL_GET_ERROR_MESSAGE, request.getRequestURL());
         logger.error(e.getMessage(), e);
-        return "redirect:/500";
+        return String.format(REDIRECT_TEMPLATE, INTERNAL_ERROR_PAGE_URL);
     }
 }
