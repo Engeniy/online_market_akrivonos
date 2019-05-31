@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
@@ -20,7 +21,7 @@ import java.util.Objects;
         "UPDATE t_profile " +
                 "SET deleted = 1 " +
                 "WHERE user_id = ?")
-public class Profile {
+public class Profile implements Serializable {
 
     @GenericGenerator(
             name = "generator", strategy = "foreign",

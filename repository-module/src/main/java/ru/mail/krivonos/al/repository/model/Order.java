@@ -18,6 +18,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 @Entity
 @Table(name = "t_order")
@@ -102,5 +103,22 @@ public class Order implements Serializable {
 
     public void setItem(Item item) {
         this.item = item;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return id.equals(order.id) &&
+                orderNumber.equals(order.orderNumber) &&
+                quantity.equals(order.quantity) &&
+                status == order.status &&
+                dateOfCreation.equals(order.dateOfCreation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, orderNumber, quantity, status, dateOfCreation);
     }
 }
