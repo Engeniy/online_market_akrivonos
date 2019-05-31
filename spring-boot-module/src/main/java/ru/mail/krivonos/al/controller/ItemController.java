@@ -17,7 +17,6 @@ import ru.mail.krivonos.al.service.model.ItemDTO;
 import ru.mail.krivonos.al.service.model.OrderDTO;
 import ru.mail.krivonos.al.service.model.PageDTO;
 
-import java.io.IOException;
 import java.util.List;
 
 import static ru.mail.krivonos.al.controller.constant.PageConstants.ITEMS_PAGE;
@@ -119,12 +118,12 @@ public class ItemController {
     @PostMapping(ITEMS_UPLOAD_PAGE_URL)
     public String uploadItems(
             @ModelAttribute("upload_form") UploadForm uploadForm, BindingResult bindingResult
-    ) throws IOException {
-        xmlValidatorAggregator.getXMLFileValidator().validate(uploadForm.getFile().getInputStream(), bindingResult);
+    ) {
+        xmlValidatorAggregator.getXMLFileValidator().validate(uploadForm.getFile(), bindingResult);
         if (bindingResult.hasErrors()) {
             return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, ITEMS_UPLOAD_PAGE_URL, INVALID_FILE_PARAM);
         }
-        List<ItemDTO> items = xmlParsingService.getItems(uploadForm.getFile().getInputStream());
+        List<ItemDTO> items = xmlParsingService.getItems(uploadForm.getFile());
         xmlValidatorAggregator.getXMLItemsValidator().validate(items, bindingResult);
         if (bindingResult.hasErrors()) {
             return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, ITEMS_UPLOAD_PAGE_URL, INVALID_CONTENT_PARAM);
