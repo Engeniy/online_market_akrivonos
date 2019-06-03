@@ -52,13 +52,13 @@ public class ReviewControllerIntegrationTest {
     @WithUserDetails("admin@admin.com")
     @Test
     public void shouldReturnReviewsPageForGetRequestWithPageNumber() throws Exception {
-        mockMvc.perform(get("/reviews")).andExpect(status().isOk());
+        mockMvc.perform(get("/private/reviews")).andExpect(status().isOk());
     }
 
     @WithUserDetails("admin@admin.com")
     @Test
     public void requestForReviewsPageSuccessfullyProcessed() throws Exception {
-        this.mockMvc.perform(get("/reviews")
+        this.mockMvc.perform(get("/private/reviews")
                 .accept(MediaType.parseMediaType("text/html;charset=UTF-8")))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("text/html;charset=UTF-8"));
@@ -75,12 +75,12 @@ public class ReviewControllerIntegrationTest {
         reviewDTO.setHidden(true);
         reviewDTOs.add(reviewDTO);
         reviewForm.setReviewList(reviewDTOs);
-        this.mockMvc.perform(post("/reviews/update?page=1")
+        this.mockMvc.perform(post("/private/reviews/update?page=1")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("id", 1L)
                 .flashAttr("reviews", reviewForm))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/reviews?page=1&updated"));
+                .andExpect(redirectedUrl("/private/reviews?page=1&updated"));
     }
 
     @WithUserDetails("admin@admin.com")
@@ -90,11 +90,11 @@ public class ReviewControllerIntegrationTest {
         ReviewForm reviewForm = new ReviewForm();
         List<ReviewDTO> reviewDTOs = new ArrayList<>();
         reviewForm.setReviewList(reviewDTOs);
-        this.mockMvc.perform(post("/reviews/update?page=1")
+        this.mockMvc.perform(post("/private/reviews/update?page=1")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("reviews", reviewForm))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/reviews?page=1&updated_zero"));
+                .andExpect(redirectedUrl("/private/reviews?page=1&updated_zero"));
     }
 
     @WithUserDetails("customer@customer.com")
@@ -103,10 +103,10 @@ public class ReviewControllerIntegrationTest {
             throws Exception {
         ReviewDTO reviewDTO = new ReviewDTO();
         reviewDTO.setReview("Some review.");
-        this.mockMvc.perform(post("/reviews/add")
+        this.mockMvc.perform(post("/private/reviews/add")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("review", reviewDTO))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/reviews?added"));
+                .andExpect(redirectedUrl("/private/reviews/add?added"));
     }
 }

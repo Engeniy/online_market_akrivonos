@@ -30,7 +30,7 @@
     <div class="card-group">
         <div th:each="order : ${page.list}" style="width: 20%">
             <form action="#" class="card border-dark" style="padding: 20px; margin: 20px; width: 350px; height: 350px"
-                  th:action="@{/private/items/delete(page=${page.currentPageNumber}, item_number=*{id})}"
+                  th:action="@{#}"
                   th:object="${order}" method="post">
                 <b class="text-lg-center">Order number:</b>
                 <span class="text-lg-center text-center" th:text="*{orderNumber}"></span>
@@ -43,7 +43,7 @@
                 <b class="text-lg-center"><span>Total price:</span></b>
                 <span class="text-lg-center text-center" th:text="*{totalPrice}"></span>
                 <div class="text-center" sec:authorize="isAuthenticated() && hasAuthority('Sale User')">
-                    <a href="#" th:href="@{/order(order_number = *{orderNumber})}">More</a>
+                    <a href="#" th:href="@{/private/order(order_number = *{orderNumber})}">More</a>
                 </div>
             </form>
         </div>
@@ -53,10 +53,10 @@
     <ul class="pagination justify-content-center">
         <div th:if="${page.countOfPages > 0}" th:each="page_number : ${#numbers.sequence(1, page.countOfPages)}">
             <li th:if="${page_number} == ${page.currentPageNumber}" class="page-item active">
-                <a class="page-link" th:href="@{/orders(page=${page_number})}" th:text="${page_number}"></a>
+                <a class="page-link" th:href="@{/public/orders(page=${page_number})}" th:text="${page_number}"></a>
             </li>
             <li th:unless="${page_number} == ${page.currentPageNumber}" class="page-item">
-                <a class="page-link" th:href="@{/orders(page=${page_number})}" th:text="${page_number}"></a>
+                <a class="page-link" th:href="@{/public/orders(page=${page_number})}" th:text="${page_number}"></a>
             </li>
         </div>
     </ul>

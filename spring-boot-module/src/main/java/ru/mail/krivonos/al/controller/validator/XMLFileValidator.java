@@ -32,10 +32,10 @@ public class XMLFileValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        try {
+        MultipartFile file = (MultipartFile) o;
+        try (InputStream inputStream = file.getInputStream()) {
             File schemaFile = ResourceUtils.getFile(SCHEMA_FILE_LOCATION);
-            MultipartFile file = (MultipartFile) o;
-            Source xmlSource = new StreamSource(file.getInputStream());
+            Source xmlSource = new StreamSource(inputStream);
             SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
             Schema schema = schemaFactory.newSchema(schemaFile);
             schema.newValidator().validate(xmlSource);

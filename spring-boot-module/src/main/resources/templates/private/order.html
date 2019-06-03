@@ -19,16 +19,16 @@
 <div class="align-self-center container-fluid justify-content-center">
     <div class="card border-dark text-center"
          style="padding: 20px; margin-top: 30px; margin-left: 10%; width: 80%; height: auto">
-        <form action="#" th:action="@{/order/update(order_id = ${order.id})}" th:object="${order}" method="post">
+        <form action="#" th:action="@{/private/order/update(order_id = ${order.id})}" th:object="${order}" method="post">
             <b class="text-lg-center"><span>Order number:</span></b>
             <br><span class="text-lg-center text-center" th:text="*{orderNumber}"></span>
             <br><b class="text-lg-center text">Status:</b>
             <br><select class="custom-select-sm align-content-center" name="role" th:field="*{status}">
-            <option th:each="status : ${T(ru.mail.krivonos.al.repository.model.OrderStatusEnum).values()}"
+            <option th:each="status : ${T(ru.mail.krivonos.al.repository.model.enums.OrderStatusEnum).values()}"
                     th:if="${status.name()} == *{status.name()}" selected th:text="${status.name()}"
                     th:value="${status}">
             </option>
-            <option th:each="status : ${T(ru.mail.krivonos.al.repository.model.OrderStatusEnum).values()}"
+            <option th:each="status : ${T(ru.mail.krivonos.al.repository.model.enums.OrderStatusEnum).values()}"
                     th:unless="${status.name()} == *{status.name()}" th:text="${status.name()}" th:value="${status}">
             </option>
         </select>

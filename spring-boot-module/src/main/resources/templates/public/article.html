@@ -36,7 +36,7 @@
         <div th:each="comment : ${article.comments}" style="width: 70%; margin-left: 15%">
             <div class="card border-dark text-center" style="padding: 20px; margin-top: 10px; height: auto">
                 <form action="#"
-                      th:action="@{/article/comment/delete(comment_id = ${comment.id}, article_number = ${article.id})}"
+                      th:action="@{/public/article/comment/delete(comment_id = ${comment.id}, article_number = ${article.id})}"
                       th:object="${comment}"
                       method="post">
                     <b class="text-lg-center text">Written by:</b>
@@ -63,7 +63,7 @@
     </div>
     <div sec:authorize="isAuthenticated()">
         <div sec:authorize="hasAuthority('Customer User')">
-            <form th:action="@{/article/comment(article_number=${article.id}, author_id=${user.userID})}"
+            <form th:action="@{/private/article/comment(article_number=${article.id}, author_id=${user.userID})}"
                   th:object="${comment}" method="post">
                 <fieldset>
                     <h1>Write your comment:</h1>

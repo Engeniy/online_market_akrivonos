@@ -41,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(USERS_PAGE_URL, USERS_ADD_PAGE_URL, USERS_DELETE_URL,
-                        USERS_PASSWORD_CHANGE_URL, REVIEWS_UPDATE_URL, REVIEWS_DELETE_URL)
+                        USERS_PASSWORD_CHANGE_URL, REVIEWS_UPDATE_URL, REVIEWS_DELETE_URL, REVIEWS_PAGE_URL)
                 .hasAuthority(ADMIN_AUTHORITY_NAME)
                 .antMatchers(PROFILE_PAGE_URL, FAVORITE_ARTICLES_URL, PROFILE_UPDATE_URL, PROFILE_PASSWORD_UPDATE_URL,
                         ARTICLE_ADD_COMMENT_URL, REVIEWS_ADD_PAGE_URL, ORDERS_ADD_URL)
@@ -52,8 +52,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(ARTICLES_PAGE_URL, ARTICLE_PAGE_URL, ARTICLE_DELETE_COMMENT_URL, ITEMS_PAGE_URL,
                         ITEM_PAGE_URL, ORDERS_PAGE_URL)
                 .hasAnyAuthority(CUSTOMER_AUTHORITY_NAME, SALE_AUTHORITY_NAME)
-                .antMatchers(REVIEWS_PAGE_URL)
-                .hasAnyAuthority(CUSTOMER_AUTHORITY_NAME, ADMIN_AUTHORITY_NAME)
                 .antMatchers(HOMEPAGE_URL, BOOTSTRAP_CONTENT_URL, FORBIDDEN_PAGE_URL,
                         INTERNAL_ERROR_PAGE_URL)
                 .permitAll()

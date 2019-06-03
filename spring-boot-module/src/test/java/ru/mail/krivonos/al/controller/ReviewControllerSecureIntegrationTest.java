@@ -37,12 +37,6 @@ public class ReviewControllerSecureIntegrationTest {
     @WithUserDetails("admin@admin.com")
     @Test
     public void shouldSucceedForReviewsPageForAdmin() throws Exception {
-        mockMvc.perform(get("/reviews")).andExpect(status().isOk());
-    }
-
-    @WithUserDetails("customer@customer.com")
-    @Test
-    public void shouldSucceedForReviewsPageForCustomer() throws Exception {
-        mockMvc.perform(get("/reviews")).andExpect(status().isOk());
+        mockMvc.perform(get("/private/reviews")).andExpect(status().isOk());
     }
 }

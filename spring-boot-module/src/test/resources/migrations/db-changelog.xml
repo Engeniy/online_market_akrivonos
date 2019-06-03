@@ -96,7 +96,7 @@
             <column name="author_id" type="BIGINT UNSIGNED">
                 <constraints nullable="false"/>
             </column>
-            <column name="review" type="TEXT">
+            <column name="review" type="VARCHAR(300)">
                 <constraints nullable="false"/>
             </column>
             <column name="date_of_creation" type="DATETIME">

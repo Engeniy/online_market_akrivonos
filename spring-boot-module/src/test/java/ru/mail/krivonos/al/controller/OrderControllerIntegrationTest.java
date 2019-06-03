@@ -58,7 +58,7 @@ public class OrderControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("order", orderDTO))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/items?page=1&order_created"));
+                .andExpect(redirectedUrl("/public/items?page=1&order_created"));
     }
 
     @WithUserDetails("customer@customer.com")
@@ -70,6 +70,6 @@ public class OrderControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("order", orderDTO))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/items?page=1&invalid_quantity"));
+                .andExpect(redirectedUrl("/public/items?page=1&invalid_quantity"));
     }
 }

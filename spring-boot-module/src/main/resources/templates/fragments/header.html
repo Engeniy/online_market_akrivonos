@@ -26,22 +26,27 @@
                 </div>
                 <div sec:authorize="isAuthenticated() && (hasAuthority('Customer User') || hasAuthority('Sale User'))">
                     <li class="nav-item">
-                        <a class="nav-link" href="#" th:href="@{/items}">Items</a>
+                        <a class="nav-link" href="#" th:href="@{/public/items}">Items</a>
                     </li>
                 </div>
                 <div sec:authorize="isAuthenticated() && (hasAuthority('Customer User') || hasAuthority('Sale User'))">
                     <li class="nav-item">
-                        <a class="nav-link" href="#" th:href="@{/orders}">Orders</a>
+                        <a class="nav-link" href="#" th:href="@{/public/orders}">Orders</a>
                     </li>
                 </div>
-                <div sec:authorize="isAuthenticated() && (hasAuthority('Customer User') || hasAuthority('Administrator'))">
+                <div sec:authorize="isAuthenticated() && hasAuthority('Administrator')">
                     <li class="nav-item">
-                        <a class="nav-link" href="#" th:href="@{/reviews}">Reviews</a>
+                        <a class="nav-link" href="#" th:href="@{/private/reviews}">Reviews</a>
+                    </li>
+                </div>
+                <div sec:authorize="isAuthenticated() && hasAuthority('Customer User')">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" th:href="@{/private/reviews/add}">Add review</a>
                     </li>
                 </div>
                 <div sec:authorize="isAuthenticated() && (hasAuthority('Customer User') || hasAuthority('Sale User'))">
                     <li class="nav-item">
-                        <a class="nav-link" href="#" th:href="@{/articles}">Articles</a>
+                        <a class="nav-link" href="#" th:href="@{/public/articles}">Articles</a>
                     </li>
                 </div>
                 <li sec:authorize="isAuthenticated()" class="nav-item">

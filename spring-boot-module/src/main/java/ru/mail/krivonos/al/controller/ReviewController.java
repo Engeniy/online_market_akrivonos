@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,6 +17,8 @@ import ru.mail.krivonos.al.service.model.AuthUserPrincipal;
 import ru.mail.krivonos.al.service.model.PageDTO;
 import ru.mail.krivonos.al.service.model.ReviewDTO;
 import ru.mail.krivonos.al.service.model.UserDTO;
+
+import javax.validation.Valid;
 
 import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.ADMIN_AUTHORITY_NAME;
 import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.CUSTOMER_AUTHORITY_NAME;
@@ -89,13 +92,16 @@ public class ReviewController {
     @PostMapping(REVIEWS_ADD_PAGE_URL)
     public String saveReview(
             @AuthenticationPrincipal AuthUserPrincipal userPrincipal,
-            @ModelAttribute("review") ReviewDTO reviewDTO
+            @ModelAttribute("review") @Valid ReviewDTO reviewDTO, BindingResult bindingResult
     ) {
+        if (bindingResult.hasErrors()) {
+            return ADD_REVIEW_PAGE;
+        }
         UserDTO userDTO = new UserDTO();
         userDTO.setId(userPrincipal.getUserID());
         reviewDTO.setAuthor(userDTO);
         reviewService.add(reviewDTO);
-        return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, REVIEWS_PAGE_URL, ADDED_PARAM);
+        return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, REVIEWS_ADD_PAGE_URL, ADDED_PARAM);
     }
 
     private PageDTO<ReviewDTO> getPage(AuthUserPrincipal userPrincipal, Integer pageNumber) {

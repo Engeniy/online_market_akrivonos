@@ -73,7 +73,7 @@
                 <span class="text-lg-center text-center" th:text="*{dateOfCreation}"></span>
                 <b class="text-lg-center"><span>Summary:</span></b>
                 <span class="text-lg-center text-center" th:text="*{summary}"></span>
-                <a class="nav-link" href="#" th:href="@{/article(article_number = ${article.id})}">More</a>
+                <a class="nav-link" href="#" th:href="@{/public/article(article_number = ${article.id})}">More</a>
                 <div class="text-center" sec:authorize="isAuthenticated() && hasAuthority('Customer User')">
                     <br><input class="btn btn-secondary" type="submit" value="Add to favorites" formmethod="post"
                                th:formaction="@{/private/articles/favorites(user_id = ${user.userID},
@@ -91,10 +91,10 @@
 <ul class="pagination justify-content-center">
     <div th:if="${page.countOfPages > 0}" th:each="page_number : ${#numbers.sequence(1, page.countOfPages)}">
         <li th:if="${page_number} == ${page.currentPageNumber}" class="page-item active">
-            <a class="page-link" th:href="@{/articles(page=${page_number})}" th:text="${page_number}"></a>
+            <a class="page-link" th:href="@{/public/articles(page=${page_number})}" th:text="${page_number}"></a>
         </li>
         <li th:unless="${page_number} == ${page.currentPageNumber}" class="page-item">
-            <a class="page-link" th:href="@{/articles(page=${page_number})}" th:text="${page_number}"></a>
+            <a class="page-link" th:href="@{/public/articles(page=${page_number})}" th:text="${page_number}"></a>
         </li>
     </div>
 </ul>
