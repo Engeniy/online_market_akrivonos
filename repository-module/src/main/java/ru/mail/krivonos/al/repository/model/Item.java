@@ -32,8 +32,6 @@ public class Item implements Serializable {
     private BigDecimal price;
     @Column(name = "description", nullable = false, length = 200)
     private String description;
-    @Column(name = "deleted", nullable = false)
-    private boolean isDeleted = false;
 
     public Long getId() {
         return id;

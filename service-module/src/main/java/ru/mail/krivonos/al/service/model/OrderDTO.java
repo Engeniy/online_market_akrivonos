@@ -1,6 +1,6 @@
 package ru.mail.krivonos.al.service.model;
 
-import ru.mail.krivonos.al.repository.model.OrderStatusEnum;
+import ru.mail.krivonos.al.repository.model.enums.OrderStatusEnum;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;

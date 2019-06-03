@@ -16,7 +16,8 @@ public class ReviewRepositoryImpl extends GenericRepositoryImpl<Long, Review> im
     @Override
     @SuppressWarnings("unchecked")
     public List<Review> findNotHiddenReviews(int limit, int offset) {
-        String queryString = String.format("from %s where hidden = 0 order by date_of_creation desc", entityClass.getName());
+        String queryString = String.format("from %s where hidden = 0 order by date_of_creation desc",
+                entityClass.getName());
         Query query = entityManager.createQuery(queryString)
                 .setMaxResults(limit)
                 .setFirstResult(offset);

@@ -8,7 +8,7 @@ import ru.mail.krivonos.al.repository.OrderRepository;
 import ru.mail.krivonos.al.repository.UserRepository;
 import ru.mail.krivonos.al.repository.model.Item;
 import ru.mail.krivonos.al.repository.model.Order;
-import ru.mail.krivonos.al.repository.model.OrderStatusEnum;
+import ru.mail.krivonos.al.repository.model.enums.OrderStatusEnum;
 import ru.mail.krivonos.al.repository.model.User;
 import ru.mail.krivonos.al.service.OrderService;
 import ru.mail.krivonos.al.service.PageCountingService;

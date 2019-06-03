@@ -1,4 +1,4 @@
-package ru.mail.krivonos.al.repository.model;
+package ru.mail.krivonos.al.repository.model.enums;
 
 public enum OrderStatusEnum {
 

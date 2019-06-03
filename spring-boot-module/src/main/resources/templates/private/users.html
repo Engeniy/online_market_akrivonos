@@ -96,7 +96,7 @@
         <input class="btn btn-primary" style="width: 35%" type="submit" value="Delete marked">
     </form>
     <ul class="pagination justify-content-center">
-        <div th:if="${page.countOfPages > 0}" th:each="page_number : ${#numbers.sequence(1, page.countOfPages)}">
+        <div th:if="${page.countOfPages > 1}" th:each="page_number : ${#numbers.sequence(1, page.countOfPages)}">
             <li th:if="${page_number} == ${page.currentPageNumber}" class="page-item active">
                 <a class="page-link" th:href="@{/private/users(page=${page_number})}" th:text="${page_number}"></a>
             </li>

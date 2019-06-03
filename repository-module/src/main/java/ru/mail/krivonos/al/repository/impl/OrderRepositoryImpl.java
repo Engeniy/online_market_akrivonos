@@ -15,7 +15,8 @@ public class OrderRepositoryImpl extends GenericRepositoryImpl<Long, Order> impl
     @Override
     @SuppressWarnings("unchecked")
     public List<Order> findAllForUser(int limit, int offset, User user) {
-        String queryString = String.format("from %s where user = :user order by date_of_creation desc", entityClass.getName());
+        String queryString = String.format("from %s where user = :user order by date_of_creation desc",
+                entityClass.getName());
         Query query = entityManager.createQuery(queryString)
                 .setParameter("user", user)
                 .setMaxResults(limit)
@@ -25,7 +26,8 @@ public class OrderRepositoryImpl extends GenericRepositoryImpl<Long, Order> impl
 
     @Override
     public Order findOrderByOrderNumber(Long orderNumber) {
-        String queryString = String.format("from %s where order_number = :order_number order by date_of_creation desc", entityClass.getName());
+        String queryString = String.format("from %s where order_number = :order_number order by date_of_creation desc",
+                entityClass.getName());
         Query query = entityManager.createQuery(queryString)
                 .setParameter("order_number", orderNumber);
         try {

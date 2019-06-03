@@ -59,7 +59,7 @@ public class GenericRepositoryImpl<I, T> implements GenericRepository<I, T> {
     @Override
     @SuppressWarnings("unchecked")
     public List<T> findAll() {
-        String queryString = String.format("from %s %s", entityClass.getName(), " c");
+        String queryString = String.format("from %s", entityClass.getName());
         Query query = entityManager.createQuery(queryString);
         return query.getResultList();
     }
@@ -67,7 +67,7 @@ public class GenericRepositoryImpl<I, T> implements GenericRepository<I, T> {
     @Override
     @SuppressWarnings("unchecked")
     public List<T> findAll(int limit, int offset) {
-        String queryString = String.format("from %s %s", entityClass.getName(), " c");
+        String queryString = String.format("from %s", entityClass.getName());
         Query query = entityManager.createQuery(queryString)
                 .setMaxResults(limit)
                 .setFirstResult(offset);

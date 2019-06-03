@@ -73,10 +73,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateRole(Long userID, Long roleID) {
-        Role role = roleRepository.findById(roleID);
         User user = userRepository.findById(userID);
-        user.setRole(role);
-        userRepository.merge(user);
+        Role role = roleRepository.findById(roleID);
+        if (!user.getRole().equals(role)) {
+            user.setRole(role);
+            userRepository.merge(user);
+        }
     }
 
     @Override
