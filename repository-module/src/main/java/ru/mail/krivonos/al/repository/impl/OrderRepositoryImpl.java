@@ -26,8 +26,7 @@ public class OrderRepositoryImpl extends GenericRepositoryImpl<Long, Order> impl
 
     @Override
     public Order findOrderByOrderNumber(Long orderNumber) {
-        String queryString = String.format("from %s where order_number = :order_number order by date_of_creation desc",
-                entityClass.getName());
+        String queryString = String.format("from %s where order_number = :order_number", entityClass.getName());
         Query query = entityManager.createQuery(queryString)
                 .setParameter("order_number", orderNumber);
         try {
