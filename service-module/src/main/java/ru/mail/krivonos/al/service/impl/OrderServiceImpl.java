@@ -84,7 +84,7 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public OrderDTO getOrderByOrderNumber(Long orderNumber) {
         Order order = orderRepository.findOrderByOrderNumber(orderNumber);
-        return orderConverter.toDTO(order);
+        return getOrderDTOWithTotalPrice(order);
     }
 
     @Override
