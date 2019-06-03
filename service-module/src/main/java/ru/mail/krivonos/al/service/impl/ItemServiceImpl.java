@@ -60,11 +60,13 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional
-    public void deleteItem(Long itemId) {
+    public ItemDTO deleteItem(Long itemId) {
         Item item = itemRepository.findById(itemId);
-        if (item != null) {
-            itemRepository.remove(item);
+        if (item == null) {
+            return null;
         }
+        itemRepository.remove(item);
+        return itemConverter.toDTO(item);
     }
 
     @Override

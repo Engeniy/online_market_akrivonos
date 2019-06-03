@@ -11,7 +11,7 @@ public interface ItemService {
 
     List<ItemDTO> getItems(int limit, int offset);
 
-    void deleteItem(Long itemId);
+    ItemDTO deleteItem(Long itemId);
 
     ItemDTO getItemById(Long itemId);
 

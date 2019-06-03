@@ -40,7 +40,10 @@ public class OrderApiController {
     public ResponseEntity<OrderDTO> getOrder(
             @PathVariable("id") Long id
     ) {
-        OrderDTO orderDTO = orderService.getOrderByID(id);
-        return new ResponseEntity(orderDTO, HttpStatus.OK);
+        OrderDTO order = orderService.getOrderByID(id);
+        if (order == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity(order, HttpStatus.OK);
     }
 }

@@ -51,6 +51,9 @@ public class ItemApiController {
             @PathVariable("id") Long id
     ) {
         ItemDTO item = itemService.getItemById(id);
+        if (item == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity(item, HttpStatus.OK);
     }
 
@@ -71,7 +74,10 @@ public class ItemApiController {
     public ResponseEntity deleteItem(
             @PathVariable("id") Long id
     ) {
-        itemService.deleteItem(id);
+        ItemDTO item = itemService.deleteItem(id);
+        if (item == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 }

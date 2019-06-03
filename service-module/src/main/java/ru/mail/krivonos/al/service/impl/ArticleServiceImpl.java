@@ -95,11 +95,13 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional
-    public void deleteArticle(Long articleId) {
+    public ArticleDTO deleteArticle(Long articleId) {
         Article article = articleRepository.findById(articleId);
-        if (article != null) {
-            articleRepository.remove(article);
+        if (article == null) {
+            return null;
         }
+        articleRepository.remove(article);
+        return articleConverter.toDTO(article);
     }
 
     @Override

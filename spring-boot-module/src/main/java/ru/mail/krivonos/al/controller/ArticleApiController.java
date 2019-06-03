@@ -49,6 +49,9 @@ public class ArticleApiController {
             @PathVariable("id") Long id
     ) {
         ArticleDTO article = articleService.getArticleById(id);
+        if (article == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity(article, HttpStatus.OK);
     }
 
@@ -72,7 +75,10 @@ public class ArticleApiController {
     public ResponseEntity deleteArticle(
             @PathVariable("id") Long id
     ) {
-        articleService.deleteArticle(id);
+        ArticleDTO article = articleService.deleteArticle(id);
+        if (article == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 }
