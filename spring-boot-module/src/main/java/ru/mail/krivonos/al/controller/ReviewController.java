@@ -1,7 +1,6 @@
 package ru.mail.krivonos.al.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,8 +19,6 @@ import ru.mail.krivonos.al.service.model.UserDTO;
 
 import javax.validation.Valid;
 
-import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.ADMIN_AUTHORITY_NAME;
-import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.CUSTOMER_AUTHORITY_NAME;
 import static ru.mail.krivonos.al.controller.constant.PageConstants.ADD_REVIEW_PAGE;
 import static ru.mail.krivonos.al.controller.constant.PageConstants.REVIEWS_PAGE;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.REDIRECT_WITH_PARAMETER_TEMPLATE;
@@ -47,11 +44,10 @@ public class ReviewController {
     }
 
     @GetMapping(REVIEWS_PAGE_URL)
-    public String getReviewPageWithPageNumber(
-            @AuthenticationPrincipal AuthUserPrincipal userPrincipal,
+    public String getReviews(
             @RequestParam(name = "page", defaultValue = "1") Integer pageNumber, Model model
     ) {
-        PageDTO<ReviewDTO> page = getPage(userPrincipal, pageNumber);
+        PageDTO<ReviewDTO> page = reviewService.getReviews(pageNumber);
         ReviewForm reviewForm = new ReviewForm();
         reviewForm.setReviewList(page.getList());
         model.addAttribute("reviews", reviewForm);
@@ -102,17 +98,5 @@ public class ReviewController {
         reviewDTO.setAuthor(userDTO);
         reviewService.add(reviewDTO);
         return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, REVIEWS_ADD_PAGE_URL, ADDED_PARAM);
-    }
-
-    private PageDTO<ReviewDTO> getPage(AuthUserPrincipal userPrincipal, Integer pageNumber) {
-        for (GrantedAuthority authority : userPrincipal.getAuthorities()) {
-            switch (authority.getAuthority()) {
-                case ADMIN_AUTHORITY_NAME:
-                    return reviewService.getReviews(pageNumber);
-                case CUSTOMER_AUTHORITY_NAME:
-                    return reviewService.getNotHiddenReviews(pageNumber);
-            }
-        }
-        return new PageDTO<>();
     }
 }

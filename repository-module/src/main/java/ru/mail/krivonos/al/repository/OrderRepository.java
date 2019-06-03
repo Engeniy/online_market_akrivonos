@@ -10,4 +10,6 @@ public interface OrderRepository extends GenericRepository<Long, Order> {
     List<Order> findAllForUser(int limit, int offset, User user);
 
     Order findOrderByOrderNumber(Long orderNumber);
+
+    int getCountOfOrdersForUser(User user);
 }

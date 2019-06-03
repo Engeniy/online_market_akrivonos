@@ -36,4 +36,12 @@ public class OrderRepositoryImpl extends GenericRepositoryImpl<Long, Order> impl
             return null;
         }
     }
+
+    @Override
+    public int getCountOfOrdersForUser(User user) {
+        String queryString = String.format("select count(*) from %s where user = :user", entityClass.getName());
+        Query query = entityManager.createQuery(queryString)
+                .setParameter("user", user);
+        return ((Number) query.getSingleResult()).intValue();
+    }
 }

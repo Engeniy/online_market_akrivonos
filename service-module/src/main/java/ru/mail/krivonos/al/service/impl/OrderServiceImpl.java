@@ -8,8 +8,8 @@ import ru.mail.krivonos.al.repository.OrderRepository;
 import ru.mail.krivonos.al.repository.UserRepository;
 import ru.mail.krivonos.al.repository.model.Item;
 import ru.mail.krivonos.al.repository.model.Order;
-import ru.mail.krivonos.al.repository.model.enums.OrderStatusEnum;
 import ru.mail.krivonos.al.repository.model.User;
+import ru.mail.krivonos.al.repository.model.enums.OrderStatusEnum;
 import ru.mail.krivonos.al.service.OrderService;
 import ru.mail.krivonos.al.service.PageCountingService;
 import ru.mail.krivonos.al.service.converter.OrderConverter;
@@ -54,7 +54,8 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public PageDTO<OrderDTO> getOrders(int pageNumber) {
         PageDTO<OrderDTO> pageDTO = new PageDTO<>();
-        int offset = getOffsetAndSetPages(pageDTO, pageNumber);
+        int countOfEntities = orderRepository.getCountOfEntities();
+        int offset = getOffsetAndSetPages(pageDTO, pageNumber, countOfEntities);
         List<Order> orders = orderRepository.findAllWithDescendingOrder(ORDERS_LIMIT, offset, DATE_OF_CREATION);
         List<OrderDTO> orderDTOs = getOrderDTOs(orders);
         pageDTO.setList(orderDTOs);
@@ -72,8 +73,9 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     public PageDTO<OrderDTO> getOrdersByUserID(Long userID, Integer pageNumber) {
         PageDTO<OrderDTO> pageDTO = new PageDTO<>();
-        int offset = getOffsetAndSetPages(pageDTO, pageNumber);
         User user = userRepository.findById(userID);
+        int countOfEntities = orderRepository.getCountOfOrdersForUser(user);
+        int offset = getOffsetAndSetPages(pageDTO, pageNumber, countOfEntities);
         List<Order> orders = orderRepository.findAllForUser(ORDERS_LIMIT, offset, user);
         List<OrderDTO> orderDTOs = getOrderDTOs(orders);
         pageDTO.setList(orderDTOs);
@@ -134,8 +136,7 @@ public class OrderServiceImpl implements OrderService {
         return orderDTO;
     }
 
-    private int getOffsetAndSetPages(PageDTO<OrderDTO> pageDTO, Integer pageNumber) {
-        int countOfEntities = orderRepository.getCountOfEntities();
+    private int getOffsetAndSetPages(PageDTO<OrderDTO> pageDTO, Integer pageNumber, int countOfEntities) {
         int countOfPages = pageCountingService.getCountOfPages(countOfEntities, ORDERS_LIMIT);
         pageDTO.setCountOfPages(countOfPages);
         int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
