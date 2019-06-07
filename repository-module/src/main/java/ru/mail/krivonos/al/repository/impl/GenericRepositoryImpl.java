@@ -46,7 +46,7 @@ public class GenericRepositoryImpl<I, T> implements GenericRepository<I, T> {
     @SuppressWarnings("unchecked")
     public T findByIdNotDeleted(I id) {
         String queryString = String.format("from %s %s", entityClass.getName(),
-                " where id = :id and deleted = 0");
+                "where id = :id and deleted = 0");
         Query query = entityManager.createQuery(queryString);
         query.setParameter("id", id);
         try {

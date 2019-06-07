@@ -11,7 +11,7 @@ public interface OrderService {
 
     List<OrderDTO> getOrders(int limit, int offset);
 
-    PageDTO<OrderDTO> getOrdersByUserID(Long userID, Integer pageNumber);
+    PageDTO<OrderDTO> getOrdersByUserID(Long userID, int pageNumber);
 
     OrderDTO getOrderByOrderNumber(Long orderNumber);
 

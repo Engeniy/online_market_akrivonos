@@ -50,11 +50,7 @@ public class FavoriteArticleServiceImpl implements FavoriteArticleService {
     public PageDTO<FavoriteArticleDTO> getArticlesByUserId(int pageNumber, Long userId) {
         PageDTO<FavoriteArticleDTO> pageDTO = new PageDTO<>();
         int countOfEntities = favoriteArticleRepository.getCountOfEntities();
-        int countOfPages = pageCountingService.getCountOfPages(countOfEntities, ARTICLES_LIMIT);
-        pageDTO.setCountOfPages(countOfPages);
-        int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
-        pageDTO.setCurrentPageNumber(currentPageNumber);
-        int offset = pageCountingService.getOffset(currentPageNumber, ARTICLES_LIMIT);
+        int offset = getOffsetAndSetPages(pageDTO, pageNumber, countOfEntities);
         List<FavoriteArticle> allByUserId = favoriteArticleRepository
                 .findAllByUserId(ARTICLES_LIMIT, offset, userId);
         pageDTO.setList(getFavoriteArticleDTOs(allByUserId));
@@ -80,5 +76,13 @@ public class FavoriteArticleServiceImpl implements FavoriteArticleService {
         return favoriteArticles.stream()
                 .map(favoriteArticleConverter::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    private int getOffsetAndSetPages(PageDTO<FavoriteArticleDTO> pageDTO, int pageNumber, int countOfEntities) {
+        int countOfPages = pageCountingService.getCountOfPages(countOfEntities, ARTICLES_LIMIT);
+        pageDTO.setCountOfPages(countOfPages);
+        int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
+        pageDTO.setCurrentPageNumber(currentPageNumber);
+        return pageCountingService.getOffset(currentPageNumber, ARTICLES_LIMIT);
     }
 }

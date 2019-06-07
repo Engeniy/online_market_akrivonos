@@ -29,11 +29,11 @@ public class MailConfig {
         javaMailSender.setUsername(mailProperties.getMailUsername());
         javaMailSender.setPassword(mailProperties.getMailPassword());
 
-        Properties mailProperties = javaMailSender.getJavaMailProperties();
-        mailProperties.put("mail.transport.protocol", "smtp");
-        mailProperties.put("mail.smtp.auth", "true");
-        mailProperties.put("mail.smtp.starttls.enable", "true");
-        mailProperties.put("mail.debug", "true");
+        Properties properties = javaMailSender.getJavaMailProperties();
+        properties.put("mail.transport.protocol", "smtp");
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.debug", "true");
         return javaMailSender;
     }
 }

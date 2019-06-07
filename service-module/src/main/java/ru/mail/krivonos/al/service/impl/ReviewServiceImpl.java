@@ -80,18 +80,6 @@ public class ReviewServiceImpl implements ReviewService {
         reviewRepository.persist(review);
     }
 
-    @Override
-    @Transactional
-    public PageDTO<ReviewDTO> getNotHiddenReviews(int pageNumber) {
-        PageDTO<ReviewDTO> pageDTO = new PageDTO<>();
-        int countOfEntities = reviewRepository.getCountOfNotHiddenEntities();
-        int offset = getOffsetAndSetPages(pageDTO, pageNumber, countOfEntities);
-        List<Review> reviews = reviewRepository.findNotHiddenReviews(REVIEWS_LIMIT, offset);
-        List<ReviewDTO> reviewDTOs = getReviewDTOs(reviews);
-        pageDTO.setList(reviewDTOs);
-        return pageDTO;
-    }
-
     private List<ReviewDTO> getReviewDTOs(List<Review> reviews) {
         return reviews.stream()
                 .map(reviewConverter::toDTO)

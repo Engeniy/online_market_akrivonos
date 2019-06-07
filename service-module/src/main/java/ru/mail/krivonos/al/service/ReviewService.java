@@ -14,6 +14,4 @@ public interface ReviewService {
     void deleteReviewByID(Long id);
 
     void add(ReviewDTO reviewDTO);
-
-    PageDTO<ReviewDTO> getNotHiddenReviews(int pageNumber);
 }

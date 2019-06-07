@@ -40,12 +40,12 @@
                       th:object="${comment}"
                       method="post">
                     <b class="text-lg-center text">Written by:</b>
-                    <span class="text-lg-center"
-                          th:text="${comment.author.surname + ' ' + comment.author.name}"></span>
-                    <b class="text-lg-center">Written:</b>
-                    <span class="text-lg-center text-center" th:text="*{dateOfCreation}"></span>
-                    <b class="text-lg-center"><span>Comment:</span></b>
-                    <span class="text-lg-center text-center" th:text="*{content}"></span>
+                    <br><span class="text-lg-center"
+                              th:text="${comment.author.surname + ' ' + comment.author.name}"></span>
+                    <br><b class="text-lg-center">Written:</b>
+                    <br><span class="text-lg-center text-center" th:text="*{dateOfCreation}"></span>
+                    <br><b class="text-lg-center"><span>Comment:</span></b>
+                    <br><span class="text-lg-center text-center" th:text="*{content}"></span>
                     <div sec:authorize="isAuthenticated()">
                     <span sec:authorize="hasAuthority('Customer User')">
                 <br><input th:if="${user.userID} == ${comment.author.id}" class="btn btn-secondary" type="submit"
@@ -66,7 +66,7 @@
             <form th:action="@{/private/article/comment(article_number=${article.id}, author_id=${user.userID})}"
                   th:object="${comment}" method="post">
                 <fieldset>
-                    <h1>Write your comment:</h1>
+                    <h2>Write your comment:</h2>
                     <div class="form-group">
                         <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('content')}"
                               th:errors="*{content}">

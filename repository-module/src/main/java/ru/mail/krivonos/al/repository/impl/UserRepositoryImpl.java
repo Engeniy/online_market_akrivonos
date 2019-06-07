@@ -13,7 +13,7 @@ public class UserRepositoryImpl extends GenericRepositoryImpl<Long, User> implem
     @Override
     public User findUserByEmail(String email) {
         String queryString = String.format("from %s %s", entityClass.getName(),
-                " where email = :email and deleted = 0");
+                "where email = :email");
         Query query = entityManager.createQuery(queryString).setParameter("email", email);
         try {
             return (User) query.getSingleResult();

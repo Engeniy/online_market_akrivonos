@@ -7,6 +7,7 @@ import ru.mail.krivonos.al.service.model.ProfileDTO;
 
 @Component("orderUserProfileConverter")
 public class OrderUserProfileConverter implements ProfileConverter {
+
     @Override
     public ProfileDTO toDTO(Profile profile) {
         ProfileDTO profileDTO = new ProfileDTO();

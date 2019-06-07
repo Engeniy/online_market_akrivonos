@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mail.krivonos.al.repository.RoleRepository;
 import ru.mail.krivonos.al.repository.UserRepository;
+import ru.mail.krivonos.al.repository.model.Profile;
 import ru.mail.krivonos.al.repository.model.Role;
 import ru.mail.krivonos.al.repository.model.User;
 import ru.mail.krivonos.al.service.PageCountingService;
@@ -36,7 +37,8 @@ public class UserServiceImpl implements UserService {
             UserConverterAggregator userConverterAggregator,
             PasswordService passwordService,
             PageCountingService pageCountingService,
-            RoleRepository roleRepository) {
+            RoleRepository roleRepository
+    ) {
         this.userRepository = userRepository;
         this.userConverterAggregator = userConverterAggregator;
         this.passwordService = passwordService;
@@ -59,12 +61,7 @@ public class UserServiceImpl implements UserService {
     public PageDTO<UserDTO> getUsers(int pageNumber) {
         PageDTO<UserDTO> pageDTO = new PageDTO<>();
         int countOfEntities = userRepository.getCountOfNotDeletedEntities();
-        System.out.println("Count - " + countOfEntities);
-        int countOfPages = pageCountingService.getCountOfPages(countOfEntities, USERS_LIMIT);
-        pageDTO.setCountOfPages(countOfPages);
-        int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
-        pageDTO.setCurrentPageNumber(currentPageNumber);
-        int offset = pageCountingService.getOffset(currentPageNumber, USERS_LIMIT);
+        int offset = getOffsetAndSetPages(pageDTO, pageNumber, countOfEntities);
         List<User> users = userRepository.findAllNotDeletedWithAscendingOrder(USERS_LIMIT, offset, EMAIL);
         pageDTO.setList(getUserDTOs(users));
         return pageDTO;
@@ -86,7 +83,7 @@ public class UserServiceImpl implements UserService {
     public void add(UserDTO userDTO) {
         User user = userConverterAggregator.getUserAuthorizationConverter().toEntity(userDTO);
         user.setPassword(passwordService.getPassword(user.getEmail()));
-        user.getProfile().setUser(user);
+        user.setProfile(getDefaultProfile(user));
         userRepository.persist(user);
     }
 
@@ -143,5 +140,21 @@ public class UserServiceImpl implements UserService {
         return users.stream()
                 .map(userConverterAggregator.getUserForShowingConverter()::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    private int getOffsetAndSetPages(PageDTO<UserDTO> pageDTO, int pageNumber, int countOfEntities) {
+        int countOfPages = pageCountingService.getCountOfPages(countOfEntities, USERS_LIMIT);
+        pageDTO.setCountOfPages(countOfPages);
+        int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
+        pageDTO.setCurrentPageNumber(currentPageNumber);
+        return pageCountingService.getOffset(currentPageNumber, USERS_LIMIT);
+    }
+
+    private Profile getDefaultProfile(User user) {
+        Profile profile = new Profile();
+        profile.setAddress("");
+        profile.setTelephone("");
+        profile.setUser(user);
+        return profile;
     }
 }

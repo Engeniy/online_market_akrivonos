@@ -6,6 +6,9 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import ru.mail.krivonos.al.service.model.ProfileDTO;
 
+import static ru.mail.krivonos.al.controller.constant.FieldConstants.ADDRESS_FIELD;
+import static ru.mail.krivonos.al.controller.constant.FieldConstants.TELEPHONE_FIELD;
+
 @Component("profileValidator")
 public class ProfileValidator implements Validator {
 
@@ -19,14 +22,14 @@ public class ProfileValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        ValidationUtils.rejectIfEmpty(errors, "profile.address", "user.profile.address.empty");
-        ValidationUtils.rejectIfEmpty(errors, "profile.telephone", "user.profile.telephone.empty");
+        ValidationUtils.rejectIfEmpty(errors, ADDRESS_FIELD, "user.profile.address.empty");
+        ValidationUtils.rejectIfEmpty(errors, TELEPHONE_FIELD, "user.profile.telephone.empty");
         ProfileDTO profileDTO = (ProfileDTO) o;
         if (profileDTO.getAddress() != null && profileDTO.getAddress().length() > ADDRESS_MAX_LENGTH) {
-            errors.rejectValue("profile.address", "user.profile.address.length");
+            errors.rejectValue(ADDRESS_FIELD, "user.profile.address.length");
         }
         if (profileDTO.getTelephone() != null && !profileDTO.getTelephone().matches(PHONE_NUMBER_VALIDATOR)) {
-            errors.rejectValue("profile.telephone", "user.profile.telephone.format");
+            errors.rejectValue(TELEPHONE_FIELD, "user.profile.telephone.format");
         }
     }
 }

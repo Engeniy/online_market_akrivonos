@@ -44,7 +44,7 @@ public class UserControllerIntegrationTest {
     public void init() {
         correctUserDTO = new UserDTO();
         correctUserDTO.setId(2L);
-        correctUserDTO.setEmail("krivonos-al@mail.ru");
+        correctUserDTO.setEmail("test.mail.jd2@gmail.com");
         correctUserDTO.setName("Alex");
         correctUserDTO.setSurname("Krivonos");
         ProfileDTO correctProfile = new ProfileDTO();

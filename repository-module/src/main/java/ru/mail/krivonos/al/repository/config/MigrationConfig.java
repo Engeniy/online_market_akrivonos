@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 @Configuration
 public class MigrationConfig {
 
-    @Bean
+    @Bean("liquibase")
     public SpringLiquibase liquibase(DataSource dataSource) {
         SpringLiquibase springLiquibase = new SpringLiquibase();
         springLiquibase.setChangeLog("classpath:migrations/db-changelog.xml");

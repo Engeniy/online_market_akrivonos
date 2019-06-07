@@ -10,6 +10,9 @@ import ru.mail.krivonos.al.service.model.RoleDTO;
 
 import java.util.List;
 
+import static ru.mail.krivonos.al.controller.constant.FieldConstants.NAME_FIELD;
+import static ru.mail.krivonos.al.controller.constant.FieldConstants.ROLE_FIELD;
+
 @Component("roleValidator")
 public class RoleValidator implements Validator {
 
@@ -27,11 +30,11 @@ public class RoleValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        ValidationUtils.rejectIfEmpty(errors, "name", "user.role.name.empty");
+        ValidationUtils.rejectIfEmpty(errors, NAME_FIELD, "user.role.name.empty");
         RoleDTO roleDTO = (RoleDTO) o;
         List<RoleDTO> roles = roleService.getRoles();
         if (roleDTO == null) {
-            errors.rejectValue("role", "user.role.empty");
+            errors.rejectValue(ROLE_FIELD, "user.role.empty");
         } else {
             boolean matches = false;
             for (RoleDTO role : roles) {
@@ -40,7 +43,7 @@ public class RoleValidator implements Validator {
                 }
             }
             if (!matches) {
-                errors.rejectValue("role", "user.role.invalid");
+                errors.rejectValue(ROLE_FIELD, "user.role.invalid");
             }
         }
     }

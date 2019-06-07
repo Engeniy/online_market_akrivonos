@@ -55,6 +55,8 @@ public class AppAuthenticationSuccessHandler implements AuthenticationSuccessHan
                 case SALE_AUTHORITY_NAME:
                     targetURL = ITEMS_PAGE_URL;
                     break;
+                default:
+                    targetURL = null;
             }
         }
         if (targetURL == null) {

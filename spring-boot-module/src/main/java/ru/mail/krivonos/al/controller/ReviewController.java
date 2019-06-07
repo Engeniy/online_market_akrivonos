@@ -19,8 +19,13 @@ import ru.mail.krivonos.al.service.model.UserDTO;
 
 import javax.validation.Valid;
 
+import static ru.mail.krivonos.al.controller.constant.AttributeConstants.PAGE_ATTRIBUTE;
+import static ru.mail.krivonos.al.controller.constant.AttributeConstants.REVIEWS_ATTRIBUTE;
+import static ru.mail.krivonos.al.controller.constant.AttributeConstants.REVIEW_ATTRIBUTE;
 import static ru.mail.krivonos.al.controller.constant.PageConstants.ADD_REVIEW_PAGE;
 import static ru.mail.krivonos.al.controller.constant.PageConstants.REVIEWS_PAGE;
+import static ru.mail.krivonos.al.controller.constant.PathVariableConstants.ID_VARIABLE;
+import static ru.mail.krivonos.al.controller.constant.RequestParameterConstants.PAGE_PARAMETER;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.REDIRECT_WITH_PARAMETER_TEMPLATE;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.REDIRECT_WITH_TWO_PARAMETERS_TEMPLATE;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.REVIEWS_ADD_PAGE_URL;
@@ -45,20 +50,20 @@ public class ReviewController {
 
     @GetMapping(REVIEWS_PAGE_URL)
     public String getReviews(
-            @RequestParam(name = "page", defaultValue = "1") Integer pageNumber, Model model
+            @RequestParam(name = PAGE_PARAMETER, defaultValue = "1") Integer pageNumber, Model model
     ) {
         PageDTO<ReviewDTO> page = reviewService.getReviews(pageNumber);
         ReviewForm reviewForm = new ReviewForm();
         reviewForm.setReviewList(page.getList());
-        model.addAttribute("reviews", reviewForm);
-        model.addAttribute("page", page);
+        model.addAttribute(REVIEWS_ATTRIBUTE, reviewForm);
+        model.addAttribute(PAGE_ATTRIBUTE, page);
         return REVIEWS_PAGE;
     }
 
     @PostMapping(REVIEWS_DELETE_URL)
     public String deleteReview(
-            @PathVariable("id") Long id,
-            @RequestParam(name = "page", defaultValue = "1") Integer pageNumber
+            @PathVariable(ID_VARIABLE) Long id,
+            @RequestParam(name = PAGE_PARAMETER, defaultValue = "1") Integer pageNumber
     ) {
         reviewService.deleteReviewByID(id);
         return String.format(REDIRECT_WITH_TWO_PARAMETERS_TEMPLATE, REVIEWS_PAGE_URL, PAGE_NUMBER_PARAM,
@@ -67,8 +72,8 @@ public class ReviewController {
 
     @PostMapping(REVIEWS_UPDATE_URL)
     public String updateReviews(
-            @ModelAttribute("reviews") ReviewForm reviewForm,
-            @RequestParam(name = "page", defaultValue = "1") Integer pageNumber
+            @ModelAttribute(REVIEWS_ATTRIBUTE) ReviewForm reviewForm,
+            @RequestParam(name = PAGE_PARAMETER, defaultValue = "1") Integer pageNumber
     ) {
         if (reviewForm.getReviewList().isEmpty()) {
             return String.format(REDIRECT_WITH_TWO_PARAMETERS_TEMPLATE, REVIEWS_PAGE_URL, PAGE_NUMBER_PARAM,
@@ -81,22 +86,26 @@ public class ReviewController {
 
     @GetMapping(REVIEWS_ADD_PAGE_URL)
     public String getAddReviewPage(Model model) {
-        model.addAttribute("review", new ReviewDTO());
+        model.addAttribute(REVIEW_ATTRIBUTE, new ReviewDTO());
         return ADD_REVIEW_PAGE;
     }
 
     @PostMapping(REVIEWS_ADD_PAGE_URL)
     public String saveReview(
             @AuthenticationPrincipal AuthUserPrincipal userPrincipal,
-            @ModelAttribute("review") @Valid ReviewDTO reviewDTO, BindingResult bindingResult
+            @ModelAttribute(REVIEW_ATTRIBUTE) @Valid ReviewDTO reviewDTO, BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
             return ADD_REVIEW_PAGE;
         }
+        setAuthorAndAdd(userPrincipal.getUserID(), reviewDTO);
+        return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, REVIEWS_ADD_PAGE_URL, ADDED_PARAM);
+    }
+
+    private void setAuthorAndAdd(Long authorId, ReviewDTO reviewDTO) {
         UserDTO userDTO = new UserDTO();
-        userDTO.setId(userPrincipal.getUserID());
+        userDTO.setId(authorId);
         reviewDTO.setAuthor(userDTO);
         reviewService.add(reviewDTO);
-        return String.format(REDIRECT_WITH_PARAMETER_TEMPLATE, REVIEWS_ADD_PAGE_URL, ADDED_PARAM);
     }
 }

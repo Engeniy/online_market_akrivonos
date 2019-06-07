@@ -16,11 +16,19 @@ public class FavoriteArticleRepositoryImpl extends GenericRepositoryImpl<Favorit
     @SuppressWarnings("unchecked")
     public List<FavoriteArticle> findAllByUserId(int limit, int offset, Long userId) {
         String queryString = String.format("from %s %s", entityClass.getName(),
-                " where user_id = :user_id");
+                "where user.id = :user_id and article.isDeleted = 0");
         Query query = entityManager.createQuery(queryString)
                 .setMaxResults(limit)
                 .setFirstResult(offset)
                 .setParameter("user_id", userId);
         return query.getResultList();
+    }
+
+    @Override
+    public int getCountOfEntities() {
+        String queryString = String.format("select count(*) from %s %s", entityClass.getName(),
+                "where article.isDeleted = 0");
+        Query query = entityManager.createQuery(queryString);
+        return ((Number) query.getSingleResult()).intValue();
     }
 }

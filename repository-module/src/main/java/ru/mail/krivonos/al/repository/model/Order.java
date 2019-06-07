@@ -29,6 +29,7 @@ import java.util.Objects;
                 "WHERE id = ?")
 @Where(clause = "deleted = 0")
 public class Order implements Serializable {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)

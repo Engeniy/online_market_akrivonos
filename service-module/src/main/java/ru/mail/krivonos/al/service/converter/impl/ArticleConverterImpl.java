@@ -22,7 +22,8 @@ public class ArticleConverterImpl implements ArticleConverter {
     @Autowired
     public ArticleConverterImpl(
             CommentConverter commentConverter,
-            UserConverterAggregator userConverterAggregator) {
+            UserConverterAggregator userConverterAggregator
+    ) {
         this.commentConverter = commentConverter;
         this.userConverterAggregator = userConverterAggregator;
     }

@@ -13,7 +13,7 @@ public class ItemRepositoryImpl extends GenericRepositoryImpl<Long, Item> implem
     @Override
     public Item findItemByUniqueNumber(String uniqueNumber) {
         String queryString = String.format("from %s %s", entityClass.getName(),
-                " where unique_number = :unique_number");
+                "where unique_number = :unique_number");
         Query query = entityManager.createQuery(queryString).setParameter("unique_number", uniqueNumber);
         try {
             return (Item) query.getSingleResult();

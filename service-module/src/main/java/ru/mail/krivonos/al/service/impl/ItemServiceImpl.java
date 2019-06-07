@@ -40,11 +40,7 @@ public class ItemServiceImpl implements ItemService {
     public PageDTO<ItemDTO> getItems(int pageNumber) {
         PageDTO<ItemDTO> pageDTO = new PageDTO<>();
         int countOfEntities = itemRepository.getCountOfNotDeletedEntities();
-        int countOfPages = pageCountingService.getCountOfPages(countOfEntities, ITEMS_LIMIT);
-        pageDTO.setCountOfPages(countOfPages);
-        int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
-        pageDTO.setCurrentPageNumber(currentPageNumber);
-        int offset = pageCountingService.getOffset(currentPageNumber, ITEMS_LIMIT);
+        int offset = getOffsetAndSetPages(pageDTO, pageNumber, countOfEntities);
         List<Item> items = itemRepository.findAllNotDeletedWithAscendingOrder(ITEMS_LIMIT, offset, NAME);
         List<ItemDTO> itemDTOs = getItemDTOs(items);
         pageDTO.setList(itemDTOs);
@@ -106,5 +102,13 @@ public class ItemServiceImpl implements ItemService {
         return items.stream()
                 .map(itemConverter::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    private int getOffsetAndSetPages(PageDTO<ItemDTO> pageDTO, int pageNumber, int countOfEntities) {
+        int countOfPages = pageCountingService.getCountOfPages(countOfEntities, ITEMS_LIMIT);
+        pageDTO.setCountOfPages(countOfPages);
+        int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
+        pageDTO.setCurrentPageNumber(currentPageNumber);
+        return pageCountingService.getOffset(currentPageNumber, ITEMS_LIMIT);
     }
 }

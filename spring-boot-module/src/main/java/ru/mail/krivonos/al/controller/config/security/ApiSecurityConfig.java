@@ -17,13 +17,13 @@ import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.SECURE_
 
 @Configuration
 @Order(1)
-public class ApiSecurityConfigurer extends WebSecurityConfigurerAdapter {
+public class ApiSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final UserDetailsService userDetailsService;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public ApiSecurityConfigurer(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+    public ApiSecurityConfig(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         this.userDetailsService = userDetailsService;
         this.passwordEncoder = passwordEncoder;
     }

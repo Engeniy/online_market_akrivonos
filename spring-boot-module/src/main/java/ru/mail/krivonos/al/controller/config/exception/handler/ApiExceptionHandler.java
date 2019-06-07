@@ -29,6 +29,6 @@ public class ApiExceptionHandler {
     public ResponseEntity defaultErrorHandler(HttpServletRequest request, Exception e) {
         logger.error(URL_GET_ERROR_MESSAGE, request.getRequestURL());
         logger.error(e.getMessage(), e);
-        return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 }

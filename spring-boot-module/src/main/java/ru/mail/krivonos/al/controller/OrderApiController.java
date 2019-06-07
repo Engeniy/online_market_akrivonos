@@ -14,6 +14,9 @@ import java.util.List;
 
 import static ru.mail.krivonos.al.controller.constant.ApiURLConstants.API_ORDERS_URL;
 import static ru.mail.krivonos.al.controller.constant.ApiURLConstants.API_ORDERS_WITH_ID_URL;
+import static ru.mail.krivonos.al.controller.constant.PathVariableConstants.ID_VARIABLE;
+import static ru.mail.krivonos.al.controller.constant.RequestParameterConstants.LIMIT_PARAMETER;
+import static ru.mail.krivonos.al.controller.constant.RequestParameterConstants.OFFSET_PARAMETER;
 
 @RestController("orderApiController")
 public class OrderApiController {
@@ -28,8 +31,8 @@ public class OrderApiController {
     @GetMapping(API_ORDERS_URL)
     @SuppressWarnings("unchecked")
     public ResponseEntity<List<OrderDTO>> getOrders(
-            @RequestParam(name = "limit", defaultValue = "10") Integer limit,
-            @RequestParam(name = "offset", defaultValue = "0") Integer offset
+            @RequestParam(name = LIMIT_PARAMETER, defaultValue = "10") Integer limit,
+            @RequestParam(name = OFFSET_PARAMETER, defaultValue = "0") Integer offset
     ) {
         List<OrderDTO> orders = orderService.getOrders(limit, offset);
         return new ResponseEntity(orders, HttpStatus.OK);
@@ -38,7 +41,7 @@ public class OrderApiController {
     @GetMapping(API_ORDERS_WITH_ID_URL)
     @SuppressWarnings("unchecked")
     public ResponseEntity<OrderDTO> getOrder(
-            @PathVariable("id") Long id
+            @PathVariable(ID_VARIABLE) Long id
     ) {
         OrderDTO order = orderService.getOrderByID(id);
         if (order == null) {

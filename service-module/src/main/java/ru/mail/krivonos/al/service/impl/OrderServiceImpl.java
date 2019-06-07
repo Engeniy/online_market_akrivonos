@@ -71,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     @Transactional
-    public PageDTO<OrderDTO> getOrdersByUserID(Long userID, Integer pageNumber) {
+    public PageDTO<OrderDTO> getOrdersByUserID(Long userID, int pageNumber) {
         PageDTO<OrderDTO> pageDTO = new PageDTO<>();
         User user = userRepository.findById(userID);
         int countOfEntities = orderRepository.getCountOfOrdersForUser(user);
