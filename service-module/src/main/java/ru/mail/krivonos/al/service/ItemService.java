@@ -11,11 +11,13 @@ public interface ItemService {
 
     List<ItemDTO> getItems(int limit, int offset);
 
-    void deleteItem(Long itemId);
+    ItemDTO deleteItem(Long itemId);
 
     ItemDTO getItemById(Long itemId);
 
-    boolean isUnique(String uniqueNumber);
+    boolean isNotUnique(String uniqueNumber);
 
     ItemDTO add(ItemDTO itemDTO);
+
+    void add(List<ItemDTO> items);
 }

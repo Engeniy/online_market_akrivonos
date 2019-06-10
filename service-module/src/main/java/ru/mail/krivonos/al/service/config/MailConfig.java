@@ -14,6 +14,11 @@ import java.util.Properties;
 @PropertySource("classpath:mail.properties")
 public class MailConfig {
 
+    private static final String TRANSPORT_PROTOCOL_KEY = "mail.transport.protocol";
+    private static final String SMTP_AUTH_KEY = "mail.smtp.auth";
+    private static final String SMTP_STARTTLS_ENABLE_KEY = "mail.smtp.starttls.enable";
+    private static final String MAIL_DEBUG_KEY = "mail.debug";
+
     private final MailProperties mailProperties;
 
     @Autowired
@@ -29,11 +34,11 @@ public class MailConfig {
         javaMailSender.setUsername(mailProperties.getMailUsername());
         javaMailSender.setPassword(mailProperties.getMailPassword());
 
-        Properties mailProperties = javaMailSender.getJavaMailProperties();
-        mailProperties.put("mail.transport.protocol", "smtp");
-        mailProperties.put("mail.smtp.auth", "true");
-        mailProperties.put("mail.smtp.starttls.enable", "true");
-        mailProperties.put("mail.debug", "true");
+        Properties properties = javaMailSender.getJavaMailProperties();
+        properties.put(TRANSPORT_PROTOCOL_KEY, mailProperties.getMailTransportProtocol());
+        properties.put(SMTP_AUTH_KEY, mailProperties.getMailSMTPAuth());
+        properties.put(SMTP_STARTTLS_ENABLE_KEY, mailProperties.getMailSMTPStartTLSEnable());
+        properties.put(MAIL_DEBUG_KEY, mailProperties.getMailDebug());
         return javaMailSender;
     }
 }

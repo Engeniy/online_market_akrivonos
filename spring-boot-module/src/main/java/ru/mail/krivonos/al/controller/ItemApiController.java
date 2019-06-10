@@ -20,6 +20,9 @@ import java.util.List;
 
 import static ru.mail.krivonos.al.controller.constant.ApiURLConstants.API_ITEMS_URL;
 import static ru.mail.krivonos.al.controller.constant.ApiURLConstants.API_ITEMS_WITH_ID_URL;
+import static ru.mail.krivonos.al.controller.constant.PathVariableConstants.ID_VARIABLE;
+import static ru.mail.krivonos.al.controller.constant.RequestParameterConstants.LIMIT_PARAMETER;
+import static ru.mail.krivonos.al.controller.constant.RequestParameterConstants.OFFSET_PARAMETER;
 
 @RestController("itemApiController")
 public class ItemApiController {
@@ -30,7 +33,8 @@ public class ItemApiController {
     @Autowired
     public ItemApiController(
             ItemService itemService,
-            ItemValidator itemValidator) {
+            ItemValidator itemValidator
+    ) {
         this.itemService = itemService;
         this.itemValidator = itemValidator;
     }
@@ -38,8 +42,8 @@ public class ItemApiController {
     @GetMapping(API_ITEMS_URL)
     @SuppressWarnings("unchecked")
     public ResponseEntity<List<ItemDTO>> getItems(
-            @RequestParam(name = "limit", defaultValue = "10") Integer limit,
-            @RequestParam(name = "offset", defaultValue = "0") Integer offset
+            @RequestParam(name = LIMIT_PARAMETER, defaultValue = "10") Integer limit,
+            @RequestParam(name = OFFSET_PARAMETER, defaultValue = "0") Integer offset
     ) {
         List<ItemDTO> items = itemService.getItems(limit, offset);
         return new ResponseEntity(items, HttpStatus.OK);
@@ -48,9 +52,12 @@ public class ItemApiController {
     @GetMapping(API_ITEMS_WITH_ID_URL)
     @SuppressWarnings("unchecked")
     public ResponseEntity<ItemDTO> getItem(
-            @PathVariable("id") Long id
+            @PathVariable(ID_VARIABLE) Long id
     ) {
         ItemDTO item = itemService.getItemById(id);
+        if (item == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity(item, HttpStatus.OK);
     }
 
@@ -69,9 +76,12 @@ public class ItemApiController {
 
     @DeleteMapping(API_ITEMS_WITH_ID_URL)
     public ResponseEntity deleteItem(
-            @PathVariable("id") Long id
+            @PathVariable(ID_VARIABLE) Long id
     ) {
-        itemService.deleteItem(id);
+        ItemDTO item = itemService.deleteItem(id);
+        if (item == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity(HttpStatus.ACCEPTED);
     }
 }

@@ -48,6 +48,8 @@ public class Article implements Serializable {
     private String summary;
     @Column(name = "content", nullable = false)
     private String content;
+    @Column(name = "deleted", nullable = false)
+    private boolean isDeleted;
     @OrderBy(value = "date_of_creation desc")
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "article", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
@@ -98,6 +100,14 @@ public class Article implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public List<Comment> getComments() {

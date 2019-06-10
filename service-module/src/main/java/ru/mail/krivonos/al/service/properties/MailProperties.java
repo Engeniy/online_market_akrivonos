@@ -14,6 +14,14 @@ public class MailProperties {
     private String mailUsername;
     @Value("${mail.password}")
     private String mailPassword;
+    @Value("${mail.transport.protocol}")
+    private String mailTransportProtocol;
+    @Value("${mail.smtp.auth}")
+    private String mailSMTPAuth;
+    @Value("${mail.smtp.starttls.enable}")
+    private String mailSMTPStartTLSEnable;
+    @Value("${mail.debug}")
+    private String mailDebug;
 
     public String getMailHost() {
         return mailHost;
@@ -29,5 +37,21 @@ public class MailProperties {
 
     public String getMailPassword() {
         return mailPassword;
+    }
+
+    public String getMailTransportProtocol() {
+        return mailTransportProtocol;
+    }
+
+    public String getMailSMTPAuth() {
+        return mailSMTPAuth;
+    }
+
+    public String getMailSMTPStartTLSEnable() {
+        return mailSMTPStartTLSEnable;
+    }
+
+    public String getMailDebug() {
+        return mailDebug;
     }
 }

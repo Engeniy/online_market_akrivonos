@@ -10,6 +10,9 @@ import ru.mail.krivonos.al.service.PasswordService;
 import ru.mail.krivonos.al.service.UserService;
 import ru.mail.krivonos.al.service.model.UserDTO;
 
+import static ru.mail.krivonos.al.controller.constant.FieldConstants.NEW_PASSWORD_FIELD;
+import static ru.mail.krivonos.al.controller.constant.FieldConstants.OLD_PASSWORD_FIELD;
+
 @Component("userPasswordFormValidator")
 public class UserPasswordFormValidator implements Validator {
 
@@ -35,25 +38,25 @@ public class UserPasswordFormValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        ValidationUtils.rejectIfEmpty(errors, "oldPassword", "user.password.empty");
-        ValidationUtils.rejectIfEmpty(errors, "newPassword", "user.password.empty");
+        ValidationUtils.rejectIfEmpty(errors, OLD_PASSWORD_FIELD, "user.password.empty");
+        ValidationUtils.rejectIfEmpty(errors, NEW_PASSWORD_FIELD, "user.password.empty");
         UserPasswordForm passwordForm = (UserPasswordForm) o;
         if (passwordForm.getOldPassword() != null && passwordForm.getOldPassword().length() < PASSWORD_MIN_LENGTH) {
-            errors.rejectValue("oldPassword", "user.password.length");
+            errors.rejectValue(OLD_PASSWORD_FIELD, "user.password.length");
         }
         if (passwordForm.getOldPassword() != null && passwordForm.getOldPassword().length() > PASSWORD_MAX_LENGTH) {
-            errors.rejectValue("oldPassword", "user.password.length");
+            errors.rejectValue(OLD_PASSWORD_FIELD, "user.password.length");
         }
         if (passwordForm.getNewPassword() != null && passwordForm.getNewPassword().length() < PASSWORD_MIN_LENGTH) {
-            errors.rejectValue("newPassword", "user.password.length");
+            errors.rejectValue(NEW_PASSWORD_FIELD, "user.password.length");
         }
         if (passwordForm.getNewPassword() != null && passwordForm.getNewPassword().length() > PASSWORD_MAX_LENGTH) {
-            errors.rejectValue("newPassword", "user.password.length");
+            errors.rejectValue(NEW_PASSWORD_FIELD, "user.password.length");
         }
-        UserDTO userByID = userService.getUserByID(passwordForm.getUserId());
-        boolean matches = passwordService.matches(passwordForm.getOldPassword(), userByID.getPassword());
+        UserDTO user = userService.getUserByID(passwordForm.getUserId());
+        boolean matches = passwordService.matches(passwordForm.getOldPassword(), user.getPassword());
         if (!matches) {
-            errors.rejectValue("oldPassword", "user.old-password.invalid");
+            errors.rejectValue(OLD_PASSWORD_FIELD, "user.old-password.invalid");
         }
     }
 }

@@ -1,7 +1,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Add user</title>
+    <title>Add article</title>
     <link href="#" th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap.min.css}" rel="stylesheet" type="text/css"/>
 </head>
 <body>
@@ -11,13 +11,13 @@
         <div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
             <form th:action="@{/private/articles/add}" th:object="${article}" method="post">
                 <fieldset>
-                    <h1>Please input user info</h1>
+                    <h1>Please input article:</h1>
                     <div class="form-group">
                         <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('dateOfCreation')}"
                               th:errors="*{dateOfCreation}">
                             Date error</span>
                         <input th:field="*{dateOfCreation}" type="datetime-local" name="dateOfCreation"
-                               id="dateOfCreation" class="form-control input-lg"
+                               id="dateOfCreation" class="form-control input-lg" max="9999-01-01T23:59"
                                required/>
                     </div>
                     <div class="form-group">
@@ -30,7 +30,7 @@
                     <div class="form-group">
                         <span class="form-control alert alert-danger" th:if="${#fields.hasErrors('content')}"
                               th:errors="*{content}">Content error</span>
-                        <textarea th:field="*{content}" type="text" name="content" id="content"
+                        <textarea th:field="*{content}" type="text" name="content" id="content" style="resize: none"
                                   class="form-control" placeholder="Content" rows="5" required maxlength="1000"/>
                     </div>
                     <div class="row">

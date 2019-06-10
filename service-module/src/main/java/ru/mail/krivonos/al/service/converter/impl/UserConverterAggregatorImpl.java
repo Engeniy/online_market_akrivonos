@@ -13,18 +13,21 @@ public class UserConverterAggregatorImpl implements UserConverterAggregator {
     private final UserConverter userForProfileConverter;
     private final UserConverter authorConverter;
     private final UserConverter userForShowingConverter;
+    private final UserConverter orderUserConverter;
 
     @Autowired
     public UserConverterAggregatorImpl(
             @Qualifier("userAuthorizationConverter") UserConverter userAuthorizationConverter,
             @Qualifier("userForProfileConverter") UserConverter userForProfileConverter,
             @Qualifier("authorConverter") UserConverter authorConverter,
-            @Qualifier("userForShowingConverter") UserConverter userForShowingConverter
+            @Qualifier("userForShowingConverter") UserConverter userForShowingConverter,
+            @Qualifier("orderUserConverter") UserConverter orderUserConverter
     ) {
         this.userAuthorizationConverter = userAuthorizationConverter;
         this.userForProfileConverter = userForProfileConverter;
         this.authorConverter = authorConverter;
         this.userForShowingConverter = userForShowingConverter;
+        this.orderUserConverter = orderUserConverter;
     }
 
     @Override
@@ -45,5 +48,10 @@ public class UserConverterAggregatorImpl implements UserConverterAggregator {
     @Override
     public UserConverter getUserForShowingConverter() {
         return userForShowingConverter;
+    }
+
+    @Override
+    public UserConverter getOrderUserConverter() {
+        return orderUserConverter;
     }
 }

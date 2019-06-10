@@ -14,29 +14,39 @@
                 <li sec:authorize="isAnonymous()" class="nav-item">
                     <a class="nav-link" href="#" th:href="@{/login}">Login</a>
                 </li>
-                <div sec:authorize="isAuthenticated()">
-                    <li sec:authorize="hasAuthority('Administrator')" class="nav-item">
+                <div sec:authorize="isAuthenticated() && hasAuthority('Administrator')">
+                    <li class="nav-item">
                         <a class="nav-link" href="#" th:href="@{/private/users}">Users</a>
                     </li>
                 </div>
-                <div sec:authorize="isAuthenticated()">
-                    <li sec:authorize="hasAuthority('Customer User')" class="nav-item">
+                <div sec:authorize="isAuthenticated() && hasAuthority('Customer User')">
+                    <li class="nav-item">
                         <a class="nav-link" href="#" th:href="@{/private/profile}">Profile</a>
                     </li>
                 </div>
-                <div sec:authorize="isAuthenticated()">
-                    <li sec:authorize="hasAuthority('Sale User')" class="nav-item">
-                        <a class="nav-link" href="#" th:href="@{/items}">Items</a>
+                <div sec:authorize="isAuthenticated() && (hasAuthority('Customer User') || hasAuthority('Sale User'))">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" th:href="@{/public/items}">Items</a>
                     </li>
                 </div>
-                <div sec:authorize="isAuthenticated()">
-                    <li sec:authorize="hasAuthority('Administrator')" class="nav-item">
-                        <a class="nav-link" href="#" th:href="@{/reviews}">Reviews</a>
+                <div sec:authorize="isAuthenticated() && (hasAuthority('Customer User') || hasAuthority('Sale User'))">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" th:href="@{/public/orders}">Orders</a>
                     </li>
                 </div>
-                <div sec:authorize="isAuthenticated()">
-                    <li sec:authorize="hasAuthority('Customer User') || hasAuthority('Sale User')" class="nav-item">
-                        <a class="nav-link" href="#" th:href="@{/articles}">Articles</a>
+                <div sec:authorize="isAuthenticated() && hasAuthority('Administrator')">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" th:href="@{/private/reviews}">Reviews</a>
+                    </li>
+                </div>
+                <div sec:authorize="isAuthenticated() && hasAuthority('Customer User')">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" th:href="@{/private/reviews/add}">Add review</a>
+                    </li>
+                </div>
+                <div sec:authorize="isAuthenticated() && (hasAuthority('Customer User') || hasAuthority('Sale User'))">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" th:href="@{/public/articles}">Articles</a>
                     </li>
                 </div>
                 <li sec:authorize="isAuthenticated()" class="nav-item">

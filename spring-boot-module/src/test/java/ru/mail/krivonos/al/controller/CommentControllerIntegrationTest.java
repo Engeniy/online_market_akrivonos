@@ -39,7 +39,7 @@ public class CommentControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("comment", commentDTO))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/article?article_number=1"));
+                .andExpect(redirectedUrl("/public/article?article_number=1"));
     }
 
     @WithUserDetails("customer@customer.com")
@@ -51,11 +51,11 @@ public class CommentControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("comment", commentDTO))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/article?article_number=1"));
+                .andExpect(redirectedUrl("/public/article?article_number=1"));
         this.mockMvc.perform(post(ARTICLE_DELETE_COMMENT_URL + "?article_number=1&comment_id=1")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("comment", commentDTO))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/article?article_number=1"));
+                .andExpect(redirectedUrl("/public/article?article_number=1"));
     }
 }

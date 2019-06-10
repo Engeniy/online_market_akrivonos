@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.mail.krivonos.al.repository.RoleRepository;
 import ru.mail.krivonos.al.repository.UserRepository;
+import ru.mail.krivonos.al.repository.model.Profile;
 import ru.mail.krivonos.al.repository.model.Role;
 import ru.mail.krivonos.al.repository.model.User;
 import ru.mail.krivonos.al.service.PageCountingService;
@@ -36,7 +37,8 @@ public class UserServiceImpl implements UserService {
             UserConverterAggregator userConverterAggregator,
             PasswordService passwordService,
             PageCountingService pageCountingService,
-            RoleRepository roleRepository) {
+            RoleRepository roleRepository
+    ) {
         this.userRepository = userRepository;
         this.userConverterAggregator = userConverterAggregator;
         this.passwordService = passwordService;
@@ -56,15 +58,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public PageDTO<UserDTO> getUsers(Integer pageNumber) {
+    public PageDTO<UserDTO> getUsers(int pageNumber) {
+        int countOfEntities = userRepository.getCountOfNotDeletedEntities();
         PageDTO<UserDTO> pageDTO = new PageDTO<>();
-        int countOfEntities = userRepository.getCountOfEntities();
-        int countOfPages = pageCountingService.getCountOfPages(countOfEntities, USERS_LIMIT);
-        pageDTO.setCountOfPages(countOfPages);
-        int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
-        pageDTO.setCurrentPageNumber(currentPageNumber);
-        int offset = pageCountingService.getOffset(currentPageNumber, USERS_LIMIT);
-        List<User> users = userRepository.findAllWithAscendingOrder(USERS_LIMIT, offset, EMAIL);
+        int offset = getOffsetAndSetPages(pageDTO, pageNumber, countOfEntities);
+        List<User> users = userRepository.findAllNotDeletedWithAscendingOrder(USERS_LIMIT, offset, EMAIL);
         pageDTO.setList(getUserDTOs(users));
         return pageDTO;
     }
@@ -72,10 +70,12 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateRole(Long userID, Long roleID) {
-        Role role = roleRepository.findById(roleID);
         User user = userRepository.findById(userID);
-        user.setRole(role);
-        userRepository.merge(user);
+        Role role = roleRepository.findById(roleID);
+        if (!user.getRole().equals(role)) {
+            user.setRole(role);
+            userRepository.merge(user);
+        }
     }
 
     @Override
@@ -83,7 +83,7 @@ public class UserServiceImpl implements UserService {
     public void add(UserDTO userDTO) {
         User user = userConverterAggregator.getUserAuthorizationConverter().toEntity(userDTO);
         user.setPassword(passwordService.getPassword(user.getEmail()));
-        user.getProfile().setUser(user);
+        user.setProfile(getDefaultProfile(user));
         userRepository.persist(user);
     }
 
@@ -108,14 +108,17 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserDTO getUserByID(Long userID) {
-        User byId = userRepository.findById(userID);
-        return userConverterAggregator.getUserForProfileConverter().toDTO(byId);
+        User user = userRepository.findByIdNotDeleted(userID);
+        if (user == null) {
+            return null;
+        }
+        return userConverterAggregator.getUserForProfileConverter().toDTO(user);
     }
 
     @Override
     @Transactional
     public void updateProfile(UserDTO userDTO) {
-        User user = userRepository.findById(userDTO.getId());
+        User user = userRepository.findByIdNotDeleted(userDTO.getId());
         user.setName(userDTO.getName());
         user.setSurname(userDTO.getSurname());
         ProfileDTO profile = userDTO.getProfile();
@@ -127,7 +130,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updatePassword(UserDTO userDTO) {
-        User user = userRepository.findById(userDTO.getId());
+        User user = userRepository.findByIdNotDeleted(userDTO.getId());
         String encodedPassword = passwordService.encodePassword(userDTO.getPassword());
         user.setPassword(encodedPassword);
         userRepository.merge(user);
@@ -137,5 +140,19 @@ public class UserServiceImpl implements UserService {
         return users.stream()
                 .map(userConverterAggregator.getUserForShowingConverter()::toDTO)
                 .collect(Collectors.toList());
+    }
+
+    private int getOffsetAndSetPages(PageDTO<UserDTO> pageDTO, int pageNumber, int countOfEntities) {
+        int countOfPages = pageCountingService.getCountOfPages(countOfEntities, USERS_LIMIT);
+        pageDTO.setCountOfPages(countOfPages);
+        int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
+        pageDTO.setCurrentPageNumber(currentPageNumber);
+        return pageCountingService.getOffset(currentPageNumber, USERS_LIMIT);
+    }
+
+    private Profile getDefaultProfile(User user) {
+        Profile profile = new Profile();
+        profile.setUser(user);
+        return profile;
     }
 }

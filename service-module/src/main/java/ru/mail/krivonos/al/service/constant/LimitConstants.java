@@ -6,6 +6,7 @@ public class LimitConstants {
     public static final int REVIEWS_LIMIT = 10;
     public static final int ARTICLES_LIMIT = 10;
     public static final int ITEMS_LIMIT = 10;
+    public static final int ORDERS_LIMIT = 10;
     public static final int SUMMARY_LENGTH = 200;
 
     private LimitConstants() {

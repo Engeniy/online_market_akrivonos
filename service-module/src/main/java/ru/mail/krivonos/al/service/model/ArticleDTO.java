@@ -10,8 +10,10 @@ import java.util.List;
 
 public class ArticleDTO {
 
+    private static final String DATE_PATTERN = "yyyy-MM-dd'T'HH:mm";
+
     private Long id;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    @DateTimeFormat(pattern = DATE_PATTERN)
     private Date dateOfCreation;
     @NotNull
     @Size(max = 30)

@@ -1,13 +1,12 @@
 package ru.mail.krivonos.al.service.converter.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.mail.krivonos.al.repository.model.Article;
 import ru.mail.krivonos.al.repository.model.Comment;
 import ru.mail.krivonos.al.service.converter.ArticleConverter;
 import ru.mail.krivonos.al.service.converter.CommentConverter;
-import ru.mail.krivonos.al.service.converter.UserConverter;
+import ru.mail.krivonos.al.service.converter.UserConverterAggregator;
 import ru.mail.krivonos.al.service.model.ArticleDTO;
 import ru.mail.krivonos.al.service.model.CommentDTO;
 
@@ -18,15 +17,15 @@ import java.util.stream.Collectors;
 public class ArticleConverterImpl implements ArticleConverter {
 
     private final CommentConverter commentConverter;
-    private final UserConverter userConverter;
+    private final UserConverterAggregator userConverterAggregator;
 
     @Autowired
     public ArticleConverterImpl(
             CommentConverter commentConverter,
-            @Qualifier("authorConverter") UserConverter userConverter
+            UserConverterAggregator userConverterAggregator
     ) {
         this.commentConverter = commentConverter;
-        this.userConverter = userConverter;
+        this.userConverterAggregator = userConverterAggregator;
     }
 
     @Override
@@ -35,7 +34,7 @@ public class ArticleConverterImpl implements ArticleConverter {
         articleDTO.setId(article.getId());
         articleDTO.setDateOfCreation(article.getDateOfCreation());
         articleDTO.setTitle(article.getTitle());
-        articleDTO.setAuthor(userConverter.toDTO(article.getAuthor()));
+        articleDTO.setAuthor(userConverterAggregator.getAuthorConverter().toDTO(article.getAuthor()));
         articleDTO.setSummary(article.getSummary());
         articleDTO.setContent(article.getContent());
         articleDTO.setComments(getCommentDTOs(article.getComments()));
@@ -48,7 +47,7 @@ public class ArticleConverterImpl implements ArticleConverter {
         article.setContent(articleDTO.getContent());
         article.setTitle(articleDTO.getTitle());
         article.setDateOfCreation(articleDTO.getDateOfCreation());
-        article.setAuthor(userConverter.toEntity(articleDTO.getAuthor()));
+        article.setAuthor(userConverterAggregator.getAuthorConverter().toEntity(articleDTO.getAuthor()));
         return article;
     }
 

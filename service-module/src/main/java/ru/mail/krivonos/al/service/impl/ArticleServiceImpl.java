@@ -36,7 +36,8 @@ public class ArticleServiceImpl implements ArticleService {
             ArticleRepository articleRepository,
             ArticleConverter articleConverter,
             PageCountingService pageCountingService,
-            UserRepository userRepository) {
+            UserRepository userRepository
+    ) {
         this.articleRepository = articleRepository;
         this.articleConverter = articleConverter;
         this.pageCountingService = pageCountingService;
@@ -47,13 +48,9 @@ public class ArticleServiceImpl implements ArticleService {
     @Transactional
     @SuppressWarnings("unchecked")
     public PageDTO<ArticleDTO> getArticles(int pageNumber) {
-        PageDTO<ArticleDTO> pageDTO = new PageDTO();
         int countOfEntities = articleRepository.getCountOfEntities();
-        int countOfPages = pageCountingService.getCountOfPages(countOfEntities, ARTICLES_LIMIT);
-        pageDTO.setCountOfPages(countOfPages);
-        int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
-        pageDTO.setCurrentPageNumber(currentPageNumber);
-        int offset = pageCountingService.getOffset(currentPageNumber, ARTICLES_LIMIT);
+        PageDTO<ArticleDTO> pageDTO = new PageDTO();
+        int offset = getOffsetAndSetPages(pageDTO, pageNumber, countOfEntities);
         List<Article> articles = articleRepository.findAll(ARTICLES_LIMIT, offset);
         List<ArticleDTO> articleDTOs = getArticleDTOs(articles);
         pageDTO.setList(articleDTOs);
@@ -95,11 +92,13 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     @Transactional
-    public void deleteArticle(Long articleId) {
+    public ArticleDTO deleteArticle(Long articleId) {
         Article article = articleRepository.findById(articleId);
-        if (article != null) {
-            articleRepository.remove(article);
+        if (article == null) {
+            return null;
         }
+        articleRepository.remove(article);
+        return articleConverter.toDTO(article);
     }
 
     @Override
@@ -124,5 +123,13 @@ public class ArticleServiceImpl implements ArticleService {
             return content.substring(0, SUMMARY_LENGTH - SUMMARY_ENDING.length()) + SUMMARY_ENDING;
         }
         return content;
+    }
+
+    private int getOffsetAndSetPages(PageDTO<ArticleDTO> pageDTO, int pageNumber, int countOfEntities) {
+        int countOfPages = pageCountingService.getCountOfPages(countOfEntities, ARTICLES_LIMIT);
+        pageDTO.setCountOfPages(countOfPages);
+        int currentPageNumber = pageCountingService.getCurrentPageNumber(pageNumber, countOfPages);
+        pageDTO.setCurrentPageNumber(currentPageNumber);
+        return pageCountingService.getOffset(currentPageNumber, ARTICLES_LIMIT);
     }
 }

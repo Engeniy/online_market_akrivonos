@@ -7,6 +7,9 @@ import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 import ru.mail.krivonos.al.service.model.UserDTO;
 
+import static ru.mail.krivonos.al.controller.constant.FieldConstants.NAME_FIELD;
+import static ru.mail.krivonos.al.controller.constant.FieldConstants.SURNAME_FIELD;
+
 @Component("userUpdatingValidator")
 public class UserUpdatingValidator implements Validator {
 
@@ -28,20 +31,20 @@ public class UserUpdatingValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        ValidationUtils.rejectIfEmpty(errors, "name", "user.name.empty");
-        ValidationUtils.rejectIfEmpty(errors, "surname", "user.surname.empty");
+        ValidationUtils.rejectIfEmpty(errors, NAME_FIELD, "user.name.empty");
+        ValidationUtils.rejectIfEmpty(errors, SURNAME_FIELD, "user.surname.empty");
         UserDTO userDTO = (UserDTO) o;
         if (userDTO.getName() != null && userDTO.getName().length() > NAME_MAX_LENGTH) {
-            errors.rejectValue("name", "user.name.length");
+            errors.rejectValue(NAME_FIELD, "user.name.length");
         }
         if (userDTO.getName() != null && !userDTO.getName().matches(INITIALS_SYMBOLS_VALIDATION_REGEX)) {
-            errors.rejectValue("name", "user.name.symbols");
+            errors.rejectValue(NAME_FIELD, "user.name.symbols");
         }
         if (userDTO.getSurname() != null && userDTO.getSurname().length() > SURNAME_MAX_LENGTH) {
-            errors.rejectValue("surname", "user.surname.length");
+            errors.rejectValue(SURNAME_FIELD, "user.surname.length");
         }
         if (userDTO.getSurname() != null && !userDTO.getSurname().matches(INITIALS_SYMBOLS_VALIDATION_REGEX)) {
-            errors.rejectValue("surname", "user.surname.symbols");
+            errors.rejectValue(SURNAME_FIELD, "user.surname.symbols");
         }
         profileValidator.validate(userDTO.getProfile(), errors);
     }

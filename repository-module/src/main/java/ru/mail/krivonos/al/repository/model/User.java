@@ -1,7 +1,6 @@
 package ru.mail.krivonos.al.repository.model;
 
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -14,6 +13,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Objects;
 
 @Entity
@@ -22,8 +22,7 @@ import java.util.Objects;
         "UPDATE t_user " +
                 "SET deleted = 1 " +
                 "WHERE id = ? AND unchangeable = 0")
-@Where(clause = "deleted = 0")
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +39,7 @@ public class User {
     @Column(name = "unchangeable", nullable = false)
     private boolean isUnchangeable;
     @Column(name = "deleted", nullable = false)
-    private boolean isDeleted;
+    private boolean isDeleted = false;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;

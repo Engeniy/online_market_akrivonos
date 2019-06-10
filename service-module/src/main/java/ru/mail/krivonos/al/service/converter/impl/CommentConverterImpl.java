@@ -1,23 +1,20 @@
 package ru.mail.krivonos.al.service.converter.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import ru.mail.krivonos.al.repository.model.Comment;
 import ru.mail.krivonos.al.service.converter.CommentConverter;
-import ru.mail.krivonos.al.service.converter.UserConverter;
+import ru.mail.krivonos.al.service.converter.UserConverterAggregator;
 import ru.mail.krivonos.al.service.model.CommentDTO;
 
 @Component("commentConverter")
 public class CommentConverterImpl implements CommentConverter {
 
-    private final UserConverter userConverter;
+    private final UserConverterAggregator userConverterAggregator;
 
     @Autowired
-    public CommentConverterImpl(
-            @Qualifier("authorConverter") UserConverter userConverter
-    ) {
-        this.userConverter = userConverter;
+    public CommentConverterImpl(UserConverterAggregator userConverterAggregator) {
+        this.userConverterAggregator = userConverterAggregator;
     }
 
     @Override
@@ -26,7 +23,7 @@ public class CommentConverterImpl implements CommentConverter {
         commentDTO.setId(comment.getId());
         commentDTO.setDateOfCreation(comment.getDateOfCreation());
         commentDTO.setContent(comment.getContent());
-        commentDTO.setAuthor(userConverter.toDTO(comment.getAuthor()));
+        commentDTO.setAuthor(userConverterAggregator.getAuthorConverter().toDTO(comment.getAuthor()));
         return commentDTO;
     }
 

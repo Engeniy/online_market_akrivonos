@@ -16,12 +16,10 @@ public class FavoriteArticle implements Serializable {
 
     @EmbeddedId
     private FavoriteArticleKey id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("user_id")
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("article_id")
     @JoinColumn(name = "article_id", nullable = false)

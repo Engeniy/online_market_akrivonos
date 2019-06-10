@@ -22,7 +22,8 @@ public class UserApiController {
     @Autowired
     public UserApiController(
             UserService userService,
-            UserValidatorAggregator userValidatorAggregator) {
+            UserValidatorAggregator userValidatorAggregator
+    ) {
         this.userService = userService;
         this.userValidatorAggregator = userValidatorAggregator;
     }

@@ -37,7 +37,7 @@ public class FavoriteControllerIntegrationTest {
         this.mockMvc.perform(post(FAVORITE_ARTICLES_URL + "?user_id=1&article_id=1")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/articles?page=1&favorite_added"));
+                .andExpect(redirectedUrl("/public/articles?page=1&favorite_added"));
     }
 
     @WithUserDetails("customer@customer.com")
@@ -46,7 +46,7 @@ public class FavoriteControllerIntegrationTest {
         this.mockMvc.perform(post(FAVORITE_ARTICLES_URL + "?user_id=4&article_id=1")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/articles?page=1&favorite_added"));
+                .andExpect(redirectedUrl("/public/articles?page=1&favorite_added"));
         this.mockMvc.perform(get(FAVORITE_ARTICLES_URL)
                 .accept(MediaType.parseMediaType("text/html;charset=UTF-8")))
                 .andExpect(status().isOk())

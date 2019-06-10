@@ -12,7 +12,11 @@ import ru.mail.krivonos.al.service.model.UserDTO;
 
 import javax.validation.Valid;
 
+import static ru.mail.krivonos.al.controller.constant.AttributeConstants.COMMENT_ATTRIBUTE;
 import static ru.mail.krivonos.al.controller.constant.PageConstants.ARTICLE_PAGE;
+import static ru.mail.krivonos.al.controller.constant.RequestParameterConstants.ARTICLE_NUMBER_PARAMETER;
+import static ru.mail.krivonos.al.controller.constant.RequestParameterConstants.AUTHOR_ID_PARAMETER;
+import static ru.mail.krivonos.al.controller.constant.RequestParameterConstants.COMMENT_ID_PARAMETER;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ARTICLE_ADD_COMMENT_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ARTICLE_DELETE_COMMENT_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ARTICLE_PAGE_URL;
@@ -31,9 +35,9 @@ public class CommentController {
 
     @PostMapping(ARTICLE_ADD_COMMENT_URL)
     public String addComment(
-            @RequestParam(name = "article_number") Long articleId,
-            @RequestParam(name = "author_id") Long authorId,
-            @ModelAttribute("comment") @Valid CommentDTO commentDTO, BindingResult bindingResult
+            @RequestParam(name = ARTICLE_NUMBER_PARAMETER) Long articleId,
+            @RequestParam(name = AUTHOR_ID_PARAMETER) Long authorId,
+            @ModelAttribute(COMMENT_ATTRIBUTE) @Valid CommentDTO commentDTO, BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
             return ARTICLE_PAGE;
@@ -47,8 +51,8 @@ public class CommentController {
 
     @PostMapping(ARTICLE_DELETE_COMMENT_URL)
     public String deleteComment(
-            @RequestParam(name = "comment_id") Long commentId,
-            @RequestParam(name = "article_number") Long articleId
+            @RequestParam(name = COMMENT_ID_PARAMETER) Long commentId,
+            @RequestParam(name = ARTICLE_NUMBER_PARAMETER) Long articleId
     ) {
         commentService.deleteComment(commentId);
         return String.format(REDIRECT_WITH_DECIMAL_PARAMETER_TEMPLATE, ARTICLE_PAGE_URL, ARTICLE_NUMBER_PARAM, articleId);

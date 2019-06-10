@@ -1,11 +1,15 @@
 package ru.mail.krivonos.al.service.model;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
 public class ReviewDTO {
 
     private Long id;
     private UserDTO author;
+    @NotNull
+    @Size(max = 300)
     private String review;
     private Date dateOfCreation;
     private boolean isHidden;

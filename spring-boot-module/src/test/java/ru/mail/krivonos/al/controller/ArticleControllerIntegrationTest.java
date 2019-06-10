@@ -20,7 +20,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.CUSTOMER_AUTHORITY_NAME;
 import static ru.mail.krivonos.al.controller.constant.AuthorityConstants.SALE_AUTHORITY_NAME;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ADD_ARTICLE_PAGE_URL;
 import static ru.mail.krivonos.al.controller.constant.URLConstants.ARTICLES_PAGE_URL;
@@ -86,7 +85,7 @@ public class ArticleControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("article", articleDTO))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/articles?added"));
+                .andExpect(redirectedUrl("/public/articles?added"));
     }
 
     @WithUserDetails("sale@sale.com")
@@ -99,11 +98,11 @@ public class ArticleControllerIntegrationTest {
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .flashAttr("article", articleDTO))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/articles?added"));
+                .andExpect(redirectedUrl("/public/articles?added"));
         this.mockMvc.perform(post(DELETE_ARTICLE_URL + "?article_id=1")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED))
                 .andExpect(status().isFound())
-                .andExpect(redirectedUrl("/articles?page=1&deleted"));
+                .andExpect(redirectedUrl("/public/articles?page=1&deleted"));
     }
 
     @WithMockUser(authorities = {SALE_AUTHORITY_NAME})

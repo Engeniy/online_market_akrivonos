@@ -3,18 +3,18 @@ package ru.mail.krivonos.al.service.converter.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.mail.krivonos.al.repository.model.User;
-import ru.mail.krivonos.al.service.converter.ProfileConverter;
+import ru.mail.krivonos.al.service.converter.ProfileConverterAggregator;
 import ru.mail.krivonos.al.service.converter.UserConverter;
 import ru.mail.krivonos.al.service.model.UserDTO;
 
 @Component("userForProfileConverter")
 public class UserForProfileConverter implements UserConverter {
 
-    private final ProfileConverter profileConverter;
+    private final ProfileConverterAggregator profileConverterAggregator;
 
     @Autowired
-    public UserForProfileConverter(ProfileConverter profileConverter) {
-        this.profileConverter = profileConverter;
+    public UserForProfileConverter(ProfileConverterAggregator profileConverterAggregator) {
+        this.profileConverterAggregator = profileConverterAggregator;
     }
 
     @Override
@@ -24,7 +24,7 @@ public class UserForProfileConverter implements UserConverter {
         userDTO.setName(user.getName());
         userDTO.setSurname(user.getSurname());
         userDTO.setPassword(user.getPassword());
-        userDTO.setProfile(profileConverter.toDTO(user.getProfile()));
+        userDTO.setProfile(profileConverterAggregator.getProfileConverter().toDTO(user.getProfile()));
         return userDTO;
     }
 

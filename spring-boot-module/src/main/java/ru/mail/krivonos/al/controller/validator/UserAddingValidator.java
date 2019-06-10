@@ -8,6 +8,10 @@ import org.springframework.validation.Validator;
 import ru.mail.krivonos.al.service.UserService;
 import ru.mail.krivonos.al.service.model.UserDTO;
 
+import static ru.mail.krivonos.al.controller.constant.FieldConstants.EMAIL_FIELD;
+import static ru.mail.krivonos.al.controller.constant.FieldConstants.NAME_FIELD;
+import static ru.mail.krivonos.al.controller.constant.FieldConstants.SURNAME_FIELD;
+
 @Component("userAddingValidator")
 public class UserAddingValidator implements Validator {
 
@@ -20,17 +24,14 @@ public class UserAddingValidator implements Validator {
 
     private final UserService userService;
     private final RoleValidator roleValidator;
-    private final ProfileValidator profileValidator;
 
     @Autowired
     public UserAddingValidator(
             UserService userService,
-            RoleValidator roleValidator,
-            ProfileValidator profileValidator
+            RoleValidator roleValidator
     ) {
         this.userService = userService;
         this.roleValidator = roleValidator;
-        this.profileValidator = profileValidator;
     }
 
     @Override
@@ -40,33 +41,32 @@ public class UserAddingValidator implements Validator {
 
     @Override
     public void validate(Object o, Errors errors) {
-        ValidationUtils.rejectIfEmpty(errors, "email", "user.email.empty");
-        ValidationUtils.rejectIfEmpty(errors, "name", "user.name.empty");
-        ValidationUtils.rejectIfEmpty(errors, "surname", "user.surname.empty");
+        ValidationUtils.rejectIfEmpty(errors, EMAIL_FIELD, "user.email.empty");
+        ValidationUtils.rejectIfEmpty(errors, NAME_FIELD, "user.name.empty");
+        ValidationUtils.rejectIfEmpty(errors, SURNAME_FIELD, "user.surname.empty");
         UserDTO userDTO = (UserDTO) o;
         UserDTO userByEmail = userService.getUserByEmail(userDTO.getEmail());
         if (userByEmail != null) {
-            errors.reject("email", "user.email.exist");
+            errors.reject(EMAIL_FIELD, "user.email.exist");
         }
         if (userDTO.getEmail() != null && userDTO.getEmail().length() > EMAIL_MAX_LENGTH) {
-            errors.rejectValue("email", "user.email.length");
+            errors.rejectValue(EMAIL_FIELD, "user.email.length");
         }
         if (userDTO.getEmail() != null && !userDTO.getEmail().toLowerCase().matches(EMAIL_VALIDATION_REGEX)) {
-            errors.rejectValue("email", "user.email.invalid");
+            errors.rejectValue(EMAIL_FIELD, "user.email.invalid");
         }
         if (userDTO.getName() != null && userDTO.getName().length() > NAME_MAX_LENGTH) {
-            errors.rejectValue("name", "user.name.length");
+            errors.rejectValue(NAME_FIELD, "user.name.length");
         }
         if (userDTO.getName() != null && !userDTO.getName().matches(INITIALS_SYMBOLS_VALIDATION_REGEX)) {
-            errors.rejectValue("name", "user.name.symbols");
+            errors.rejectValue(NAME_FIELD, "user.name.symbols");
         }
         if (userDTO.getSurname() != null && userDTO.getSurname().length() > SURNAME_MAX_LENGTH) {
-            errors.rejectValue("surname", "user.surname.length");
+            errors.rejectValue(SURNAME_FIELD, "user.surname.length");
         }
         if (userDTO.getSurname() != null && !userDTO.getSurname().matches(INITIALS_SYMBOLS_VALIDATION_REGEX)) {
-            errors.rejectValue("surname", "user.surname.symbols");
+            errors.rejectValue(SURNAME_FIELD, "user.surname.symbols");
         }
         roleValidator.validate(userDTO.getRole(), errors);
-        profileValidator.validate(userDTO.getProfile(), errors);
     }
 }

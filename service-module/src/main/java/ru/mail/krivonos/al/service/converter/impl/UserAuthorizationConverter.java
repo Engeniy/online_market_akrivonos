@@ -3,7 +3,6 @@ package ru.mail.krivonos.al.service.converter.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.mail.krivonos.al.repository.model.User;
-import ru.mail.krivonos.al.service.converter.ProfileConverter;
 import ru.mail.krivonos.al.service.converter.RoleConverter;
 import ru.mail.krivonos.al.service.converter.UserConverter;
 import ru.mail.krivonos.al.service.model.UserDTO;
@@ -12,15 +11,10 @@ import ru.mail.krivonos.al.service.model.UserDTO;
 public class UserAuthorizationConverter implements UserConverter {
 
     private final RoleConverter roleConverter;
-    private final ProfileConverter profileConverter;
 
     @Autowired
-    public UserAuthorizationConverter(
-            RoleConverter roleConverter,
-            ProfileConverter profileConverter
-    ) {
+    public UserAuthorizationConverter(RoleConverter roleConverter) {
         this.roleConverter = roleConverter;
-        this.profileConverter = profileConverter;
     }
 
     @Override
@@ -42,7 +36,6 @@ public class UserAuthorizationConverter implements UserConverter {
         user.setSurname(userDTO.getSurname());
         user.setPassword(userDTO.getPassword());
         user.setRole(roleConverter.toEntity(userDTO.getRole()));
-        user.setProfile(profileConverter.toEntity(userDTO.getProfile()));
         return user;
     }
 }

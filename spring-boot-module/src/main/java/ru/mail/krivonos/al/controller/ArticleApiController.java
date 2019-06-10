@@ -3,7 +3,7 @@ package ru.mail.krivonos.al.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +22,9 @@ import java.util.List;
 
 import static ru.mail.krivonos.al.controller.constant.ApiURLConstants.API_ARTICLES_URL;
 import static ru.mail.krivonos.al.controller.constant.ApiURLConstants.API_ARTICLES_WITH_ID_URL;
+import static ru.mail.krivonos.al.controller.constant.PathVariableConstants.ID_VARIABLE;
+import static ru.mail.krivonos.al.controller.constant.RequestParameterConstants.LIMIT_PARAMETER;
+import static ru.mail.krivonos.al.controller.constant.RequestParameterConstants.OFFSET_PARAMETER;
 
 @RestController("articleApiController")
 public class ArticleApiController {
@@ -36,8 +39,8 @@ public class ArticleApiController {
     @GetMapping(API_ARTICLES_URL)
     @SuppressWarnings("unchecked")
     public ResponseEntity<List<ArticleDTO>> getArticles(
-            @RequestParam(name = "limit", defaultValue = "10") Integer limit,
-            @RequestParam(name = "offset", defaultValue = "0") Integer offset
+            @RequestParam(name = LIMIT_PARAMETER, defaultValue = "10") Integer limit,
+            @RequestParam(name = OFFSET_PARAMETER, defaultValue = "0") Integer offset
     ) {
         List<ArticleDTO> articles = articleService.getArticles(limit, offset);
         return new ResponseEntity(articles, HttpStatus.OK);
@@ -46,9 +49,12 @@ public class ArticleApiController {
     @GetMapping(API_ARTICLES_WITH_ID_URL)
     @SuppressWarnings("unchecked")
     public ResponseEntity<ArticleDTO> getArticle(
-            @PathVariable("id") Long id
+            @PathVariable(ID_VARIABLE) Long id
     ) {
         ArticleDTO article = articleService.getArticleById(id);
+        if (article == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity(article, HttpStatus.OK);
     }
 
@@ -56,24 +62,30 @@ public class ArticleApiController {
     @SuppressWarnings("unchecked")
     public ResponseEntity<ArticleDTO> saveArticle(
             @RequestBody @Valid ArticleDTO articleDTO,
-            Authentication authentication, BindingResult bindingResult
+            @AuthenticationPrincipal AuthUserPrincipal userPrincipal, BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        AuthUserPrincipal userPrincipal = (AuthUserPrincipal) authentication.getPrincipal();
-        UserDTO author = new UserDTO();
-        author.setId(userPrincipal.getUserID());
-        articleDTO.setAuthor(author);
-        ArticleDTO returningArticle = articleService.add(articleDTO);
+        ArticleDTO returningArticle = setAuthorAndAdd(userPrincipal.getUserID(), articleDTO);
         return new ResponseEntity(returningArticle, HttpStatus.CREATED);
     }
 
     @DeleteMapping(API_ARTICLES_WITH_ID_URL)
     public ResponseEntity deleteArticle(
-            @PathVariable("id") Long id
+            @PathVariable(ID_VARIABLE) Long id
     ) {
-        articleService.deleteArticle(id);
+        ArticleDTO article = articleService.deleteArticle(id);
+        if (article == null) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity(HttpStatus.ACCEPTED);
+    }
+
+    private ArticleDTO setAuthorAndAdd(Long authorId, ArticleDTO articleDTO) {
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(authorId);
+        articleDTO.setAuthor(userDTO);
+        return articleService.add(articleDTO);
     }
 }

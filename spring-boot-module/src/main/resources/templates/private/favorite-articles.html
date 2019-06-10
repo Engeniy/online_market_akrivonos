@@ -50,15 +50,13 @@
                 <span class="text-lg-center text-center" th:text="*{dateOfCreation}"></span>
                 <b class="text-lg-center"><span>Summary:</span></b>
                 <span class="text-lg-center text-center" th:text="*{summary}"></span>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" th:href="@{/article(article_number = ${favorite.article.id})}">More</a>
-                </li>
+                <a class="text-center" href="#" th:href="@{/public/article(article_number = ${favorite.article.id})}">More</a>
             </form>
         </div>
     </div>
 </div>
 <ul class="pagination justify-content-center">
-    <div th:if="${page.countOfPages > 0}" th:each="page_number : ${#numbers.sequence(1, page.countOfPages)}">
+    <div th:if="${page.countOfPages > 1}" th:each="page_number : ${#numbers.sequence(1, page.countOfPages)}">
         <li th:if="${page_number} == ${page.currentPageNumber}" class="page-item active">
             <a class="page-link" th:href="@{/private/articles/favorites(page=${page_number})}"
                th:text="${page_number}"></a>

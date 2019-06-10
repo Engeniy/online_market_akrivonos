@@ -1,0 +1,66 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Orders</title>
+    <link href="#" rel="stylesheet" th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap.min.css}" type="text/css"/>
+    <link href="#" rel="stylesheet" th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap.css}" type="text/css"/>
+    <link href="#" rel="stylesheet" th:href="@{/webjars/bootstrap/4.2.1/css/bootstrap-grid-jsf.css}" type="text/css"/>
+
+</head>
+<body>
+<div th:replace="fragments/header.html"/>
+<div th:if="${page.list.isEmpty()}">
+    <div class="alert alert-info text-center">
+        There is no orders at the moment.
+    </div>
+</div>
+<div th:if="${param.deleted}">
+    <div class="alert alert-success text-center">
+        Item was successfully deleted.
+    </div>
+</div>
+<div th:if="${param.copied}">
+    <div class="alert alert-success text-center">
+        Item was successfully copied.
+    </div>
+</div>
+<div class="align-self-center container-fluid justify-content-center">
+    <div class="card-group">
+        <div th:each="order : ${page.list}" style="width: 20%">
+            <form action="#" class="card border-dark" style="padding: 20px; margin: 20px; width: 350px; height: 350px"
+                  th:action="@{#}"
+                  th:object="${order}" method="post">
+                <b class="text-lg-center">Order number:</b>
+                <span class="text-lg-center text-center" th:text="*{orderNumber}"></span>
+                <b class="text-lg-center text">Status:</b>
+                <span class="text-lg-center" th:text="*{status}"></span>
+                <b class="text-lg-center"><span>Item:</span></b>
+                <span class="text-lg-center text-center" th:text="*{item.name}"></span>
+                <b class="text-lg-center"><span>Quantity:</span></b>
+                <span class="text-lg-center text-center" th:text="*{quantity}"></span>
+                <b class="text-lg-center"><span>Total price:</span></b>
+                <span class="text-lg-center text-center" th:text="*{totalPrice}"></span>
+                <div class="text-center" sec:authorize="isAuthenticated() && hasAuthority('Sale User')">
+                    <a href="#" th:href="@{/private/order(order_number = *{orderNumber})}">More</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <ul class="pagination justify-content-center">
+        <div th:if="${page.countOfPages > 1}" th:each="page_number : ${#numbers.sequence(1, page.countOfPages)}">
+            <li th:if="${page_number} == ${page.currentPageNumber}" class="page-item active">
+                <a class="page-link" th:href="@{/public/orders(page=${page_number})}" th:text="${page_number}"></a>
+            </li>
+            <li th:unless="${page_number} == ${page.currentPageNumber}" class="page-item">
+                <a class="page-link" th:href="@{/public/orders(page=${page_number})}" th:text="${page_number}"></a>
+            </li>
+        </div>
+    </ul>
+</div>
+<div th:replace="fragments/footer.html"/>
+</body>
+</html>

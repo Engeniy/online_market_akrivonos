@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
@@ -24,7 +25,7 @@ import java.util.Objects;
                 "SET deleted = 1 " +
                 "WHERE id = ?")
 @Where(clause = "deleted = 0")
-public class Review {
+public class Review implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
