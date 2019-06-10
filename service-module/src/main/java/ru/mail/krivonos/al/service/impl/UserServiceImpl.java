@@ -59,8 +59,8 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public PageDTO<UserDTO> getUsers(int pageNumber) {
-        PageDTO<UserDTO> pageDTO = new PageDTO<>();
         int countOfEntities = userRepository.getCountOfNotDeletedEntities();
+        PageDTO<UserDTO> pageDTO = new PageDTO<>();
         int offset = getOffsetAndSetPages(pageDTO, pageNumber, countOfEntities);
         List<User> users = userRepository.findAllNotDeletedWithAscendingOrder(USERS_LIMIT, offset, EMAIL);
         pageDTO.setList(getUserDTOs(users));
@@ -152,8 +152,6 @@ public class UserServiceImpl implements UserService {
 
     private Profile getDefaultProfile(User user) {
         Profile profile = new Profile();
-        profile.setAddress("");
-        profile.setTelephone("");
         profile.setUser(user);
         return profile;
     }

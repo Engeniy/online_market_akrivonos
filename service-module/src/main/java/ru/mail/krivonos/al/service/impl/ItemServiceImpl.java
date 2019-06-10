@@ -38,8 +38,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     @Transactional
     public PageDTO<ItemDTO> getItems(int pageNumber) {
-        PageDTO<ItemDTO> pageDTO = new PageDTO<>();
         int countOfEntities = itemRepository.getCountOfNotDeletedEntities();
+        PageDTO<ItemDTO> pageDTO = new PageDTO<>();
         int offset = getOffsetAndSetPages(pageDTO, pageNumber, countOfEntities);
         List<Item> items = itemRepository.findAllNotDeletedWithAscendingOrder(ITEMS_LIMIT, offset, NAME);
         List<ItemDTO> itemDTOs = getItemDTOs(items);

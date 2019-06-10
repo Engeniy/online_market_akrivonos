@@ -44,8 +44,8 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     @Transactional
     public PageDTO<ReviewDTO> getReviews(int pageNumber) {
-        PageDTO<ReviewDTO> pageDTO = new PageDTO<>();
         int countOfEntities = reviewRepository.getCountOfEntities();
+        PageDTO<ReviewDTO> pageDTO = new PageDTO<>();
         int offset = getOffsetAndSetPages(pageDTO, pageNumber, countOfEntities);
         List<Review> reviews = reviewRepository.findAllWithDescendingOrder(REVIEWS_LIMIT, offset, DATE_OF_CREATION);
         List<ReviewDTO> reviewDTOs = getReviewDTOs(reviews);

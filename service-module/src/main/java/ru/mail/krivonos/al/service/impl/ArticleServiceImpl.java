@@ -48,8 +48,8 @@ public class ArticleServiceImpl implements ArticleService {
     @Transactional
     @SuppressWarnings("unchecked")
     public PageDTO<ArticleDTO> getArticles(int pageNumber) {
-        PageDTO<ArticleDTO> pageDTO = new PageDTO();
         int countOfEntities = articleRepository.getCountOfEntities();
+        PageDTO<ArticleDTO> pageDTO = new PageDTO();
         int offset = getOffsetAndSetPages(pageDTO, pageNumber, countOfEntities);
         List<Article> articles = articleRepository.findAll(ARTICLES_LIMIT, offset);
         List<ArticleDTO> articleDTOs = getArticleDTOs(articles);

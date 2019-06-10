@@ -48,8 +48,8 @@ public class FavoriteArticleServiceImpl implements FavoriteArticleService {
     @Override
     @Transactional
     public PageDTO<FavoriteArticleDTO> getArticlesByUserId(int pageNumber, Long userId) {
-        PageDTO<FavoriteArticleDTO> pageDTO = new PageDTO<>();
         int countOfEntities = favoriteArticleRepository.getCountOfEntities();
+        PageDTO<FavoriteArticleDTO> pageDTO = new PageDTO<>();
         int offset = getOffsetAndSetPages(pageDTO, pageNumber, countOfEntities);
         List<FavoriteArticle> allByUserId = favoriteArticleRepository
                 .findAllByUserId(ARTICLES_LIMIT, offset, userId);
